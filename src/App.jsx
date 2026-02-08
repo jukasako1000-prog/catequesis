@@ -276,7 +276,7 @@ function App() {
   const [phraseGame, setPhraseGame] = useState({
     original: '',
     revealed: [],
-    timeLeft: 90,
+    timeLeft: 60,
     status: 'playing', // 'playing', 'won', 'lost'
     usedLetters: [],
     isPaused: false,
@@ -945,7 +945,7 @@ function App() {
       teams: teams,
       currentTeamIdx: initialTeamIdx,
       pointsAwarded: false,
-      timeLeft: teams.length * 60, // Damos tiempo proporcional
+      timeLeft: 60, // 1 minuto fijo
       isPaused: false
     });
     setAulaStep('historia');
@@ -1035,7 +1035,7 @@ function App() {
       ...prev,
       original: phrase,
       revealed: revealedIndices,
-      timeLeft: 90,
+      timeLeft: 60, // 1 minuto fijo
       usedLetters: [],
       isPaused: false,
       teams: teams,
@@ -2534,10 +2534,11 @@ function App() {
                           } else if (aulaStep === 'select-team-intruso') {
                             startIntrusoGame(selectedAulaTema, aulaTeams, winnerIdx);
                           } else if (aulaStep === 'select-team-historia') {
-                            startHistoriaGame(selectedAulaTema, aulaTeams, winnerIdx);
+                            // Solo participa el ganador del sorteo (1 sola ronda)
+                            startHistoriaGame(selectedAulaTema, [aulaTeams[winnerIdx]], 0);
                           } else {
-                            // Reto Phrase
-                            startPhraseGame(selectedAulaTema, aulaTeams, winnerIdx);
+                            // Reto Phrase - Solo participa el ganador
+                            startPhraseGame(selectedAulaTema, [aulaTeams[winnerIdx]], 0);
                           }
                         });
                       }}
