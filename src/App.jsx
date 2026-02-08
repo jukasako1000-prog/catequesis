@@ -94,7 +94,7 @@ const AULA_TEMAS = {
       { letter: "V", question: "Debemos decir siempre la...", answer: "VERDAD" },
       { letter: "X", question: "Libro de la Biblia donde están los mandamientos (Contiene la X).", answer: "ÉXODO" },
       { letter: "Y", question: "Lo que Dios hace con nosotros cuando cumplimos su ley (Contiene la Y).", answer: "AYUDAR" },
-      { letter: "Z", question: "Cómo nos sentimos cuando amamos a Dios (Contiene la Z).", answer: "FELIZ" }
+      { letter: "Z", label: "Contiene la Z", question: "¿COMO ME SIENTO CUANDO AMO A DIOS?", answer: "FELIZ" }
     ],
     intrusos: [
       { options: ["Moisés", "Tablas", "Sinaí", "Goliat"], correct: 3, explanation: "Goliat es el gigante que venció David, no aparece en los Mandamientos." },
