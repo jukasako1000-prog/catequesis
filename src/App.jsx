@@ -2295,7 +2295,7 @@ function App() {
               value={rankingType}
               onChange={(e) => setRankingType(e.target.value)}
               style={{
-                width: '180px',
+                width: '185px',
                 padding: '12px',
                 borderRadius: '15px',
                 border: 'none',
@@ -2308,10 +2308,10 @@ function App() {
                 boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
               }}
             >
-              <option value="general">🏆 Clasificación General</option>
-              <option value="behavior">🎖️ Buen Comportamiento</option>
-              <option value="reading">📖 Buen Lector</option>
-              <option value="attendance">📅 Asistencia</option>
+              <option value="general">🏆 CLASIFICACIÓN</option>
+              <option value="behavior">🎖️ COMPORTAMIENTO</option>
+              <option value="reading">📖 LECTURA</option>
+              <option value="attendance">📅 ASISTENCIA</option>
             </select>
 
             <button
