@@ -2295,7 +2295,7 @@ function App() {
               value={rankingType}
               onChange={(e) => setRankingType(e.target.value)}
               style={{
-                width: '185px',
+                width: '220px',
                 padding: '12px',
                 borderRadius: '15px',
                 border: 'none',
@@ -2313,6 +2313,31 @@ function App() {
               <option value="reading">📖 LECTURA</option>
               <option value="attendance">📅 ASISTENCIA</option>
             </select>
+
+            <button
+              onClick={() => setShowRankingList(!showRankingList)}
+              style={{
+                padding: '12px 20px',
+                borderRadius: '15px',
+                border: 'none',
+                background: showRankingList ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.2)',
+                color: showRankingList ? '#2c3e50' : 'white',
+                fontWeight: 800,
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.3s',
+                boxShadow: showRankingList ? '0 4px 15px rgba(0,0,0,0.1)' : 'none'
+              }}
+            >
+              <Trophy size={18} />
+              {showRankingList ? 'OCULTAR LISTA' : 'VER LISTA'}
+              <motion.div animate={{ rotate: showRankingList ? 180 : 0 }}>
+                <ChevronDown size={18} />
+              </motion.div>
+            </button>
 
             <button
               onClick={() => setView('learning')}
@@ -2338,74 +2363,85 @@ function App() {
             </button>
           </div>
 
-          <div className="ranking-list">
-            <AnimatePresence>
-              {sortedStudents.map((student, index) => (
-                <motion.div key={student.id} id={`student-${student.id}`} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="student-card">
-                  <div className="rank-number">#{index + 1}</div>
-                  <div className="small-avatar" onClick={() => setSelectedStudent(student)} style={{ cursor: 'pointer' }}>
-                    <img src={student.avatar} alt="" style={{ width: '100%' }} />
-                  </div>
-                  <div className="student-info">
-                    <div className="student-name">
-                      {student.name}
-                    </div>
-                    <div className="student-scores">
-                      <span>✨ {student.totalScore} Estrellas</span>
-                    </div>
-                  </div>
-                  <div className="controls">
-                    <div className="medal-controls" title="Asistencia">
-                      <button className="medal-step" onClick={() => updateAttendance(student.id, -1)}>-</button>
-                      <span className="medal-badge attendance" style={{ background: 'linear-gradient(135deg, #1abc9c, #16a085)' }}>
-                        📅 {student.attendance || 0}
-                      </span>
-                      <button className="medal-step" onClick={() => updateAttendance(student.id, 1)}>+</button>
-                    </div>
-                    <div className="medal-controls" title="Lectura">
-                      <button className="medal-step" onClick={() => updateReadingMerits(student.id, -1)}>-</button>
-                      <span className="medal-badge reading" style={{ background: 'linear-gradient(135deg, #3498db, #2980b9)' }}>
-                        📖 {student.readingMerits || 0}
-                      </span>
-                      <button className="medal-step" onClick={() => updateReadingMerits(student.id, 1)}>+</button>
-                    </div>
-                    <div className="medal-controls" title="Buen Comportamiento">
-                      <button className="medal-step" onClick={() => updateMedals(student.id, -1)}>-</button>
-                      <span className="medal-badge behavior" style={{ background: 'linear-gradient(135deg, #e74c3c, #c0392b)' }}>
-                        🎖️ {student.behaviorMedals || 0}
-                      </span>
-                      <button className="medal-step" onClick={() => updateMedals(student.id, 1)}>+</button>
-                    </div>
-                    <button
-                      className="btn-point"
-                      style={{ background: '#4a90e2' }}
-                      onClick={() => openAula(student.id)}
-                      title="Pregunta Bíblica"
-                    >
-                      <HelpCircle size={16} />
-                    </button>
-                    <button
-                      className="btn-point"
-                      style={{ background: '#f39c12' }}
-                      onClick={() => updatePoints(student.id, -10)}
-                      title="Quitar Puntos (-10)"
-                    >
-                      <Minus size={16} />
-                    </button>
-                    <button
-                      className="btn-point"
-                      style={{ background: '#2ecc71' }}
-                      onClick={() => updatePoints(student.id, 10)}
-                      title="Añadir Puntos (+10)"
-                    >
-                      <Plus size={16} />
-                    </button>
+          <AnimatePresence>
+            {showRankingList && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                style={{ overflow: 'hidden' }}
+              >
+                <div className="ranking-list">
+                  <AnimatePresence>
+                    {sortedStudents.map((student, index) => (
+                      <motion.div key={student.id} id={`student-${student.id}`} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="student-card">
+                        <div className="rank-number">#{index + 1}</div>
+                        <div className="small-avatar" onClick={() => setSelectedStudent(student)} style={{ cursor: 'pointer' }}>
+                          <img src={student.avatar} alt="" style={{ width: '100%' }} />
+                        </div>
+                        <div className="student-info">
+                          <div className="student-name">
+                            {student.name}
+                          </div>
+                          <div className="student-scores">
+                            <span>✨ {student.totalScore} Estrellas</span>
+                          </div>
+                        </div>
+                        <div className="controls">
+                          <div className="medal-controls" title="Asistencia">
+                            <button className="medal-step" onClick={() => updateAttendance(student.id, -1)}>-</button>
+                            <span className="medal-badge attendance" style={{ background: 'linear-gradient(135deg, #1abc9c, #16a085)' }}>
+                              📅 {student.attendance || 0}
+                            </span>
+                            <button className="medal-step" onClick={() => updateAttendance(student.id, 1)}>+</button>
+                          </div>
+                          <div className="medal-controls" title="Lectura">
+                            <button className="medal-step" onClick={() => updateReadingMerits(student.id, -1)}>-</button>
+                            <span className="medal-badge reading" style={{ background: 'linear-gradient(135deg, #3498db, #2980b9)' }}>
+                              📖 {student.readingMerits || 0}
+                            </span>
+                            <button className="medal-step" onClick={() => updateReadingMerits(student.id, 1)}>+</button>
+                          </div>
+                          <div className="medal-controls" title="Buen Comportamiento">
+                            <button className="medal-step" onClick={() => updateMedals(student.id, -1)}>-</button>
+                            <span className="medal-badge behavior" style={{ background: 'linear-gradient(135deg, #e74c3c, #c0392b)' }}>
+                              🎖️ {student.behaviorMedals || 0}
+                            </span>
+                            <button className="medal-step" onClick={() => updateMedals(student.id, 1)}>+</button>
+                          </div>
+                          <button
+                            className="btn-point"
+                            style={{ background: '#4a90e2' }}
+                            onClick={() => openAula(student.id)}
+                            title="Pregunta Bíblica"
+                          >
+                            <HelpCircle size={16} />
+                          </button>
+                          <button
+                            className="btn-point"
+                            style={{ background: '#f39c12' }}
+                            onClick={() => updatePoints(student.id, -10)}
+                            title="Quitar Puntos (-10)"
+                          >
+                            <Minus size={16} />
+                          </button>
+                          <button
+                            className="btn-point"
+                            style={{ background: '#2ecc71' }}
+                            onClick={() => updatePoints(student.id, 10)}
+                            title="Añadir Puntos (+10)"
+                          >
+                            <Plus size={16} />
+                          </button>
 
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       )}
 
