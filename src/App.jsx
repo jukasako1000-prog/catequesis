@@ -2275,12 +2275,14 @@ function App() {
                   </div>
                   <div className="stat-item" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '10px', borderRadius: '15px', border: '1px solid rgba(255, 255, 255, 0.1)', gridColumn: 'span 2' }}>
                     <span className="stat-label">Buen Comportamiento</span>
-                    <span className="stat-value" style={{ color: '#e74c3c', fontSize: '1.4rem' }}>🎖️ {selectedStudent.behaviorMedals || 0} Medallas</span>
                   </div>
                 </div>
                 <button
                   className="detail-badge"
-                  onClick={() => triggerFlares()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    triggerFlares();
+                  }}
                   style={{
                     cursor: 'pointer',
                     border: 'none',
@@ -2293,7 +2295,9 @@ function App() {
                     fontWeight: 800,
                     fontSize: '1.2rem',
                     boxShadow: '0 10px 20px rgba(245, 158, 11, 0.3)',
-                    transition: 'transform 0.2s'
+                    transition: 'transform 0.2s',
+                    position: 'relative',
+                    zIndex: 10001
                   }}
                   onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
                   onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
