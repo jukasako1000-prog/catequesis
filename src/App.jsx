@@ -327,7 +327,7 @@ const INITIAL_STUDENTS = [
   { id: 101, name: 'Adrian', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/ADRIAN.jpg' },
   { id: 102, name: 'Alejandra', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/ALEJANDRA.jpg' },
   { id: 103, name: 'Marina', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MARINA.jpg' },
-  { id: 104, name: 'Miguel Angel Cases', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGELCASES.jpg' },
+  { id: 104, name: 'MA Cases', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGELCASES.jpg' },
   { id: 105, name: 'Miguel Angel', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGEL .jpg' },
   { id: 106, name: 'Enzo', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/enzo.jpg' },
   { id: 108, name: 'Jose Francisco', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=JF&backgroundColor=4a90e2&fontSize=45' },
