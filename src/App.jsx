@@ -317,7 +317,9 @@ function App() {
     teams: [],
     currentTeamIdx: 0,
     pointsAwarded: false,
-    title: ''
+    title: '',
+    timeLeft: 60,
+    isPaused: false
   });
 
   const [aulaTeams, setAulaTeams] = useState([]); // Equipos para el juego actual
@@ -936,7 +938,9 @@ function App() {
       teams: teams,
       currentTeamIdx: initialTeamIdx,
       pointsAwarded: false,
-      title: historia.title
+      title: historia.title,
+      timeLeft: 60,
+      isPaused: false
     });
     setAulaStep('historia');
   };
@@ -1118,6 +1122,24 @@ function App() {
       setTimeout(() => alert(summary), 500);
     }
   }, [intrusoGame.status, intrusoGame.pointsAwarded, aulaStep, showAulaModal]);
+
+  // Timer para Ordenar Historia
+  useEffect(() => {
+    let timer;
+    if (showAulaModal && aulaStep === 'historia' && historiaGame.status === 'playing' && !historiaGame.isPaused && historiaGame.timeLeft > 0) {
+      timer = setInterval(() => {
+        setHistoriaGame(prev => {
+          if (prev.isPaused) return prev;
+          if (prev.timeLeft <= 1) {
+            clearInterval(timer);
+            return { ...prev, timeLeft: 0, status: 'lost' };
+          }
+          return { ...prev, timeLeft: prev.timeLeft - 1 };
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [showAulaModal, aulaStep, historiaGame.status, historiaGame.timeLeft, historiaGame.isPaused]);
 
   // Recompensas Historia
   useEffect(() => {
@@ -3033,6 +3055,18 @@ function App() {
                     </button>
                     <h2 style={{ color: '#9b59b6', textAlign: 'center', marginBottom: '1rem', fontSize: '2rem', fontWeight: 900 }}>⏳ Ordena la Historia</h2>
 
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginBottom: '1.5rem' }}>
+                      <div style={{ background: historiaGame.timeLeft <= 10 ? '#e74c3c' : '#9b59b6', color: 'white', padding: '10px 20px', borderRadius: '20px', fontWeight: 900, fontSize: '1.4rem', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
+                        ⏱️ {historiaGame.timeLeft}s
+                      </div>
+                      <button
+                        onClick={() => setHistoriaGame(prev => ({ ...prev, isPaused: !prev.isPaused }))}
+                        style={{ background: '#34495e', color: 'white', padding: '10px 20px', borderRadius: '20px', fontWeight: 800, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}
+                      >
+                        {historiaGame.isPaused ? '▶️ Reanudar' : '⏸️ Pausar'}
+                      </button>
+                    </div>
+
 
                     <p style={{ textAlign: 'center', color: '#7f8c8d', marginBottom: '2rem', fontWeight: 700 }}>{historiaGame.title}</p>
 
@@ -3081,9 +3115,16 @@ function App() {
                     </div>
 
                     {historiaGame.status === 'won' && (
-                      <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} style={{ textAlign: 'center', marginTop: '30px' }}>
-                        <div style={{ color: '#9b59b6', fontSize: '1.5rem', fontWeight: 900, marginBottom: '20px' }}>✨ ¡HISTORIA ORDENADA CORRECTAMENTE! ✨</div>
-                        <button className="btn-primary" style={{ background: '#9b59b6' }} onClick={() => setShowAulaModal(false)}>Continuar</button>
+                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ textAlign: 'center', marginTop: '30px', background: 'rgba(155, 89, 182, 0.1)', padding: '30px', borderRadius: '30px', border: '3px dashed #9b59b6' }}>
+                        <div style={{ color: '#9b59b6', fontSize: '1.8rem', fontWeight: 950, marginBottom: '20px' }}>✨ ¡HISTORIA ORDENADA CORRECTAMENTE! ✨</div>
+                        <button className="btn-primary" style={{ background: '#9b59b6', padding: '15px 40px', fontSize: '1.2rem' }} onClick={() => setShowAulaModal(false)}>Continuar</button>
+                      </motion.div>
+                    )}
+
+                    {historiaGame.status === 'lost' && (
+                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ textAlign: 'center', marginTop: '30px', background: 'rgba(231, 76, 60, 0.1)', padding: '30px', borderRadius: '30px', border: '3px dashed #e74c3c' }}>
+                        <div style={{ color: '#e74c3c', fontSize: '1.8rem', fontWeight: 950, marginBottom: '20px' }}>⏰ ¡SE ACABÓ EL TIEMPO! ⏰</div>
+                        <button className="btn-primary" style={{ background: '#e74c3c', padding: '15px 40px', fontSize: '1.2rem' }} onClick={() => setShowAulaModal(false)}>Volver al Aula</button>
                       </motion.div>
                     )}
                   </div>
