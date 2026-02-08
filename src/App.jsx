@@ -1307,8 +1307,8 @@ function App() {
           onComplete: null
         }));
         if (onComplete) onComplete(winner);
-      }, 4000);
-    }, 3800);
+      }, 2000);
+    }, 3000);
   };
 
   const openAula = (studentId) => {
