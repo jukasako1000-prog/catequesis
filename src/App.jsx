@@ -1145,11 +1145,15 @@ function App() {
   useEffect(() => {
     if (showAulaModal && aulaStep === 'historia' && historiaGame.status === 'won' && !historiaGame.pointsAwarded) {
       const pointsWin = 5;
-      historiaGame.teams.forEach(team => {
-        team.studentIds.forEach(id => updatePoints(id, pointsWin));
-      });
-      alert(`✨ ¡EXCELENTE! Los miembros del equipo ganan ${pointsWin} estrellas por ordenar la historia.`);
-      setHistoriaGame(prev => ({ ...prev, pointsAwarded: true }));
+
+      // Esperar 1 segundo para que se vea el orden final antes del cartel
+      setTimeout(() => {
+        historiaGame.teams.forEach(team => {
+          team.studentIds.forEach(id => updatePoints(id, pointsWin));
+        });
+        alert(`✨ ¡EXCELENTE! Los miembros del equipo ganan ${pointsWin} estrellas por ordenar la historia.`);
+        setHistoriaGame(prev => ({ ...prev, pointsAwarded: true }));
+      }, 1000);
     }
   }, [historiaGame.status, historiaGame.pointsAwarded, aulaStep, showAulaModal]);
 
