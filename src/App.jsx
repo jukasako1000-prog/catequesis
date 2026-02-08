@@ -1920,29 +1920,53 @@ function App() {
 
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isExpanded ? '1.5rem' : '0' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                        <div style={{
-                          width: '45px',
-                          height: '45px',
-                          borderRadius: '12px',
-                          background: isCompleted ? '#2ecc71' : (i % 2 === 0 ? '#4a90e2' : '#2ecc71'),
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: 'white',
-                          transition: 'all 0.3s'
-                        }}>
-                          {isCompleted ? <CheckCircle2 size={24} /> : (i % 3 === 0 ? <BookOpen size={24} /> : i % 3 === 1 ? <TrendingUp size={24} /> : <Star size={24} />)}
-                        </div>
-                        <h3 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#2c3e50' }}>{theme}</h3>
+                        <button
+                          onClick={() => markThemeCompleted(theme)}
+                          style={{
+                            width: '55px',
+                            height: '55px',
+                            borderRadius: '16px',
+                            background: isCompleted ? '#2ecc71' : '#f0f4f8',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: isCompleted ? 'white' : '#bdc3c7',
+                            transition: 'all 0.3s',
+                            border: 'none',
+                            cursor: 'pointer',
+                            boxShadow: isCompleted ? '0 5px 15px rgba(46, 204, 113, 0.3)' : 'none'
+                          }}
+                          title={isCompleted ? "Marcar como no completado" : "Marcar como completado"}
+                        >
+                          {isCompleted ? <CheckCircle2 size={30} /> : (i % 2 === 0 ? <BookOpen size={30} /> : <Star size={30} />)}
+                        </button>
+                        <h3
+                          onClick={() => markThemeCompleted(theme)}
+                          style={{ fontSize: '1.3rem', fontWeight: 900, color: '#2c3e50', cursor: 'pointer' }}
+                        >
+                          {theme}
+                        </h3>
                       </div>
 
                       <div style={{ display: 'flex', gap: '8px' }}>
                         <button
                           onClick={() => markThemeCompleted(theme)}
-                          style={{ background: isCompleted ? '#2ecc71' : '#f0f4f8', border: 'none', width: '35px', height: '35px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: isCompleted ? 'white' : '#bdc3c7', transition: 'all 0.3s' }}
+                          style={{
+                            background: isCompleted ? '#2ecc71' : '#f0f4f8',
+                            border: 'none',
+                            width: '45px',
+                            height: '45px',
+                            borderRadius: '12px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            color: isCompleted ? 'white' : '#bdc3c7',
+                            transition: 'all 0.3s'
+                          }}
                           title={isCompleted ? "Marcar como no completado" : "Marcar como completado"}
                         >
-                          <CheckCircle2 size={20} />
+                          <CheckCircle2 size={24} />
                         </button>
                         <button
                           onClick={() => toggleThemeExpanded(theme)}
@@ -2446,6 +2470,33 @@ function App() {
                               }
                             }}
                           >
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                markThemeCompleted(tema);
+                              }}
+                              style={{
+                                position: 'absolute',
+                                top: '10px',
+                                left: '10px',
+                                background: isCompleted ? '#2ecc71' : 'rgba(0,0,0,0.05)',
+                                color: isCompleted ? 'white' : '#bdc3c7',
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: '35px',
+                                height: '35px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                cursor: 'pointer',
+                                zIndex: 10,
+                                transition: 'all 0.3s'
+                              }}
+                              title={isCompleted ? "Marcar como no terminado" : "Marcar como terminado"}
+                            >
+                              <CheckCircle2 size={20} />
+                            </button>
+
                             {isCompleted && (
                               <div style={{ position: 'absolute', top: '10px', right: '10px', color: '#2ecc71' }}>
                                 <CheckCircle2 size={24} />
