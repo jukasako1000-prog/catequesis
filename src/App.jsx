@@ -2257,7 +2257,7 @@ function App() {
 
       {/* View: Ranking List with Search and Filter */}
       {view !== 'history' && view !== 'learning' && (
-        <div className="ranking-container" style={{ maxWidth: '1000px', margin: '3rem auto 0' }}>
+        <div className="ranking-container" style={{ maxWidth: '1200px', margin: '3rem auto 0' }}>
           <div className="ranking-header-controls" style={{
             display: 'flex',
             gap: '15px',
@@ -2269,7 +2269,7 @@ function App() {
             border: '2px solid rgba(255,255,255,0.1)',
             backdropFilter: 'blur(10px)'
           }}>
-            <div className="search-bar-container" style={{ flex: 1, position: 'relative' }}>
+            <div className="search-bar-container" style={{ flex: 2, minWidth: '300px', position: 'relative' }}>
               <div style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: '#95a5a6' }}>
                 <Search size={20} />
               </div>
