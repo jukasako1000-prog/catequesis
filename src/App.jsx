@@ -177,7 +177,7 @@ const AULA_TEMAS = {
       { letter: "B", question: "El sacramento que nos limpia el pecado original.", answer: "BAUTISMO" },
       { letter: "C", question: "Recibimos el cuerpo de Jesús en la Primera...", answer: "COMUNIÓN" },
       { letter: "D", question: "Jesús está ... en el sagrario.", answer: "DENTRO" },
-      { letter: "E", question: "Sacramento para los que están muy malitos.", answer: "ENFERMOS" },
+      { letter: "E", question: "Sacramento para los que están muy .........", answer: "ENFERMOS" },
       { letter: "F", question: "Sacramento que nos confirma en la fe (Contiene la F).", answer: "CONFIRMACIÓN" },
       { letter: "G", question: "Lo que recibimos de Dios con los sacramentos.", answer: "GRACIA" },
       { letter: "H", question: "Por el bautismo somos ... de Dios.", answer: "HIJOS" },
@@ -189,15 +189,15 @@ const AULA_TEMAS = {
       { letter: "Ñ", question: "Personas que suelen recibir la Primera Comunión (Contiene la Ñ).", answer: "NIÑOS" },
       { letter: "O", question: "Sacramento para ser sacerdote.", answer: "ORDEN" },
       { letter: "P", question: "Lo que recibimos en la confesión.", answer: "PERDÓN" },
-      { letter: "Q", question: "Lo que Dios nos muestra a través de los sacramentos (Contiene la Q).", answer: "QUERER" },
+      { letter: "Q", label: "Contiene la Q", question: "Persona que nos enseña y nos prepara para recibir los sacramentos.", answer: "CATEQUISTA" },
       { letter: "R", question: "Otro nombre para el sacramento de la confesión.", answer: "RECONCILIACIÓN" },
       { letter: "S", question: "Los sacramentos son ... sagrados.", answer: "SIGNOS" },
       { letter: "T", question: "Jesús nos entrega ... su amor (Empieza por T).", answer: "TODO" },
-      { letter: "U", question: "Se utiliza aceite bendecido en este sacramento.", answer: "UNCIÓN" },
+      { letter: "U", label: "Contiene la U", question: "Los sacramentos nos ayudan a vivir en ... con Jesús.", answer: "UNIÓN" },
       { letter: "V", question: "Lo que se convierte en la sangre de Cristo.", answer: "VINO" },
       { letter: "X", question: "Nombre completo de la unción de los enfermos (Contiene la X).", answer: "EXTREMAUNCIÓN" },
       { letter: "Y", question: "La gracia nos sirve para ... a los demás (Contiene la Y).", answer: "AYUDAR" },
-      { letter: "Z", question: "Lo que recibimos al bañarnos en el agua del bautismo (Contiene la Z).", answer: "BAUTIZAR" }
+      { letter: "Z", label: "Contiene la Z", question: "Copa donde el vino se convierte en la Sangre de Jesús.", answer: "CÁLIZ" }
     ],
     intrusos: [
       { options: ["Bautismo", "Comunión", "Confesión", "Feria"], correct: 3, explanation: "La feria es una fiesta popular, no un sacramento de la Iglesia." },
