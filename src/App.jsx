@@ -461,7 +461,7 @@ function App() {
       zIndex: 9999
     });
 
-    // playSound('fanfare'); // Eliminado por petición del usuario
+    playSound('stars');
   };
 
   const updatePoints = (id, amount, isMedal = false) => {
