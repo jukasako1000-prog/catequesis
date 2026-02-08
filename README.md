@@ -321,6 +321,7 @@ Buscar las funciones:
 
 ### 📋 Gestión de Alumnos y Ranking
 - **Control Unificado**: El buscador, el selector de clasificación y los botones de acción están ahora agrupados en una barra compacta y elegante con efecto cristal.
+- **Buscador Expandido**: Se ha ensanchado el campo de búsqueda dándole prioridad visual y asegurando un tamaño mínimo de **300px** para que sea cómodo de usar. El contenedor general ahora es más ancho (**1200px**).
 - **Lista Desplegable Inteligente**: El botón **"VER LISTA"** (con icono de trofeo 🏆) se ha integrado en la barra de control, permitiendo abrir y cerrar el ranking con un clic.
 - **Mejora de Visibilidad**: Se ha ensanchado el selector de tipo de ranking a **220px** para que todos los textos (como "COMPORTAMIENTO") se lean perfectamente sin cortarse.
 - **Edición Directa**: Se ha añadido un botón de **Edición (Lápiz 📝)** en la ficha individual de cada alumno para poder corregir sus nombres al momento.
