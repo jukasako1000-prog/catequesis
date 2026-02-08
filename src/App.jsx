@@ -250,6 +250,20 @@ function App() {
   const cannonPowerRef = useRef(45);
   const lastCannonClickRef = useRef(0);
   const [showRankingList, setShowRankingList] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState('');
+  const [loginError, setLoginError] = useState(false);
+
+  const handleLogin = (e) => {
+    e?.preventDefault();
+    if (passwordInput.toUpperCase() === 'JUANCATE') {
+      setIsAuthenticated(true);
+      setLoginError(false);
+    } else {
+      setLoginError(true);
+      setTimeout(() => setLoginError(false), 2000);
+    }
+  };
 
   // AULA (Aula Virtual) State
   const [showAulaModal, setShowAulaModal] = useState(false);
@@ -401,6 +415,51 @@ function App() {
     } catch (err) {
       console.error("Error playing sound", err);
     }
+  };
+
+  const triggerFlares = () => {
+    const duration = 2 * 1000;
+    const animationEnd = Date.now() + duration;
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+    function randomInRange(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    const interval = setInterval(function () {
+      const timeLeft = animationEnd - Date.now();
+
+      if (timeLeft <= 0) {
+        return clearInterval(interval);
+      }
+
+      const particleCount = 40 * (timeLeft / duration);
+      confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+      confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+    }, 250);
+
+    // Bengala izquierda
+    confetti({
+      particleCount: 150,
+      angle: 65,
+      spread: 70,
+      origin: { x: 0.1, y: 1 },
+      colors: ['#fbbf24', '#f59e0b', '#ffffff'],
+      startVelocity: 85,
+      gravity: 0.8
+    });
+    // Bengala derecha
+    confetti({
+      particleCount: 150,
+      angle: 115,
+      spread: 70,
+      origin: { x: 0.9, y: 1 },
+      colors: ['#fbbf24', '#f59e0b', '#ffffff'],
+      startVelocity: 85,
+      gravity: 0.8
+    });
+
+    playSound('fanfare');
   };
 
   const updatePoints = (id, amount, isMedal = false) => {
@@ -1380,6 +1439,85 @@ function App() {
     setSelectedStudent(sortedStudents[nextIndex]);
   };
 
+  if (!isAuthenticated) {
+    return (
+      <div className="login-screen" style={{
+        height: '100vh',
+        width: '100vw',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: 'linear-gradient(135deg, #1e3a8a 0%, #1e1b4b 100%)',
+        color: 'white',
+        fontFamily: 'system-ui, -apple-system, sans-serif'
+      }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="login-card"
+          style={{
+            background: 'rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(10px)',
+            padding: '3rem',
+            borderRadius: '2rem',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+            textAlign: 'center',
+            maxWidth: '400px',
+            width: '90%'
+          }}
+        >
+          <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>⛪</div>
+          <h1 style={{ fontSize: '2rem', marginBottom: '0.5rem', fontWeight: 800 }}>Catequesis App</h1>
+          <p style={{ opacity: 0.7, marginBottom: '2rem' }}>Acceso restringido para catequistas</p>
+
+          <form onSubmit={handleLogin} style={{ width: '100%' }}>
+            <input
+              type="password"
+              placeholder="Contraseña"
+              value={passwordInput}
+              onChange={(e) => setPasswordInput(e.target.value)}
+              autoFocus
+              style={{
+                width: '100%',
+                padding: '1rem',
+                borderRadius: '1rem',
+                border: loginError ? '2px solid #ef4444' : '1px solid rgba(255, 255, 255, 0.3)',
+                background: 'rgba(255, 255, 255, 0.05)',
+                color: 'white',
+                fontSize: '1.2rem',
+                textAlign: 'center',
+                marginBottom: '1rem',
+                outline: 'none',
+                transition: 'all 0.2s'
+              }}
+            />
+            {loginError && <p style={{ color: '#ef4444', fontSize: '0.9rem', marginBottom: '1rem', fontWeight: 'bold' }}>Contraseña incorrecta</p>}
+            <button
+              type="submit"
+              className="login-button"
+              style={{
+                width: '100%',
+                padding: '1rem',
+                borderRadius: '1rem',
+                border: 'none',
+                background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+                color: '#1e1b4b',
+                fontSize: '1.1rem',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                transition: 'transform 0.2s'
+              }}
+            >
+              Entrar al Aula
+            </button>
+          </form>
+        </motion.div>
+      </div>
+    );
+  }
+
   return (
     <div className="app-container">
       {/* Background Clouds */}
@@ -2049,6 +2187,22 @@ function App() {
                           >
                             <Plus size={16} />
                           </button>
+                          <button
+                            className="btn-point"
+                            style={{
+                              background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+                              width: 'auto',
+                              padding: '0 15px',
+                              color: '#1e1b4b',
+                              fontWeight: 'bold',
+                              fontSize: '0.8rem',
+                              borderRadius: '25px',
+                              boxShadow: '0 4px 10px rgba(245, 158, 11, 0.3)'
+                            }}
+                            onClick={() => triggerFlares()}
+                          >
+                            🌱 Iniciando el Camino
+                          </button>
                         </div>
                       </motion.div>
                     ))}
@@ -2122,9 +2276,28 @@ function App() {
                     <span className="stat-value" style={{ color: '#e74c3c', fontSize: '1.4rem' }}>🎖️ {selectedStudent.behaviorMedals || 0} Medallas</span>
                   </div>
                 </div>
-                <div className="detail-badge">
+                <button
+                  className="detail-badge"
+                  onClick={() => triggerFlares()}
+                  style={{
+                    cursor: 'pointer',
+                    border: 'none',
+                    width: '100%',
+                    marginTop: '20px',
+                    padding: '15px',
+                    borderRadius: '20px',
+                    background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+                    color: '#1e1b4b',
+                    fontWeight: 800,
+                    fontSize: '1.2rem',
+                    boxShadow: '0 10px 20px rgba(245, 158, 11, 0.3)',
+                    transition: 'transform 0.2s'
+                  }}
+                  onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                  onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                >
                   {selectedStudent.totalScore >= 100 ? '🎖️ Guía Celestial' : selectedStudent.totalScore >= 50 ? '🌟 Brillante' : '🌱 Iniciando el Camino'}
-                </div>
+                </button>
               </motion.div>
 
               {sortedStudents.length > 1 && (
