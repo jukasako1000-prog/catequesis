@@ -1,0 +1,979 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+:root {
+  --primary: #4a90e2;
+  --secondary: #f39c12;
+  --heaven-blue-light: #e3f2fd;
+  --heaven-blue-dark: #2196f3;
+  --cloud-white: #ffffff;
+  --gold: #ffd700;
+  --silver: #c0c0c0;
+  --bronze: #cd7f32;
+  --text-main: #2c3e50;
+  --font-family: 'Outfit', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background: linear-gradient(180deg, #0c2646 0%, #204065 50%, #2a5298 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+/* Background Clouds Animation */
+.background-clouds {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.8;
+  /* Aumentado para que se vean más */
+}
+
+.cloud {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  filter: blur(25px);
+  opacity: 0.35;
+  animation: float 40s linear infinite;
+  box-shadow:
+    40px 10px 0 10px #fff,
+    -30px 5px 0 2px #fff,
+    10px -20px 0 5px #fff,
+    -10px 15px 0 5px #fff;
+}
+
+/* Añadir volumen extra con pseudoelementos */
+.cloud::after,
+.cloud::before {
+  content: '';
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.cloud::after {
+  width: 80%;
+  height: 80%;
+  top: -40%;
+  left: 20%;
+}
+
+.cloud::before {
+  width: 60%;
+  height: 60%;
+  bottom: -20%;
+  right: 10%;
+}
+
+@keyframes float {
+  from {
+    transform: translateX(-200px);
+  }
+
+  to {
+    transform: translateX(100vw);
+  }
+}
+
+.app-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 4rem;
+  /* Aumentado para dar aire al podio */
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin-bottom: 0.2rem;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+}
+
+header h1:hover {
+  transform: scale(1.02);
+}
+
+header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Podium Styles */
+.podium-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 5rem;
+  height: 420px;
+  /* Más alto para acomodar avatares grandes */
+}
+
+.podium-spot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.avatar-container {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  margin-bottom: 2rem;
+  /* Espacio para que no choque con el pedestal al botar */
+  background-color: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  /* Importante para que se vean los brazos */
+  transition: transform 0.3s ease;
+  animation: bounce 2s infinite ease-in-out;
+}
+
+.podium-1 .avatar-container {
+  width: 180px;
+  height: 180px;
+  border-color: var(--gold);
+  /* El líder salta más rápido y con más energía que los demás */
+  animation: bounce 1s infinite ease-in-out;
+}
+
+.podium-4 .avatar-container,
+.podium-5 .avatar-container {
+  width: 110px;
+  height: 110px;
+}
+
+
+/* Los brazos animados */
+.arms-container {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.arm {
+  position: absolute;
+  width: 12px;
+  height: 45px;
+  background: #f39c12;
+  /* Color piel/dorado */
+  border-radius: 10px;
+  transform-origin: bottom center;
+}
+
+.arm-left {
+  left: -20px;
+  top: 20px;
+  rotate: -45deg;
+  animation: wave-left 0.8s infinite alternate ease-in-out;
+}
+
+.arm-right {
+  right: -20px;
+  top: 20px;
+  rotate: 45deg;
+  animation: wave-right 0.8s infinite alternate ease-in-out;
+}
+
+/* Las piernas dinámicas */
+.legs-container {
+  position: absolute;
+  bottom: -30px;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.leg {
+  width: 10px;
+  height: 35px;
+  background: #f39c12;
+  border-radius: 5px;
+  animation: kick 0.5s infinite alternate ease-in-out;
+}
+
+.leg-left {
+  animation-delay: 0.1s;
+}
+
+.leg-right {
+  animation-delay: 0.3s;
+}
+
+/* Aureola de Santo */
+.halo {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 20px;
+  border: 4px solid rgba(255, 215, 0, 0.6);
+  border-radius: 50%;
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+  animation: float-halo 3s infinite ease-in-out;
+  z-index: 5;
+}
+
+@keyframes float-halo {
+
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0) rotateX(60deg);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translateX(-50%) translateY(-10px) rotateX(60deg);
+    opacity: 1;
+  }
+}
+
+@keyframes kick {
+  from {
+    transform: rotate(-5deg);
+  }
+
+  to {
+    transform: rotate(5deg);
+  }
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(0) scale(1.05, 0.95);
+  }
+
+  50% {
+    transform: translateY(-50px) scale(0.95, 1.05);
+  }
+}
+
+@keyframes wave-left {
+  from {
+    transform: rotate(-10deg);
+  }
+
+  to {
+    transform: rotate(-50deg);
+  }
+}
+
+@keyframes wave-right {
+  from {
+    transform: rotate(10deg);
+  }
+
+  to {
+    transform: rotate(50deg);
+  }
+}
+
+.avatar-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.podium-pedestal {
+  width: 100%;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  /* Cambio a flex-start para que los puntos no se salgan por abajo */
+  padding-top: 20px;
+  /* Espacio para la medalla */
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.podium-1 {
+  height: 180px;
+  background: linear-gradient(135deg, var(--gold) 0%, #f1c40f 100%);
+  order: 3;
+  z-index: 3;
+}
+
+.podium-2 {
+  height: 140px;
+  background: linear-gradient(135deg, var(--silver) 0%, #bdc3c7 100%);
+  order: 2;
+  z-index: 2;
+}
+
+.podium-3 {
+  height: 110px;
+  background: linear-gradient(135deg, var(--bronze) 0%, #a0522d 100%);
+  order: 4;
+  z-index: 1;
+}
+
+.podium-4 {
+  height: 90px;
+  background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+  order: 1;
+  z-index: 0;
+}
+
+.podium-5 {
+  height: 80px;
+  background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+  order: 5;
+  z-index: -1;
+}
+
+.podium-name {
+  margin-top: 1.5rem;
+  font-size: 1.6rem;
+  color: #1a252f;
+  font-weight: 900;
+  /* Peso máximo */
+  text-align: center;
+  text-transform: uppercase;
+  background: white;
+  /* Fondo para resaltar sobre el cielo */
+  padding: 5px 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  /* Sombra para elevarlo */
+  border: 3px solid var(--primary);
+  /* Borde de color */
+  display: inline-block;
+  min-width: 150px;
+}
+
+.podium-1 .podium-name {
+  font-size: 2.2rem;
+  color: #b8860b;
+  border-color: var(--gold);
+  padding: 8px 30px;
+}
+
+.podium-points {
+  font-size: 2rem;
+  /* Puntos mucho más visibles */
+  margin-top: 10px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 15px;
+  border-radius: 20px;
+  letter-spacing: 1px;
+}
+
+/* Confetti Cannons */
+.confetti-cannon {
+  position: absolute;
+  bottom: 0px;
+  width: 60px;
+  height: 90px;
+  background: linear-gradient(to bottom, #2c3e50, #1a252f);
+  border: 3px solid #f1c40f;
+  border-radius: 10px 10px 0 0;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.confetti-cannon:hover {
+  transform: scale(1.1) translateY(-5px);
+  filter: brightness(1.2);
+}
+
+.confetti-cannon:active {
+  transform: scale(0.9) translateY(2px);
+}
+
+.confetti-cannon::before {
+  content: '🎊';
+  animation: jitter 0.5s infinite alternate;
+}
+
+.cannon-left {
+  left: -150px;
+  transform: rotate(-15deg);
+}
+
+.cannon-right {
+  right: -150px;
+  transform: rotate(15deg);
+}
+
+@keyframes jitter {
+  from {
+    transform: rotate(-5deg) scale(1);
+  }
+
+  to {
+    transform: rotate(5deg) scale(1.1);
+  }
+}
+
+/* List Styles */
+.ranking-list {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.student-card {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 15px;
+  margin-bottom: 0.8rem;
+  transition: transform 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.student-card:hover {
+  transform: translateY(-2px);
+}
+
+.rank-number {
+  width: 30px;
+  font-weight: 700;
+  color: #95a5a6;
+  font-size: 1.1rem;
+}
+
+.small-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  margin: 0 1rem;
+  background: #f0f0f0;
+  overflow: hidden;
+}
+
+.student-info {
+  flex: 1;
+}
+
+.student-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.student-scores {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.score-daily {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-point {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  transition: all 0.2s;
+}
+
+.btn-plus {
+  background-color: #2ecc71;
+}
+
+.btn-plus:hover {
+  background-color: #27ae60;
+  transform: scale(1.1);
+}
+
+.btn-minus {
+  background-color: #e74c3c;
+}
+
+.btn-minus:hover {
+  background-color: #c0392b;
+  transform: scale(1.1);
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tab {
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  border: none;
+  background: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.tab.active {
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: var(--primary);
+}
+
+/* Animations */
+.star-particle {
+  position: absolute;
+  color: var(--gold);
+  pointer-events: none;
+  z-index: 100;
+}
+
+.crown {
+  font-size: 2rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  z-index: 10;
+}
+
+.podium-spot {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  /* Align pedestals to bottom */
+  align-items: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-point:active {
+  transform: scale(0.9);
+}
+
+/* Quiz & Admin Styles */
+.admin-panel,
+.quiz-panel {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.input-main {
+  flex: 1;
+  padding: 0.8rem 1.2rem;
+  border: 2px solid #e3f2fd;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 1rem;
+  outline: none;
+}
+
+.input-main:focus {
+  border-color: var(--primary);
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.quiz-card {
+  text-align: center;
+}
+
+.question-text {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: var(--text-main);
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.option-btn {
+  padding: 1.5rem;
+  border: 2px solid #e3f2fd;
+  border-radius: 15px;
+  background: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.option-btn:hover {
+  border-color: var(--primary);
+  background: #f8fbff;
+  transform: translateY(-3px);
+}
+
+.floating-action {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.action-btn {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.action-btn:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal {
+  background: white;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 25px;
+  padding: 2rem;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+}
+
+/* --- CELEBRACIÓN APOTEÓSICA --- */
+
+.balloon {
+  position: fixed;
+  bottom: -100px;
+  font-size: 3rem;
+  z-index: 100;
+  pointer-events: none;
+  filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.2));
+}
+
+.angel {
+  position: fixed;
+  top: -100px;
+  font-size: 3.5rem;
+  z-index: 100;
+  pointer-events: none;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+}
+
+@keyframes fly-balloon {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-120vh) rotate(20deg);
+    opacity: 0;
+  }
+}
+
+@keyframes descend-angel {
+  0% {
+    transform: translateY(0) scale(0.5);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+    transform: translateY(60vh) scale(1.2);
+  }
+
+  100% {
+    transform: translateY(100vh) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.apotheosic-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  /* Arriba */
+  justify-content: center;
+  padding-top: 5rem;
+  z-index: 1000;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 30%, rgba(0, 0, 0, 0) 70%);
+}
+
+.celebration-text {
+  font-size: 4rem;
+  font-weight: 950;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  text-shadow:
+    0 0 20px rgba(255, 215, 0, 1),
+    0 0 40px rgba(255, 215, 0, 0.8),
+    0 5px 15px rgba(0, 0, 0, 0.7);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* --- FICHA DEL ALUMNO --- */
+
+.student-detail-card {
+  background: linear-gradient(180deg, #1a252f 0%, #2c3e50 100%);
+  color: white;
+  width: 100%;
+  max-width: 450px;
+  border-radius: 40px;
+  padding: 3rem 2rem;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  border: 4px solid rgba(255, 255, 255, 0.1);
+  overflow: visible;
+}
+
+.detail-avatar-container {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 2rem;
+  position: relative;
+  border-radius: 50%;
+  border: 8px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  background: #1a252f;
+}
+
+.detail-avatar-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.halo-large {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110%;
+  height: 30px;
+  border: 4px solid #fff59d;
+  border-radius: 50%;
+  box-shadow: 0 0 25px rgba(255, 235, 59, 0.8), inset 0 0 15px rgba(255, 235, 59, 0.4);
+  animation: halo-swing 4s infinite ease-in-out;
+  pointer-events: none;
+}
+
+.detail-name {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.detail-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+  background: #f8fbff;
+  padding: 1.5rem;
+  border-radius: 25px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.detail-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #ffd700, #ffa000);
+  color: white;
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  box-shadow: 0 5px 15px rgba(255, 160, 0, 0.3);
+}
+
+.medal-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(142, 188, 226, 0.1);
+  padding: 2px 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(142, 188, 226, 0.2);
+}
+
+.medal-step {
+  background: none;
+  border: none;
+  color: #7f8c8d;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 5px;
+  font-size: 1.2rem;
+  line-height: 1;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.medal-step:hover {
+  color: #f39c12;
+  transform: scale(1.3);
+}
+
+.medal-badge {
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  box-shadow: 0 2px 4px rgba(243, 156, 18, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 42px;
+  justify-content: center;
+}
+
+@keyframes halo-swing {
+  0% {
+    transform: translateX(-65%) translateY(0) rotateX(65deg);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: translateX(-35%) translateY(-10px) rotateX(65deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateX(-65%) translateY(0) rotateX(65deg);
+    opacity: 0.7;
+  }
+}
