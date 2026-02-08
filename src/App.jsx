@@ -282,7 +282,7 @@ const AULA_TEMAS = {
     rosco: [
       { letter: "A", question: "Momento en que el Ángel visita a María.", answer: "ANUNCIACIÓN" },
       { letter: "B", question: "Ciudad donde María dio a luz a Jesús.", answer: "BELÉN" },
-      { letter: "C", label: "Contiene la C", question: "Nombre de la madre de María.", answer: "ANA" },
+      { letter: "C", question: "Bodas donde María dijo: 'Haced lo que Él os diga'.", answer: "CANÁ" },
       { letter: "D", label: "Contiene la D", question: "Lo que María guardaba en su corazón (sus ...).", answer: "RECUERDOS" },
       { letter: "E", label: "Contiene la E", question: "Nombre de la prima de María.", answer: "ISABEL" },
       { letter: "F", question: "Lugar de Portugal donde se apareció la Virgen a tres pastorcitos.", answer: "FÁTIMA" },
@@ -296,7 +296,7 @@ const AULA_TEMAS = {
       { letter: "O", label: "Contiene la O", question: "La oración preferida de María: el ...", answer: "ROSARIO" },
       { letter: "P", question: "María es la siempre ... (limpia de pecado).", answer: "PURÍSIMA" },
       { letter: "Q", label: "Contiene la Q", question: "Lo que sentimos por María.", answer: "QUERER" },
-      { letter: "R", question: "Cadena de cuentas que usamos para rezar a María.", answer: "ROSARIO" },
+      { letter: "R", question: "Título que le damos a María: ... de los cielos.", answer: "REINA" },
       { letter: "S", question: "Respuesta de María a Dios: 'Puse ser vuestra ...'", answer: "SIERVA" },
       { letter: "T", label: "Contiene la T", question: "Donde encontraron a Jesús perdido, hablando con los doctores.", answer: "TEMPLO" },
       { letter: "U", label: "Contiene la U", question: "Cuando María subió al cielo en cuerpo y alma: La ...", answer: "ASUNCIÓN" },
