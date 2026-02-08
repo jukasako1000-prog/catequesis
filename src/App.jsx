@@ -312,12 +312,12 @@ function App() {
 
   // Ordenar Historia State
   const [historiaGame, setHistoriaGame] = useState({
-    items: [], // [{ id, text, originalIdx }]
-    status: 'playing', // 'playing', 'won'
+    challenges: [], // Array de { items: [], title: '' }
+    currentIdx: 0,
+    status: 'playing', // 'playing', 'finished'
     teams: [],
     currentTeamIdx: 0,
     pointsAwarded: false,
-    title: '',
     timeLeft: 60,
     isPaused: false
   });
@@ -927,19 +927,25 @@ function App() {
   };
 
   const startHistoriaGame = (temaName, teams = [], initialTeamIdx = 0) => {
-    const historia = AULA_TEMAS[temaName].historias[0]; // Usamos la primera
-    const items = historia.items.map((text, idx) => ({ id: idx, text, originalIdx: idx }));
-    // Desordenar
-    const shuffled = [...items].sort(() => Math.random() - 0.5);
+    const allHistorias = [...AULA_TEMAS[temaName].historias].sort(() => Math.random() - 0.5);
+    // Necesitamos una historia por equipo
+    const challenges = teams.map((_, i) => {
+      const h = allHistorias[i % allHistorias.length];
+      const items = h.items.map((text, idx) => ({ id: idx, text, originalIdx: idx }));
+      return {
+        title: h.title,
+        items: [...items].sort(() => Math.random() - 0.5)
+      };
+    });
 
     setHistoriaGame({
-      items: shuffled,
+      challenges: challenges,
+      currentIdx: 0,
       status: 'playing',
       teams: teams,
       currentTeamIdx: initialTeamIdx,
       pointsAwarded: false,
-      title: historia.title,
-      timeLeft: 60,
+      timeLeft: teams.length * 60, // Damos tiempo proporcional
       isPaused: false
     });
     setAulaStep('historia');
@@ -947,17 +953,39 @@ function App() {
 
   const handleHistoriaMove = (fromIdx, toIdx) => {
     setHistoriaGame(prev => {
-      const newItems = [...prev.items];
+      const currentChallenge = prev.challenges[prev.currentIdx];
+      const newItems = [...currentChallenge.items];
       const [moved] = newItems.splice(fromIdx, 1);
       newItems.splice(toIdx, 0, moved);
 
       const isCorrect = newItems.every((item, idx) => item.originalIdx === idx);
-      if (isCorrect) playSound('success');
+
+      const newChallenges = prev.challenges.map((c, i) =>
+        i === prev.currentIdx ? { ...c, items: newItems } : c
+      );
+
+      if (isCorrect) {
+        playSound('success');
+        const pointsWin = 5;
+        // Reparto de puntos inmediato al acertar su historia
+        prev.teams[prev.currentTeamIdx].studentIds.forEach(id => updatePoints(id, pointsWin));
+
+        // Si hay más equipos, pasamos al siguiente después de un pequeño retardo
+        if (prev.currentIdx + 1 < prev.challenges.length) {
+          setTimeout(() => {
+            setHistoriaGame(curr => ({
+              ...curr,
+              currentIdx: curr.currentIdx + 1,
+              currentTeamIdx: (curr.currentTeamIdx + 1) % curr.teams.length
+            }));
+          }, 1500);
+        }
+      }
 
       return {
         ...prev,
-        items: newItems,
-        status: isCorrect ? 'won' : 'playing'
+        challenges: newChallenges,
+        status: (isCorrect && prev.currentIdx + 1 >= prev.challenges.length) ? 'finished' : 'playing'
       };
     });
   };
@@ -1143,15 +1171,19 @@ function App() {
 
   // Recompensas Historia
   useEffect(() => {
-    if (showAulaModal && aulaStep === 'historia' && historiaGame.status === 'won' && !historiaGame.pointsAwarded) {
+    if (showAulaModal && aulaStep === 'historia' && historiaGame.status === 'finished' && !historiaGame.pointsAwarded) {
       const pointsWin = 5;
+      let summary = "📜 ¡Historias Completadas!\n";
 
       // Esperar 1 segundo para que se vea el orden final antes del cartel
       setTimeout(() => {
-        historiaGame.teams.forEach(team => {
+        historiaGame.teams.forEach((team, teamIdx) => {
+          // Asumiendo que cada equipo tiene un desafío y se recompensa por completarlo
+          // O si se quiere recompensar a todos los equipos que participaron
           team.studentIds.forEach(id => updatePoints(id, pointsWin));
+          summary += `✨ ${team.name}: ${pointsWin} estrellas cada uno por completar su historia.\n`;
         });
-        alert(`✨ ¡EXCELENTE! Los miembros del equipo ganan ${pointsWin} estrellas por ordenar la historia.`);
+        alert(summary);
         setHistoriaGame(prev => ({ ...prev, pointsAwarded: true }));
       }, 1000);
     }
@@ -3072,56 +3104,74 @@ function App() {
                     </div>
 
 
-                    <p style={{ textAlign: 'center', color: '#7f8c8d', marginBottom: '2rem', fontWeight: 700 }}>{historiaGame.title}</p>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '600px', margin: '0 auto' }}>
-                      {historiaGame.items.map((item, idx) => (
-                        <motion.div
-                          key={item.id}
-                          layout
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '15px',
-                            background: historiaGame.status === 'won' ? '#f3e5f5' : 'white',
-                            padding: '20px',
-                            borderRadius: '20px',
-                            border: `3px solid ${historiaGame.status === 'won' ? '#9b59b6' : '#eee'}`,
-                            boxShadow: '0 5px 15px rgba(0,0,0,0.05)'
-                          }}
-                        >
-                          <div style={{ background: '#9b59b6', color: 'white', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0 }}>
-                            {idx + 1}
-                          </div>
-                          <div style={{ flex: 1, fontWeight: 800, color: '#2c3e50', fontSize: '1.1rem' }}>
-                            {item.text}
-                          </div>
-                          {historiaGame.status === 'playing' && (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                              <button
-                                disabled={idx === 0}
-                                onClick={() => handleHistoriaMove(idx, idx - 1)}
-                                style={{ background: '#eee', border: 'none', borderRadius: '8px', padding: '5px', cursor: 'pointer', opacity: idx === 0 ? 0.3 : 1 }}
-                              >
-                                ▲
-                              </button>
-                              <button
-                                disabled={idx === historiaGame.items.length - 1}
-                                onClick={() => handleHistoriaMove(idx, idx + 1)}
-                                style={{ background: '#eee', border: 'none', borderRadius: '8px', padding: '5px', cursor: 'pointer', opacity: idx === historiaGame.items.length - 1 ? 0.3 : 1 }}
-                              >
-                                ▼
-                              </button>
-                            </div>
-                          )}
-                        </motion.div>
-                      ))}
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', marginBottom: '2rem' }}>
+                      <div style={{ background: '#f8f9fa', padding: '10px 25px', borderRadius: '20px', border: '3px solid #9b59b6', fontWeight: 900, boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
+                        Turno de: <span style={{ color: '#9b59b6' }}>{historiaGame.teams[historiaGame.currentTeamIdx]?.name}</span>
+                      </div>
+                      <div style={{ background: 'rgba(155, 89, 182, 0.1)', padding: '10px 20px', borderRadius: '15px', color: '#9b59b6', fontWeight: 800, fontSize: '0.9rem' }}>
+                        Desafío {historiaGame.currentIdx + 1} de {historiaGame.challenges.length}
+                      </div>
                     </div>
 
-                    {historiaGame.status === 'won' && (
-                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ textAlign: 'center', marginTop: '30px', background: 'rgba(155, 89, 182, 0.1)', padding: '30px', borderRadius: '30px', border: '3px dashed #9b59b6' }}>
-                        <div style={{ color: '#9b59b6', fontSize: '1.8rem', fontWeight: 950, marginBottom: '20px' }}>✨ ¡HISTORIA ORDENADA CORRECTAMENTE! ✨</div>
-                        <button className="btn-primary" style={{ background: '#9b59b6', padding: '15px 40px', fontSize: '1.2rem' }} onClick={() => setShowAulaModal(false)}>Continuar</button>
+                    <p style={{ textAlign: 'center', color: '#2c3e50', marginBottom: '1.5rem', fontWeight: 800, fontSize: '1.2rem' }}>
+                      {historiaGame.challenges[historiaGame.currentIdx]?.title}
+                    </p>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '600px', margin: '0 auto' }}>
+                      {historiaGame.challenges[historiaGame.currentIdx]?.items.map((item, idx) => {
+                        const isCorrectPosition = item.originalIdx === idx;
+                        const isWinState = historiaGame.challenges[historiaGame.currentIdx].items.every((it, i) => it.originalIdx === i);
+
+                        return (
+                          <motion.div
+                            key={item.id}
+                            layout
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '15px',
+                              background: isWinState ? 'rgba(46, 204, 113, 0.1)' : 'white',
+                              padding: '20px',
+                              borderRadius: '20px',
+                              border: `3px solid ${isWinState ? '#2ecc71' : '#eee'}`,
+                              boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
+                              transition: 'all 0.3s'
+                            }}
+                          >
+                            <div style={{ background: isWinState ? '#2ecc71' : '#9b59b6', color: 'white', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0 }}>
+                              {idx + 1}
+                            </div>
+                            <div style={{ flex: 1, fontWeight: 800, color: '#2c3e50', fontSize: '1.1rem' }}>
+                              {item.text}
+                            </div>
+                            {historiaGame.status === 'playing' && !isWinState && (
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                <button
+                                  disabled={idx === 0}
+                                  onClick={() => handleHistoriaMove(idx, idx - 1)}
+                                  style={{ background: '#eee', border: 'none', borderRadius: '8px', padding: '5px', cursor: 'pointer', opacity: idx === 0 ? 0.3 : 1 }}
+                                >
+                                  ▲
+                                </button>
+                                <button
+                                  disabled={idx === historiaGame.challenges[historiaGame.currentIdx].items.length - 1}
+                                  onClick={() => handleHistoriaMove(idx, idx + 1)}
+                                  style={{ background: '#eee', border: 'none', borderRadius: '8px', padding: '5px', cursor: 'pointer', opacity: idx === historiaGame.challenges[historiaGame.currentIdx].items.length - 1 ? 0.3 : 1 }}
+                                >
+                                  ▼
+                                </button>
+                              </div>
+                            )}
+                          </motion.div>
+                        );
+                      })}
+                    </div>
+
+                    {historiaGame.status === 'finished' && (
+                      <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ textAlign: 'center', marginTop: '30px', background: 'rgba(46, 204, 113, 0.1)', padding: '30px', borderRadius: '30px', border: '3px dashed #2ecc71' }}>
+                        <div style={{ color: '#27ae60', fontSize: '1.8rem', fontWeight: 950, marginBottom: '20px' }}>✨ ¡TORNEO COMPLETADO! ✨</div>
+                        <button className="btn-primary" style={{ background: '#2ecc71', padding: '15px 40px', fontSize: '1.2rem' }} onClick={() => setShowAulaModal(false)}>Continuar al Aula</button>
                       </motion.div>
                     )}
 
