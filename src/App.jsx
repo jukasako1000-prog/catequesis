@@ -213,6 +213,112 @@ const AULA_TEMAS = {
         items: ["Bautismo (Nacemos)", "Confirmación (Crecemos)", "Eucaristía (Alimento)", "Confesión (Perdón)"]
       }
     ]
+  },
+  "La Biblia": {
+    icon: "📖",
+    questions: [
+      { id: 60, question: "¿Quién es el autor principal de la Biblia por inspiración divina?", options: ["Los reyes", "Dios", "Los soldados", "Los científicos"], correct: 1 },
+      { id: 61, question: "¿En cuántas partes principales se divide la Biblia?", options: ["Tres", "Cinco", "Dos (Antiguo y Nuevo Testamento)", "Diez"], correct: 2 },
+      { id: 62, question: "¿Cómo se llama el primer libro de la Biblia?", options: ["Apocalipsis", "Éxodo", "Génesis", "Salmos"], correct: 2 },
+      { id: 63, question: "¿Quiénes escribieron los cuatro Evangelios?", options: ["David y Goliat", "Mateo, Marcos, Lucas y Juan", "Pedro y Pablo", "Moisés y Abraham"], correct: 1 },
+      { id: 64, question: "¿Qué libro contiene los cánticos y oraciones del Rey David?", options: ["Génesis", "Salmos", "Levítico", "Mateo"], correct: 1 },
+      { id: 65, question: "¿Cuántos libros tiene la Biblia Católica?", options: ["10", "40", "73", "100"], correct: 2 },
+      { id: 66, question: "¿Cuál es el último libro de la Biblia?", options: ["Génesis", "Hechos", "Apocalipsis", "Romanos"], correct: 2 }
+    ],
+    phrases: ["TU PALABRA ES LÁMPARA PARA MIS PASOS", "NO SOLO DE PAN VIVE EL HOMBRE", "PEDID Y SE OS DARÁ"],
+    rosco: [
+      { letter: "A", question: "Acuerdo de amor entre Dios y su pueblo.", answer: "ALIANZA" },
+      { letter: "B", question: "El libro sagrado de los cristianos.", answer: "BIBLIA" },
+      { letter: "C", question: "Cada una de las divisiones grandes de un libro bíblico.", answer: "CAPÍTULO" },
+      { letter: "D", question: "Rey que venció a Goliat y escribió salmos.", answer: "DAVID" },
+      { letter: "E", question: "Significa 'Buena Noticia'.", answer: "EVANGELIO" },
+      { letter: "F", label: "Contiene la F", question: "Lo que necesitamos para creer en la Palabra de Dios.", answer: "FE" },
+      { letter: "G", question: "Primer libro que narra la Creación.", answer: "GÉNESIS" },
+      { letter: "H", label: "Contiene la H", question: "Libro sobre la vida de los primeros cristianos: ... de los Apóstoles.", answer: "HECHOS" },
+      { letter: "I", question: "Dios ayudó a los autores a escribir: ... divina.", answer: "INSPIRACIÓN" },
+      { letter: "J", question: "Discípulo amado y autor de un evangelio.", answer: "JUAN" },
+      { letter: "L", question: "Evangelista que era médico.", answer: "LUCAS" },
+      { letter: "M", question: "El evangelio más corto.", answer: "MARCOS" },
+      { letter: "N", question: "La parte de la Biblia que cuenta la vida de Jesús: ... Testamento.", answer: "NUEVO" },
+      { letter: "O", label: "Contiene la O", question: "Hablar con Dios usando sus palabras.", answer: "ORACIÓN" },
+      { letter: "P", question: "Hombres que hablaban en nombre de Dios.", answer: "PROFETAS" },
+      { letter: "Q", label: "Contiene la Q", question: "Lo que Dios nos pide al leer la Biblia: que le lleguemos a...", answer: "QUERER" },
+      { letter: "R", question: "Dios se nos da a conocer: La ... divina.", answer: "REVELACIÓN" },
+      { letter: "S", question: "Poemas religiosos para cantar a Dios.", answer: "SALMOS" },
+      { letter: "T", question: "Cada una de las dos grandes partes de la Biblia.", answer: "TESTAMENTO" },
+      { letter: "U", label: "Contiene la U", question: "La Biblia es un mensaje ... (para todo el mundo).", answer: "UNIVERSAL" },
+      { letter: "V", question: "Cada una de las frases numeradas en la Biblia.", answer: "VERSÍCULO" },
+      { letter: "X", label: "Contiene la X", question: "Segundo libro de la Biblia donde Moisés libera al pueblo.", answer: "ÉXODO" },
+      { letter: "Y", label: "Contiene la Y", question: "La Palabra de Dios nos sirve de ... en la vida.", answer: "AYUDA" },
+      { letter: "Z", label: "Contiene la Z", question: "Pueblo donde creció Jesús después de volver de Egipto.", answer: "NAZARET" }
+    ],
+    intrusos: [
+      { options: ["Génesis", "Salmos", "Mateo", "Pinocho"], correct: 3, explanation: "Pinocho es un cuento infantil, no un libro de la Biblia." },
+      { options: ["Moisés", "Noé", "David", "Spiderman"], correct: 3, explanation: "Spiderman es un superhéroe de Marvel, no un personaje bíblico." },
+      { options: ["Lucas", "Marcos", "Juan", "Lucas Grijander"], correct: 3, explanation: "¡Ese Lucas es un humorista! El evangelista se llama solo Lucas." },
+      { options: ["Parábola", "Milagro", "Profecía", "Wifi"], correct: 3, explanation: "En tiempos bíblicos no existía el Wifi, ¡aunque Dios está conectado con todos!" },
+      { options: ["Oro", "Incienso", "Mirra", "Carbón"], correct: 3, explanation: "Los Reyes Magos no llevaron carbón al Niño Jesús." },
+      { options: ["Paloma", "Cordero", "Pez", "Dragón"], correct: 3, explanation: "El dragón no es un símbolo de paz o de Jesús en la Biblia." }
+    ],
+    historias: [
+      {
+        title: "El Arca de Noé",
+        items: ["Dios avisa a Noé del diluvio", "Noé construye el gran Arca", "Suben los animales por parejas", "Sale el Arco Iris como promesa"]
+      }
+    ]
+  },
+  "María, nuestra Madre": {
+    icon: "🌹",
+    questions: [
+      { id: 70, question: "¿Cómo se llama el esposo de la Virgen María?", options: ["San Pedro", "San José", "San Juan", "San Mateo"], correct: 1 },
+      { id: 71, question: "¿En qué ciudad vivía María cuando el Ángel la visitó?", options: ["Roma", "Jerusalén", "Nazaret", "Belén"], correct: 2 },
+      { id: 72, question: "¿Qué Ángel anunció a María que sería la Madre de Jesús?", options: ["Ángel Rafael", "Ángel Gabriel", "Ángel Miguel", "Ángel de la Guarda"], correct: 1 },
+      { id: 73, question: "¿Cómo se llama la prima de María a la que fue a visitar?", options: ["Marta", "Isabel", "Magdalena", "Verónica"], correct: 1 },
+      { id: 74, question: "¿Cuál es la oración más famosa dedicada a María?", options: ["Padre Nuestro", "Ave María", "Gloria", "Credo"], correct: 1 },
+      { id: 75, question: "¿A qué país huyeron María, José y el Niño para escapar de Herodes?", options: ["España", "Grecia", "Egipto", "Francia"], correct: 2 },
+      { id: 76, question: "¿Es María también nuestra madre del cielo?", options: ["No, solo de Jesús", "Sí, es madre de todos los cristianos", "Solo de los santos", "No sabemos"], correct: 1 }
+    ],
+    phrases: ["HÁGASE EN MÍ SEGÚN TU PALABRA", "MARÍA ES LA MADRE DE LA IGLESIA", "BENDITA TÚ ERES ENTRE LAS MUJERES"],
+    rosco: [
+      { letter: "A", question: "Momento en que el Ángel visita a María.", answer: "ANUNCIACIÓN" },
+      { letter: "B", question: "Ciudad donde María dio a luz a Jesús.", answer: "BELÉN" },
+      { letter: "C", label: "Contiene la C", question: "Nombre de la madre de María.", answer: "ANA" },
+      { letter: "D", label: "Contiene la D", question: "Lo que María guardaba en su corazón (sus ...).", answer: "RECUERDOS" },
+      { letter: "E", label: "Contiene la E", question: "Nombre de la prima de María.", answer: "ISABEL" },
+      { letter: "F", question: "Lugar de Portugal donde se apareció la Virgen a tres pastorcitos.", answer: "FÁTIMA" },
+      { letter: "G", question: "Nombre del Arcángel de la Anunciación.", answer: "GABRIEL" },
+      { letter: "H", question: "Jesús es el ... de María.", answer: "HIJO" },
+      { letter: "I", question: "María fue concebida sin pecado: La ... Concepción.", answer: "INMACULADA" },
+      { letter: "J", question: "Nombre del esposo de María.", answer: "JOSÉ" },
+      { letter: "L", question: "Lugar de Francia famoso por las apariciones de María.", answer: "LOURDES" },
+      { letter: "M", question: "Nombre de nuestra Madre del cielo.", answer: "MARÍA" },
+      { letter: "N", question: "Pueblo donde vivía la Sagrada Familia.", answer: "NAZARET" },
+      { letter: "O", label: "Contiene la O", question: "La oración preferida de María: el ...", answer: "ROSARIO" },
+      { letter: "P", question: "María es la siempre ... (limpia de pecado).", answer: "PURÍSIMA" },
+      { letter: "Q", label: "Contiene la Q", question: "Lo que sentimos por María.", answer: "QUERER" },
+      { letter: "R", question: "Cadena de cuentas que usamos para rezar a María.", answer: "ROSARIO" },
+      { letter: "S", question: "Respuesta de María a Dios: 'Puse ser vuestra ...'", answer: "SIERVA" },
+      { letter: "T", label: "Contiene la T", question: "Donde encontraron a Jesús perdido, hablando con los doctores.", answer: "TEMPLO" },
+      { letter: "U", label: "Contiene la U", question: "Cuando María subió al cielo en cuerpo y alma: La ...", answer: "ASUNCIÓN" },
+      { letter: "V", question: "Título que damos a María: La ... María.", answer: "VIRGEN" },
+      { letter: "X", label: "Contiene la X", question: "María es nuestra ... (nos ayuda en las dificultades).", answer: "AUXILIADORA" },
+      { letter: "Y", label: "Contiene la Y", question: "María nos dio al mundo un ... de luz (Jesús).", answer: "RAYO" },
+      { letter: "Z", label: "Contiene la Z", question: "La Virgen es nuestra madre y nuestra ...", answer: "ESPERANZA" }
+    ],
+    intrusos: [
+      { options: ["Gabriel", "José", "Isabel", "Superman"], correct: 3, explanation: "Superman es de otro planeta, ¡no salía en Nazaret!" },
+      { options: ["Rosario", "Ave María", "Salve", "Rock and Roll"], correct: 3, explanation: "El Rock and Roll es música moderna, no una oración tradicional a María." },
+      { options: ["Fátima", "Lourdes", "Carmen", "Disneyland"], correct: 3, explanation: "Disneyland es un parque de atracciones, no un lugar de devoción a María." },
+      { options: ["Azul", "Blanco", "Celeste", "Marrón"], correct: 3, explanation: "María suele vestir de azul y blanco, ¡no de colores sucios!" },
+      { options: ["Madre", "Reina", "Virgen", "Abuela"], correct: 3, explanation: "Aunque Jesús tuvo abuelos (Ana y Joaquín), 'Abuela' no es un título mariano." },
+      { options: ["Portal", "Estrella", "Ángel", "Dinosaurio"], correct: 3, explanation: "En el Belén no había dinosaurios, se extinguieron mucho antes." }
+    ],
+    historias: [
+      {
+        title: "La Anunciación",
+        items: ["María está orando en Nazaret", "Aparece el Ángel Gabriel", "El Ángel le da el mensaje", "María dice: 'Hágase en mí'"]
+      }
+    ]
   }
 };
 
