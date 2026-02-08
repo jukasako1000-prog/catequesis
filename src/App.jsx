@@ -2189,22 +2189,7 @@ function App() {
                           >
                             <Plus size={16} />
                           </button>
-                          <button
-                            className="btn-point"
-                            style={{
-                              background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
-                              width: 'auto',
-                              padding: '0 15px',
-                              color: '#1e1b4b',
-                              fontWeight: 'bold',
-                              fontSize: '0.8rem',
-                              borderRadius: '25px',
-                              boxShadow: '0 4px 10px rgba(245, 158, 11, 0.3)'
-                            }}
-                            onClick={() => triggerFlares()}
-                          >
-                            🌱 Iniciando el Camino
-                          </button>
+
                         </div>
                       </motion.div>
                     ))}
