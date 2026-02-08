@@ -420,7 +420,7 @@ function App() {
   const triggerFlares = () => {
     const duration = 2 * 1000;
     const animationEnd = Date.now() + duration;
-    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+    const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
 
     function randomInRange(min, max) {
       return Math.random() * (max - min) + min;
@@ -433,30 +433,32 @@ function App() {
         return clearInterval(interval);
       }
 
-      const particleCount = 40 * (timeLeft / duration);
+      const particleCount = 50 * (timeLeft / duration);
       confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
       confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
     }, 250);
 
-    // Bengala izquierda
+    // Bengala izquierda potente
     confetti({
-      particleCount: 150,
+      particleCount: 200,
       angle: 65,
-      spread: 70,
-      origin: { x: 0.1, y: 1 },
-      colors: ['#fbbf24', '#f59e0b', '#ffffff'],
-      startVelocity: 85,
-      gravity: 0.8
+      spread: 80,
+      origin: { x: 0, y: 1 },
+      colors: ['#fbbf24', '#f59e0b', '#ffffff', '#ffd700'],
+      startVelocity: 95,
+      gravity: 0.8,
+      zIndex: 9999
     });
-    // Bengala derecha
+    // Bengala derecha potente
     confetti({
-      particleCount: 150,
+      particleCount: 200,
       angle: 115,
-      spread: 70,
-      origin: { x: 0.9, y: 1 },
-      colors: ['#fbbf24', '#f59e0b', '#ffffff'],
-      startVelocity: 85,
-      gravity: 0.8
+      spread: 80,
+      origin: { x: 1, y: 1 },
+      colors: ['#fbbf24', '#f59e0b', '#ffffff', '#ffd700'],
+      startVelocity: 95,
+      gravity: 0.8,
+      zIndex: 9999
     });
 
     playSound('fanfare');
