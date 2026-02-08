@@ -1895,7 +1895,7 @@ function App() {
 
             <div className="themes-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '25px' }}>
               {Object.keys(AULA_TEMAS).map((theme, i) => {
-                const isExpanded = expandedThemes[theme] ?? true;
+                const isExpanded = expandedThemes[theme] ?? false;
                 const isCompleted = completedThemes.includes(theme);
 
                 return (
