@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Trophy, Star, Minus, Plus, Cloud, Church, Sun, Heart, UserPlus, HelpCircle, X, ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, Download, Upload, Medal, Calendar, History, TrendingUp, Gamepad2, Sparkles, BookOpen, Search } from 'lucide-react';
+import { Trophy, Star, Minus, Plus, Cloud, Church, Sun, Heart, UserPlus, HelpCircle, X, ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, Download, Upload, Medal, Calendar, History, TrendingUp, Gamepad2, Sparkles, BookOpen, Search, ArrowLeft, Edit } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -1936,15 +1936,7 @@ function App() {
         )}
       </div>
 
-      {/* Tabs de Navegación (Debajo del Podio) */}
-      <div className="tabs" style={{ marginTop: '3rem', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'nowrap' }}>
-        <button className={`tab ${view === 'general' ? 'active' : ''}`} onClick={() => setView('general')} style={{ whiteSpace: 'nowrap', padding: '12px 25px' }}>
-          <Trophy size={20} style={{ marginRight: 10 }} /> Clasificación General
-        </button>
-        <button className={`tab ${view === 'learning' ? 'active' : ''}`} onClick={() => setView('learning')} style={{ whiteSpace: 'nowrap', padding: '12px 25px' }}>
-          <Gamepad2 size={20} style={{ marginRight: 10 }} /> Sala de Estudio
-        </button>
-      </div>
+
 
       {/* View: History */}
       {
@@ -2011,7 +2003,29 @@ function App() {
       {
         view === 'learning' && (
           <div className="learning-view animate-fade-in" style={{ padding: '2rem 0' }}>
-            <div className="learning-header" style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <div className="learning-header" style={{ position: 'relative', textAlign: 'center', marginBottom: '3rem' }}>
+              <button
+                onClick={() => setView('general')}
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: 'rgba(255,255,255,0.2)',
+                  border: 'none',
+                  color: 'white',
+                  padding: '10px 20px',
+                  borderRadius: '15px',
+                  cursor: 'pointer',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  backdropFilter: 'blur(5px)'
+                }}
+              >
+                <ArrowLeft size={20} /> Volver
+              </button>
               <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>Sala de Juegos 🎮</h2>
               <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.2rem', fontWeight: 600 }}>Elige un tema y prepárate para el reto especial del día.</p>
             </div>
@@ -2243,169 +2257,158 @@ function App() {
 
       {/* View: Ranking List with Search and Filter */}
       {view !== 'history' && view !== 'learning' && (
-        <div className="ranking-container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <button
-            onClick={() => setShowRankingList(!showRankingList)}
-            style={{
-              width: '100%',
-              background: 'rgba(255, 255, 255, 0.1)',
-              border: '2px solid rgba(255, 255, 255, 0.2)',
-              borderRadius: '20px',
-              padding: '15px 25px',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              color: 'white',
-              cursor: 'pointer',
-              marginBottom: '1rem',
-              transition: 'all 0.3s',
-              backdropFilter: 'blur(5px)'
-            }}
-            className="ranking-toggle-btn"
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-              <div style={{ background: 'white', padding: '8px', borderRadius: '12px' }}>
-                <Trophy size={24} color="#f39c12" />
+        <div className="ranking-container" style={{ maxWidth: '1000px', margin: '3rem auto 0' }}>
+          <div className="ranking-header-controls" style={{
+            display: 'flex',
+            gap: '15px',
+            marginBottom: '2rem',
+            alignItems: 'center',
+            background: 'rgba(255,255,255,0.1)',
+            padding: '20px',
+            borderRadius: '25px',
+            border: '2px solid rgba(255,255,255,0.1)',
+            backdropFilter: 'blur(10px)'
+          }}>
+            <div className="search-bar-container" style={{ flex: 1, position: 'relative' }}>
+              <div style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: '#95a5a6' }}>
+                <Search size={20} />
               </div>
-              <span style={{ fontSize: '1.4rem', fontWeight: 800 }}>Ver Lista de Alumnos</span>
+              <input
+                type="text"
+                placeholder="Buscar joven..."
+                value={searchTerm}
+                onChange={handleSearch}
+                style={{
+                  width: '100%',
+                  padding: '12px 12px 12px 45px',
+                  borderRadius: '15px',
+                  border: 'none',
+                  background: 'rgba(255,255,255,0.95)',
+                  fontSize: '1rem',
+                  outline: 'none',
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
+                }}
+              />
             </div>
-            <motion.div
-              animate={{ rotate: showRankingList ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
+
+            <select
+              value={rankingType}
+              onChange={(e) => setRankingType(e.target.value)}
+              style={{
+                width: '180px',
+                padding: '12px',
+                borderRadius: '15px',
+                border: 'none',
+                background: 'rgba(255,255,255,0.95)',
+                fontSize: '0.9rem',
+                fontWeight: 'bold',
+                color: '#2c3e50',
+                outline: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
+              }}
             >
-              <ChevronDown size={30} />
-            </motion.div>
-          </button>
+              <option value="general">🏆 Clasificación General</option>
+              <option value="behavior">🎖️ Buen Comportamiento</option>
+              <option value="reading">📖 Buen Lector</option>
+              <option value="attendance">📅 Asistencia</option>
+            </select>
 
-          <AnimatePresence>
-            {showRankingList && (
-              <motion.div
-                initial={{ height: 0, opacity: 0, overflow: 'hidden' }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease: 'easeInOut' }}
-              >
-                <div className="ranking-filters" style={{ display: 'flex', gap: '10px', marginBottom: '1.5rem', marginTop: '1rem' }}>
-                  <div className="search-bar-container" style={{ flex: 2, position: 'relative' }}>
-                    <div style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: '#95a5a6' }}>
-                      <Search size={20} />
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="Buscar joven..."
-                      value={searchTerm}
-                      onChange={handleSearch}
-                      style={{
-                        width: '100%',
-                        padding: '12px 12px 12px 45px',
-                        borderRadius: '15px',
-                        border: '2px solid rgba(255,255,255,0.5)',
-                        background: 'rgba(255,255,255,0.8)',
-                        fontSize: '1rem',
-                        outline: 'none',
-                        boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
-                        transition: 'all 0.3s'
-                      }}
-                    />
+            <button
+              onClick={() => setView('learning')}
+              style={{
+                padding: '12px 25px',
+                borderRadius: '15px',
+                border: 'none',
+                background: 'linear-gradient(135deg, #4a90e2, #357abd)',
+                color: 'white',
+                fontWeight: 800,
+                fontSize: '1rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 15px rgba(74, 144, 226, 0.3)',
+                transition: 'all 0.3s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+              onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+            >
+              <Gamepad2 size={20} /> Sala de Estudio
+            </button>
+          </div>
+
+          <div className="ranking-list">
+            <AnimatePresence>
+              {sortedStudents.map((student, index) => (
+                <motion.div key={student.id} id={`student-${student.id}`} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="student-card">
+                  <div className="rank-number">#{index + 1}</div>
+                  <div className="small-avatar" onClick={() => setSelectedStudent(student)} style={{ cursor: 'pointer' }}>
+                    <img src={student.avatar} alt="" style={{ width: '100%' }} />
                   </div>
-                  <select
-                    value={rankingType}
-                    onChange={(e) => setRankingType(e.target.value)}
-                    style={{
-                      flex: 1,
-                      padding: '12px',
-                      borderRadius: '15px',
-                      border: '2px solid rgba(255,255,255,0.5)',
-                      background: 'rgba(255,255,255,0.8)',
-                      fontSize: '0.9rem',
-                      fontWeight: 'bold',
-                      color: '#2c3e50',
-                      outline: 'none',
-                      cursor: 'pointer',
-                      boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
-                    }}
-                  >
-                    <option value="general">🏆 Clasificación General</option>
-                    <option value="behavior">🎖️ Buen Comportamiento</option>
-                    <option value="reading">📖 Buen Lector</option>
-                    <option value="attendance">📅 Asistencia</option>
-                  </select>
-                </div>
+                  <div className="student-info">
+                    <div className="student-name">
+                      {student.name}
+                    </div>
+                    <div className="student-scores">
+                      <span>✨ {student.totalScore} Estrellas</span>
+                    </div>
+                  </div>
+                  <div className="controls">
+                    <div className="medal-controls" title="Asistencia">
+                      <button className="medal-step" onClick={() => updateAttendance(student.id, -1)}>-</button>
+                      <span className="medal-badge attendance" style={{ background: 'linear-gradient(135deg, #1abc9c, #16a085)' }}>
+                        📅 {student.attendance || 0}
+                      </span>
+                      <button className="medal-step" onClick={() => updateAttendance(student.id, 1)}>+</button>
+                    </div>
+                    <div className="medal-controls" title="Lectura">
+                      <button className="medal-step" onClick={() => updateReadingMerits(student.id, -1)}>-</button>
+                      <span className="medal-badge reading" style={{ background: 'linear-gradient(135deg, #3498db, #2980b9)' }}>
+                        📖 {student.readingMerits || 0}
+                      </span>
+                      <button className="medal-step" onClick={() => updateReadingMerits(student.id, 1)}>+</button>
+                    </div>
+                    <div className="medal-controls" title="Buen Comportamiento">
+                      <button className="medal-step" onClick={() => updateMedals(student.id, -1)}>-</button>
+                      <span className="medal-badge behavior" style={{ background: 'linear-gradient(135deg, #e74c3c, #c0392b)' }}>
+                        🎖️ {student.behaviorMedals || 0}
+                      </span>
+                      <button className="medal-step" onClick={() => updateMedals(student.id, 1)}>+</button>
+                    </div>
+                    <button
+                      className="btn-point"
+                      style={{ background: '#4a90e2' }}
+                      onClick={() => openAula(student.id)}
+                      title="Pregunta Bíblica"
+                    >
+                      <HelpCircle size={16} />
+                    </button>
+                    <button
+                      className="btn-point"
+                      style={{ background: '#f39c12' }}
+                      onClick={() => updatePoints(student.id, -10)}
+                      title="Quitar Puntos (-10)"
+                    >
+                      <Minus size={16} />
+                    </button>
+                    <button
+                      className="btn-point"
+                      style={{ background: '#2ecc71' }}
+                      onClick={() => updatePoints(student.id, 10)}
+                      title="Añadir Puntos (+10)"
+                    >
+                      <Plus size={16} />
+                    </button>
 
-                <div className="ranking-list">
-                  <AnimatePresence>
-                    {sortedStudents.map((student, index) => (
-                      <motion.div key={student.id} id={`student-${student.id}`} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="student-card">
-                        <div className="rank-number">#{index + 1}</div>
-                        <div className="small-avatar" onClick={() => setSelectedStudent(student)} style={{ cursor: 'pointer' }}>
-                          <img src={student.avatar} alt="" style={{ width: '100%' }} />
-                        </div>
-                        <div className="student-info">
-                          <div className="student-name">
-                            {student.name}
-                          </div>
-                          <div className="student-scores">
-                            <span>✨ {student.totalScore} Estrellas</span>
-                          </div>
-                        </div>
-                        <div className="controls">
-                          <div className="medal-controls" title="Asistencia">
-                            <button className="medal-step" onClick={() => updateAttendance(student.id, -1)}>-</button>
-                            <span className="medal-badge attendance" style={{ background: 'linear-gradient(135deg, #1abc9c, #16a085)' }}>
-                              📅 {student.attendance || 0}
-                            </span>
-                            <button className="medal-step" onClick={() => updateAttendance(student.id, 1)}>+</button>
-                          </div>
-                          <div className="medal-controls" title="Lectura">
-                            <button className="medal-step" onClick={() => updateReadingMerits(student.id, -1)}>-</button>
-                            <span className="medal-badge reading" style={{ background: 'linear-gradient(135deg, #3498db, #2980b9)' }}>
-                              📖 {student.readingMerits || 0}
-                            </span>
-                            <button className="medal-step" onClick={() => updateReadingMerits(student.id, 1)}>+</button>
-                          </div>
-                          <div className="medal-controls" title="Buen Comportamiento">
-                            <button className="medal-step" onClick={() => updateMedals(student.id, -1)}>-</button>
-                            <span className="medal-badge behavior" style={{ background: 'linear-gradient(135deg, #e74c3c, #c0392b)' }}>
-                              🎖️ {student.behaviorMedals || 0}
-                            </span>
-                            <button className="medal-step" onClick={() => updateMedals(student.id, 1)}>+</button>
-                          </div>
-                          <button
-                            className="btn-point"
-                            style={{ background: '#4a90e2' }}
-                            onClick={() => openAula(student.id)}
-                            title="Pregunta Bíblica"
-                          >
-                            <HelpCircle size={16} />
-                          </button>
-                          <button
-                            className="btn-point"
-                            style={{ background: '#f39c12' }}
-                            onClick={() => updatePoints(student.id, -10)}
-                            title="Quitar Puntos (-10)"
-                          >
-                            <Minus size={16} />
-                          </button>
-                          <button
-                            className="btn-point"
-                            style={{ background: '#2ecc71' }}
-                            onClick={() => updatePoints(student.id, 10)}
-                            title="Añadir Puntos (+10)"
-                          >
-                            <Plus size={16} />
-                          </button>
-
-                        </div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
         </div>
-      )
-      }
+      )}
+
 
       {/* Floating Actions */}
       <div className="floating-action">
