@@ -348,14 +348,14 @@ header p {
 }
 
 .podium-4 {
-  height: 90px;
+  height: 75px;
   background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
   order: 1;
   z-index: 0;
 }
 
 .podium-5 {
-  height: 80px;
+  height: 60px;
   background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
   order: 5;
   z-index: -1;
