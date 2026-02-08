@@ -327,7 +327,7 @@ const INITIAL_STUDENTS = [
   { id: 101, name: 'Adrian', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/ADRIAN.jpg' },
   { id: 102, name: 'Alejandra', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/ALEJANDRA.jpg' },
   { id: 103, name: 'Marina', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MARINA.jpg' },
-  { id: 104, name: 'MA Cases', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGELCASES.jpg' },
+  { id: 104, name: 'MA.CASES', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGELCASES.jpg' },
   { id: 105, name: 'Miguel Angel', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGEL .jpg' },
   { id: 106, name: 'Enzo', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/enzo.jpg' },
   { id: 108, name: 'Jose Francisco', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=JF&backgroundColor=4a90e2&fontSize=45' },
@@ -343,6 +343,12 @@ function App() {
     const saved = localStorage.getItem('catequesis_students');
     return saved ? JSON.parse(saved) : INITIAL_STUDENTS;
   });
+
+  useEffect(() => {
+    // Asegurar el nombre correcto de MA.CASES por código
+    setStudents(prev => prev.map(s => (s.id === 104 && s.name !== 'MA.CASES') ? { ...s, name: 'MA.CASES' } : s));
+  }, []);
+
   const [view, setView] = useState('general'); // 'general' or 'daily'
   const [showAddModal, setShowAddModal] = useState(false);
   const [showQuizModal, setShowQuizModal] = useState(false);
@@ -753,6 +759,17 @@ function App() {
         }
       };
     });
+  };
+
+  const renameStudent = (id, currentName) => {
+    const newNameStr = prompt("Nuevo nombre para el joven:", currentName);
+    if (newNameStr !== null && newNameStr.trim() !== "") {
+      const finalName = newNameStr.trim();
+      setStudents(prev => prev.map(s => s.id === id ? { ...s, name: finalName } : s));
+      if (selectedStudent && selectedStudent.id === id) {
+        setSelectedStudent(prev => ({ ...prev, name: finalName }));
+      }
+    }
   };
 
   const addStudent = (e) => {
@@ -2432,7 +2449,16 @@ function App() {
                   <div className="halo-large"></div>
                   <img src={selectedStudent.avatar} alt={selectedStudent.name} />
                 </div>
-                <h2 className="detail-name">{selectedStudent.name}</h2>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '1.5rem' }}>
+                  <h2 className="detail-name">{selectedStudent.name}</h2>
+                  <button
+                    onClick={() => renameStudent(selectedStudent.id, selectedStudent.name)}
+                    style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', cursor: 'pointer', padding: '5px', borderRadius: '8px' }}
+                    title="Editar Nombre"
+                  >
+                    <Edit size={18} />
+                  </button>
+                </div>
                 <div className="detail-stats" style={{ gridTemplateColumns: '1fr 1fr', display: 'grid', gap: '15px' }}>
                   <div className="stat-item" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '10px', borderRadius: '15px', border: '1px solid rgba(255, 255, 255, 0.1)', gridColumn: 'span 2' }}>
                     <span className="stat-label">Total Estrellas</span>
