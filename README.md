@@ -313,23 +313,25 @@ Buscar las funciones:
 
 ---
 
-## 🛠️ Log de Cambios Recientes (Sesión Hoy)
+## 🛠️ Log de Cambios Recientes (Última Sesión)
 
 ### 🔝 Cabecera y Podio
-- **Cabecera Compacta**: Se ha reducido el tamaño del icono de la iglesia, el título y el lema para ganar espacio vertical y dar más protagonismo al podio.
-- **Optimización de Escala**: Se ajustaron las dimensiones de los avatares del podio para un equilibrio visual perfecto, evitando solapamientos.
-- **Navegación**: Los tabs de navegación ("Clasificación General" y "Sala de Estudio") se han movido justo debajo del podio para un flujo más natural.
+- **Ajuste de Altura**: Se ha bajado todo el bloque del podio y los cañones de confeti (**5rem**) para evitar que la corona del ganador solape con el lema superior.
+- **Navegación Simplificada**: Eliminación definitiva de las pestañas superiores. Ahora todo se gestiona desde el panel de control del ranking.
 
-### 📋 Gestión de Alumnos (Ranking)
-- **Lista Desplegable**: Se ha implementado un sistema de "Acordeón" para la lista de ranking. Ahora la lista se puede mostrar/ocultar mediante el botón **"Ver Lista de Alumnos"**, lo que despeja la interfaz principal.
-- **Ficha de Alumno Compacta**: Se ha refinado el diseño de cada fila en la lista para que sea legible y funcional, restaurando todos los controles críticos:
-    - ✅ **Selector de Asistencia** (📅)
-    - ✅ **Selector de Lectura** (📖)
-    - ✅ **Selector de Buen Comportamiento** (🎖️) con botones +/-.
-    - ✅ **Acceso a Pregunta Bíblica** (❓/HelpCircle) para cada alumno.
-    - ✅ **Controles de Puntos Rápidos** (+/- 10 estrellas).
+### 📋 Gestión de Alumnos y Ranking
+- **Control Unificado**: El buscador, el selector de clasificación y los botones de acción están ahora agrupados en una barra compacta y elegante con efecto cristal.
+- **Lista Desplegable Inteligente**: El botón **"VER LISTA"** (con icono de trofeo 🏆) se ha integrado en la barra de control, permitiendo abrir y cerrar el ranking con un clic.
+- **Mejora de Visibilidad**: Se ha ensanchado el selector de tipo de ranking a **220px** para que todos los textos (como "COMPORTAMIENTO") se lean perfectamente sin cortarse.
+- **Edición Directa**: Se ha añadido un botón de **Edición (Lápiz 📝)** en la ficha individual de cada alumno para poder corregir sus nombres al momento.
 
-### ✨ Efectos y Sonidos
-- **Confetti Potenciado**: Ahora los cañones de confeti lanzan más partículas y con más fuerza si se pulsa repetidamente.
-- **Sonidos Premium**: Actualización de efectos de sonido (Gloria, Polvo de Estrellas) con gestión de volumen al 90% para una experiencia más vibrante.
-- **Navegación en Ficha**: El modal de detalle del alumno ahora incluye flechas de navegación lateral para pasar de un alumno a otro sin cerrar la ventana.
+### 🎮 Sala de Estudio y Juegos
+- **Acceso Rápido**: Botón directo de **"Sala de Estudio"** integrado en el panel principal.
+- **Botón "Volver"**: Añadida navegación de retorno fácil en la vista de juegos para volver al ranking general sin perder el contexto.
+- **Consistencia de Datos**: Corrección automática y permanente del nombre "MA.CASES" (ID 104) para evitar errores manuales.
+
+### ✨ Estabilidad y Fixes
+- **Correcciones de Importación**: Solucionado error de carga de iconos que provocaba pantallas azules en ciertos navegadores.
+- **Transiciones**: Animaciones de plegado y desplegado optimizadas para la lista de alumnos.
+
+**Última actualización de diseño**: 8 de Febrero de 2026.
