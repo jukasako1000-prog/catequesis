@@ -26,6 +26,8 @@ body {
   min-height: 100vh;
   color: var(--text-main);
   overflow-x: hidden;
+  /* Safe zone for Projectors/TVs */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 /* Background Clouds Animation */
@@ -89,15 +91,16 @@ body {
 }
 
 .app-container {
-  max-width: 800px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 2rem 5%;
+  /* Safe area para proyectores/TVs */
+  width: 100%;
 }
 
 header {
   text-align: center;
-  margin-bottom: 4rem;
-  /* Aumentado para dar aire al podio */
+  margin-bottom: 2rem;
   color: #fff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -124,11 +127,11 @@ header p {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 1rem;
-  margin-top: 5rem;
-  margin-bottom: 5rem;
-  height: 420px;
-  /* Más alto para acomodar avatares grandes */
+  gap: 1.5rem;
+  margin: 3rem auto 4rem;
+  height: 400px;
+  max-width: 1200px;
+  width: 100%;
 }
 
 .podium-spot {
@@ -680,11 +683,12 @@ header p {
 
 .floating-action {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: 4rem;
+  right: 4rem;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
+  z-index: 100;
 }
 
 .action-btn {
