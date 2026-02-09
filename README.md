@@ -335,4 +335,10 @@ Buscar las funciones:
 - **Correcciones de Importación**: Solucionado error de carga de iconos que provocaba pantallas azules en ciertos navegadores.
 - **Transiciones**: Animaciones de plegado y desplegado optimizadas para la lista de alumnos.
 
-**Última actualización de diseño**: 8 de Febrero de 2026.
+### 📺 Soporte para Proyectores y TV (16:9)
+- **Control de Zoom Manual**: Se ha integrado un panel de ajuste de escala en la esquina inferior derecha. Permite encoger o agrandar la web (80%, 90%, 110%, etc.) para que encaje perfectamente en cualquier proyector o Fire TV, evitando que se corten los bordes.
+- **Zona de Seguridad (Safe Area)**: El diseño ahora tiene márgenes inteligentes del **5%** para evitar el efecto "overscan" de los televisores.
+- **Formato Panorámico**: El ancho máximo de la aplicación se ha ampliado a **1400px** para aprovechar mejor las pantallas 16:9.
+- **Optimización Vertical**: Reajuste de alturas en el podio y cabeceras para que todo el contenido principal sea visible sin necesidad de mucho scroll en pantallas grandes.
+
+**Última actualización de diseño**: 9 de Febrero de 2026.
