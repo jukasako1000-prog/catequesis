@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Trophy, Star, Minus, Plus, Cloud, Church, Sun, Heart, UserPlus, HelpCircle, X, ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, Download, Upload, Medal, Calendar, History, TrendingUp, Gamepad2, Sparkles, BookOpen, Search, ArrowLeft, Edit } from 'lucide-react';
+import { Trophy, Star, Minus, Plus, Cloud, Church, Sun, Heart, UserPlus, HelpCircle, X, ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, Download, Upload, Medal, Calendar, History, TrendingUp, Gamepad2, Sparkles, BookOpen, Search, ArrowLeft, Edit, ZoomIn, ZoomOut, Monitor } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -365,6 +365,14 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState(false);
+  const [appZoom, setAppZoom] = useState(() => {
+    const saved = localStorage.getItem('catequesis_zoom');
+    return saved ? parseFloat(saved) : 1.0;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('catequesis_zoom', appZoom);
+  }, [appZoom]);
 
   const handleLogin = (e) => {
     e?.preventDefault();
@@ -1702,7 +1710,13 @@ function App() {
   }
 
   return (
-    <div className="app-container">
+    <div className="app-container" style={{
+      transform: `scale(${appZoom})`,
+      transformOrigin: 'top center',
+      width: `${100 / appZoom}%`,
+      transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      minHeight: `${100 / appZoom}vh`
+    }}>
       {/* Background Clouds */}
       <div className="background-clouds">
         {[...Array(8)].map((_, i) => (
@@ -2461,6 +2475,45 @@ function App() {
         <button className="action-btn" onClick={() => setShowAddModal(true)} title="Añadir Alumno">
           <UserPlus size={24} />
         </button>
+
+        {/* Control de Zoom para Proyectores */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px',
+          alignItems: 'center',
+          background: 'rgba(0,0,0,0.3)',
+          padding: '10px',
+          borderRadius: '30px',
+          backdropFilter: 'blur(10px)',
+          border: '2px solid rgba(255,255,255,0.1)'
+        }}>
+          <button
+            className="action-btn"
+            style={{ background: 'rgba(255,255,255,0.2)', width: '45px', height: '45px' }}
+            onClick={() => setAppZoom(prev => Math.min(prev + 0.05, 1.5))}
+            title="Aumentar Zoom"
+          >
+            <ZoomIn size={20} />
+          </button>
+          <div style={{ color: 'white', fontSize: '0.7rem', fontWeight: 900 }}>{Math.round(appZoom * 100)}%</div>
+          <button
+            className="action-btn"
+            style={{ background: 'rgba(255,255,255,0.2)', width: '45px', height: '45px' }}
+            onClick={() => setAppZoom(prev => Math.max(prev - 0.05, 0.5))}
+            title="Reducir Zoom"
+          >
+            <ZoomOut size={20} />
+          </button>
+          <button
+            className="action-btn"
+            style={{ background: appZoom === 1.0 ? 'rgba(255,255,255,0.1)' : '#e74c3c', width: '45px', height: '45px' }}
+            onClick={() => setAppZoom(1.0)}
+            title="Resetear Pantalla (100%)"
+          >
+            <Monitor size={20} />
+          </button>
+        </div>
       </div>
 
       {/* Modals */}
