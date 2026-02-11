@@ -3767,14 +3767,7 @@ function App() {
       <AnimatePresence>
         {apotheosic && (
           <div className="apotheosic-overlay" style={{ pointerEvents: 'none' }}>
-            <motion.div
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-              className="celebration-text"
-            >
-              ¡GLORIA EN EL CIELO! ⛪✨
-            </motion.div>
+
 
             {/* Globos volando al azar */}
             {[...Array(15)].map((_, i) => (
