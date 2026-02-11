@@ -742,7 +742,6 @@ function App() {
 
     setStudents(prev => prev.map(s => {
       if (s.id === id) {
-        if (amount > 0) updatePoints(id, 10); // +10 por venir hoy
         return { ...s, attendance: newVal };
       }
       return s;
