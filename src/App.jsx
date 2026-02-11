@@ -2272,7 +2272,7 @@ function App() {
                               <History size={18} />
                               <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
                                 <span style={{ fontSize: '0.90rem' }}>Ordena la Historia</span>
-                                <span style={{ fontSize: '0.70rem', opacity: 0.9 }}> (POR EQUIPOS)</span>
+                                <span style={{ fontSize: '0.65rem', opacity: 0.9 }}> (SOLO PARTICIPA EL EQUIPO QUE GANE EL SORTEO)</span>
                               </div>
                             </button>
                           </div>
@@ -3032,7 +3032,7 @@ function App() {
                         <History size={40} color="white" />
                         <div style={{ textAlign: 'center' }}>
                           <div style={{ fontWeight: 950, fontSize: '1.2rem', textTransform: 'uppercase' }}>Ordena la Historia</div>
-                          <div style={{ fontSize: '0.75rem', opacity: 0.9, fontWeight: 700 }}>MODO EQUIPOS</div>
+                          <div style={{ fontSize: '0.65rem', opacity: 0.9, fontWeight: 700 }}>(SOLO PARTICIPA EL EQUIPO QUE GANE EL SORTEO)</div>
                         </div>
                       </button>
 
