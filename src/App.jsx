@@ -3407,9 +3407,7 @@ function App() {
                       <div style={{ background: '#f8f9fa', padding: '10px 25px', borderRadius: '20px', border: '3px solid #9b59b6', fontWeight: 900, boxShadow: '0 4px 10px rgba(0,0,0,0.05)' }}>
                         Turno de: <span style={{ color: '#9b59b6' }}>{historiaGame.teams[historiaGame.currentTeamIdx]?.name}</span>
                       </div>
-                      <div style={{ background: 'rgba(155, 89, 182, 0.1)', padding: '10px 20px', borderRadius: '15px', color: '#9b59b6', fontWeight: 800, fontSize: '0.9rem' }}>
-                        Desafío {historiaGame.currentIdx + 1} de {historiaGame.challenges.length}
-                      </div>
+
                     </div>
 
                     <p style={{ textAlign: 'center', color: '#2c3e50', marginBottom: '1.5rem', fontWeight: 800, fontSize: '1.2rem' }}>
