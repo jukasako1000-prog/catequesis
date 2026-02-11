@@ -2416,13 +2416,13 @@ function App() {
                           <img src={student.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
 
-                        <div className="student-details-right" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '15px' }}>
-                          <div className="student-info" style={{ textAlign: 'left', marginBottom: '5px' }}>
-                            <div className="student-name" style={{ fontSize: '1.8rem', fontWeight: 950, color: '#1e3a8a' }}>
+                        <div className="student-details-right" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px' }}>
+                          <div className="student-info" style={{ textAlign: 'left', marginBottom: '2px' }}>
+                            <div className="student-name" style={{ fontSize: '1.2rem', fontWeight: 950, color: '#1e3a8a', lineHeight: 1.1 }}>
                               {student.name}
                             </div>
-                            <div className="student-scores" style={{ justifyContent: 'flex-start', fontSize: '1.2rem' }}>
-                              <span>✨ {student.totalScore} Estrellas</span>
+                            <div className="student-scores" style={{ justifyContent: 'flex-start', fontSize: '0.9rem' }}>
+                              <span>✨ {student.totalScore}</span>
                             </div>
                           </div>
 
@@ -2430,51 +2430,51 @@ function App() {
                             <div className="medal-controls-row">
                               <div className="medal-controls" title="Asistencia">
                                 <button className="medal-step" onClick={() => updateAttendance(student.id, -1)}>-</button>
-                                <span className="medal-badge attendance" style={{ background: 'linear-gradient(135deg, #1abc9c, #16a085)', minWidth: '80px' }}>
+                                <span className="medal-badge attendance" style={{ background: 'linear-gradient(135deg, #1abc9c, #16a085)', minWidth: '60px', padding: '4px 8px', fontSize: '0.8rem' }}>
                                   📅 {student.attendance || 0}
                                 </span>
                                 <button className="medal-step" onClick={() => updateAttendance(student.id, 1)}>+</button>
                               </div>
                               <div className="medal-controls" title="Lectura">
                                 <button className="medal-step" onClick={() => updateReadingMerits(student.id, -1)}>-</button>
-                                <span className="medal-badge reading" style={{ background: 'linear-gradient(135deg, #3498db, #2980b9)', minWidth: '80px' }}>
+                                <span className="medal-badge reading" style={{ background: 'linear-gradient(135deg, #3498db, #2980b9)', minWidth: '60px', padding: '4px 8px', fontSize: '0.8rem' }}>
                                   📖 {student.readingMerits || 0}
                                 </span>
                                 <button className="medal-step" onClick={() => updateReadingMerits(student.id, 1)}>+</button>
                               </div>
                               <div className="medal-controls" title="Buen Comportamiento">
                                 <button className="medal-step" onClick={() => updateMedals(student.id, -1)}>-</button>
-                                <span className="medal-badge behavior" style={{ background: 'linear-gradient(135deg, #e74c3c, #c0392b)', minWidth: '80px' }}>
+                                <span className="medal-badge behavior" style={{ background: 'linear-gradient(135deg, #e74c3c, #c0392b)', minWidth: '60px', padding: '4px 8px', fontSize: '0.8rem' }}>
                                   🎖️ {student.behaviorMedals || 0}
                                 </span>
                                 <button className="medal-step" onClick={() => updateMedals(student.id, 1)}>+</button>
                               </div>
                             </div>
 
-                            <div className="action-buttons-row" style={{ justifyContent: 'flex-start', marginTop: '10px' }}>
+                            <div className="action-buttons-row" style={{ justifyContent: 'flex-start', marginTop: '5px', gap: '5px' }}>
                               <button
                                 className="btn-point"
-                                style={{ background: '#4a90e2', width: '45px', height: '45px' }}
+                                style={{ background: '#4a90e2', width: '35px', height: '35px' }}
                                 onClick={() => openAula(student.id)}
                                 title="Pregunta Bíblica"
                               >
-                                <HelpCircle size={20} />
+                                <HelpCircle size={16} />
                               </button>
                               <button
                                 className="btn-point"
-                                style={{ background: '#f39c12', width: '45px', height: '45px' }}
+                                style={{ background: '#f39c12', width: '35px', height: '35px' }}
                                 onClick={() => updatePoints(student.id, -10)}
                                 title="Quitar Puntos (-10)"
                               >
-                                <Minus size={20} />
+                                <Minus size={16} />
                               </button>
                               <button
                                 className="btn-point"
-                                style={{ background: '#2ecc71', width: '45px', height: '45px' }}
+                                style={{ background: '#2ecc71', width: '35px', height: '35px' }}
                                 onClick={() => updatePoints(student.id, 10)}
                                 title="Añadir Puntos (+10)"
                               >
-                                <Plus size={20} />
+                                <Plus size={16} />
                               </button>
                             </div>
                           </div>
