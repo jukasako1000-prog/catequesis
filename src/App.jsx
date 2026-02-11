@@ -901,6 +901,17 @@ function App() {
     }
   }, [pasapalabra.status, pasapalabra.pointsAwarded, aulaStep, showAulaModal]);
 
+  // Auto-continuar Rosco tras fallo (para que el catequista no tenga que pulsar "Continuar")
+  useEffect(() => {
+    let timer;
+    if (pasapalabra.showAnswer && pasapalabra.isPaused && pasapalabra.status === 'playing') {
+      timer = setTimeout(() => {
+        nextAfterError();
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [pasapalabra.showAnswer, pasapalabra.isPaused, pasapalabra.status]);
+
   const handlePasapalabraAnswer = (answer) => {
     if (pasapalabra.status !== 'playing' || pasapalabra.isPaused) return;
 
@@ -3198,13 +3209,7 @@ function App() {
                               <div style={{ padding: '10px' }}>
                                 <div style={{ color: '#e74c3c', fontWeight: 900, fontSize: '0.8rem', textTransform: 'uppercase', marginBottom: '5px' }}>❌ ¡FALLO! LA RESPUESTA ERA:</div>
                                 <div style={{ fontSize: '2rem', fontWeight: 900, color: '#e74c3c', marginBottom: '20px', letterSpacing: '2px' }}>{pasapalabra.showAnswer}</div>
-                                <button
-                                  onClick={nextAfterError}
-                                  className="btn-primary"
-                                  style={{ background: '#2c3e50', width: '100%', padding: '15px', fontSize: '1.1rem' }}
-                                >
-                                  CONTINUAR
-                                </button>
+                                <div style={{ color: '#2c3e50', fontSize: '0.7rem', fontWeight: 800, opacity: 0.6 }}>Siguiente pregunta en 3s...</div>
                               </div>
                             ) : (
                               <>
