@@ -461,7 +461,7 @@ header p {
 /* List Styles */
 .ranking-list {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
   gap: 1.5rem;
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
@@ -474,13 +474,13 @@ header p {
 .student-card {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
-  gap: 1.2rem;
-  padding: 1.2rem;
+  align-items: stretch;
+  gap: 1.5rem;
+  padding: 1.5rem;
   background: white;
-  border-radius: 25px;
+  border-radius: 30px;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
   position: relative;
   overflow: visible;
 }
@@ -503,14 +503,14 @@ header p {
 }
 
 .small-avatar {
-  width: 180px;
-  height: 180px;
+  width: 240px;
+  height: 240px;
   border-radius: 25px;
   flex-shrink: 0;
   background: #f0f0f0;
   overflow: hidden;
-  border: 5px solid #f8fbff;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border: 6px solid #f8fbff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
 .student-info {

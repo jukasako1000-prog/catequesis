@@ -2416,12 +2416,12 @@ function App() {
                           <img src={student.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
 
-                        <div className="student-details-right" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div className="student-details-right" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '15px' }}>
                           <div className="student-info" style={{ textAlign: 'left', marginBottom: '5px' }}>
-                            <div className="student-name" style={{ fontSize: '1.4rem' }}>
+                            <div className="student-name" style={{ fontSize: '1.8rem', fontWeight: 950, color: '#1e3a8a' }}>
                               {student.name}
                             </div>
-                            <div className="student-scores" style={{ justifyContent: 'flex-start' }}>
+                            <div className="student-scores" style={{ justifyContent: 'flex-start', fontSize: '1.2rem' }}>
                               <span>✨ {student.totalScore} Estrellas</span>
                             </div>
                           </div>
