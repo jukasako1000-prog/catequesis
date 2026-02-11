@@ -2424,52 +2424,56 @@ function App() {
                           </div>
                         </div>
                         <div className="controls">
-                          <div className="medal-controls" title="Asistencia">
-                            <button className="medal-step" onClick={() => updateAttendance(student.id, -1)}>-</button>
-                            <span className="medal-badge attendance" style={{ background: 'linear-gradient(135deg, #1abc9c, #16a085)' }}>
-                              📅 {student.attendance || 0}
-                            </span>
-                            <button className="medal-step" onClick={() => updateAttendance(student.id, 1)}>+</button>
+                          <div className="medal-controls-row">
+                            <div className="medal-controls" title="Asistencia">
+                              <button className="medal-step" onClick={() => updateAttendance(student.id, -1)}>-</button>
+                              <span className="medal-badge attendance" style={{ background: 'linear-gradient(135deg, #1abc9c, #16a085)' }}>
+                                📅 {student.attendance || 0}
+                              </span>
+                              <button className="medal-step" onClick={() => updateAttendance(student.id, 1)}>+</button>
+                            </div>
+                            <div className="medal-controls" title="Lectura">
+                              <button className="medal-step" onClick={() => updateReadingMerits(student.id, -1)}>-</button>
+                              <span className="medal-badge reading" style={{ background: 'linear-gradient(135deg, #3498db, #2980b9)' }}>
+                                📖 {student.readingMerits || 0}
+                              </span>
+                              <button className="medal-step" onClick={() => updateReadingMerits(student.id, 1)}>+</button>
+                            </div>
+                            <div className="medal-controls" title="Buen Comportamiento">
+                              <button className="medal-step" onClick={() => updateMedals(student.id, -1)}>-</button>
+                              <span className="medal-badge behavior" style={{ background: 'linear-gradient(135deg, #e74c3c, #c0392b)' }}>
+                                🎖️ {student.behaviorMedals || 0}
+                              </span>
+                              <button className="medal-step" onClick={() => updateMedals(student.id, 1)}>+</button>
+                            </div>
                           </div>
-                          <div className="medal-controls" title="Lectura">
-                            <button className="medal-step" onClick={() => updateReadingMerits(student.id, -1)}>-</button>
-                            <span className="medal-badge reading" style={{ background: 'linear-gradient(135deg, #3498db, #2980b9)' }}>
-                              📖 {student.readingMerits || 0}
-                            </span>
-                            <button className="medal-step" onClick={() => updateReadingMerits(student.id, 1)}>+</button>
-                          </div>
-                          <div className="medal-controls" title="Buen Comportamiento">
-                            <button className="medal-step" onClick={() => updateMedals(student.id, -1)}>-</button>
-                            <span className="medal-badge behavior" style={{ background: 'linear-gradient(135deg, #e74c3c, #c0392b)' }}>
-                              🎖️ {student.behaviorMedals || 0}
-                            </span>
-                            <button className="medal-step" onClick={() => updateMedals(student.id, 1)}>+</button>
-                          </div>
-                          <button
-                            className="btn-point"
-                            style={{ background: '#4a90e2' }}
-                            onClick={() => openAula(student.id)}
-                            title="Pregunta Bíblica"
-                          >
-                            <HelpCircle size={16} />
-                          </button>
-                          <button
-                            className="btn-point"
-                            style={{ background: '#f39c12' }}
-                            onClick={() => updatePoints(student.id, -10)}
-                            title="Quitar Puntos (-10)"
-                          >
-                            <Minus size={16} />
-                          </button>
-                          <button
-                            className="btn-point"
-                            style={{ background: '#2ecc71' }}
-                            onClick={() => updatePoints(student.id, 10)}
-                            title="Añadir Puntos (+10)"
-                          >
-                            <Plus size={16} />
-                          </button>
 
+                          <div className="action-buttons-row">
+                            <button
+                              className="btn-point"
+                              style={{ background: '#4a90e2' }}
+                              onClick={() => openAula(student.id)}
+                              title="Pregunta Bíblica"
+                            >
+                              <HelpCircle size={16} />
+                            </button>
+                            <button
+                              className="btn-point"
+                              style={{ background: '#f39c12' }}
+                              onClick={() => updatePoints(student.id, -10)}
+                              title="Quitar Puntos (-10)"
+                            >
+                              <Minus size={16} />
+                            </button>
+                            <button
+                              className="btn-point"
+                              style={{ background: '#2ecc71' }}
+                              onClick={() => updatePoints(student.id, 10)}
+                              title="Añadir Puntos (+10)"
+                            >
+                              <Plus size={16} />
+                            </button>
+                          </div>
                         </div>
                       </motion.div>
                     ))}
