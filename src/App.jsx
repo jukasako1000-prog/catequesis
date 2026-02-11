@@ -1202,6 +1202,14 @@ function App() {
   };
 
   const penalizeTeam = () => {
+    // Si estamos en juego por equipos (Frase)
+    if (phraseGame.teams && phraseGame.teams.length > 1) {
+      const currentTeam = phraseGame.teams[phraseGame.currentTeamIdx];
+      currentTeam.studentIds.forEach(id => updatePoints(id, -10));
+      alert(`⚠️ Penalización aplicada: -10 estrellas al equipo "${currentTeam.name.toUpperCase()}".`);
+      return;
+    }
+
     if (phraseGame.selectedTeamIds.length > 0) {
       phraseGame.selectedTeamIds.forEach(id => updatePoints(id, -10));
       alert('⚠️ Penalización aplicada: -10 estrellas a cada integrante del equipo.');
@@ -2812,11 +2820,9 @@ function App() {
                           } else if (aulaStep === 'select-team-intruso') {
                             startIntrusoGame(selectedAulaTema, aulaTeams, winnerIdx);
                           } else if (aulaStep === 'select-team-historia') {
-                            // Solo participa el ganador del sorteo (1 sola ronda)
-                            startHistoriaGame(selectedAulaTema, [aulaTeams[winnerIdx]], 0);
+                            startHistoriaGame(selectedAulaTema, aulaTeams, winnerIdx);
                           } else {
-                            // Reto Phrase - Solo participa el ganador
-                            startPhraseGame(selectedAulaTema, [aulaTeams[winnerIdx]], 0);
+                            startPhraseGame(selectedAulaTema, aulaTeams, winnerIdx);
                           }
                         });
                       }}
@@ -3478,20 +3484,21 @@ function App() {
                     >
                       ℹ️
                     </button>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                      <div style={{ display: 'flex', gap: '10px' }}>
-                        <div style={{ background: phraseGame.timeLeft <= 10 ? '#e74c3c' : '#2c3e50', color: 'white', padding: '8px 15px', borderRadius: '20px', fontWeight: 800, fontSize: '1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'wrap', gap: '20px' }}>
+                      <div style={{ display: 'flex', gap: '10px', flex: 1 }}>
+                        <div style={{ background: phraseGame.timeLeft <= 10 ? '#e74c3c' : '#2c3e50', color: 'white', padding: '10px 20px', borderRadius: '25px', fontWeight: 900, fontSize: '1.4rem', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: '0 5px 15px rgba(0,0,0,0.1)' }}>
                           ⏱️ {phraseGame.timeLeft}s
                         </div>
                         <button
                           onClick={togglePause}
-                          style={{ background: '#34495e', color: 'white', padding: '8px 15px', borderRadius: '20px', fontWeight: 800, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '5px' }}
+                          style={{ background: '#34495e', color: 'white', padding: '10px 20px', borderRadius: '25px', fontWeight: 800, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 5px 15px rgba(0,0,0,0.1)' }}
                         >
                           {phraseGame.isPaused ? '▶️ Reanudar' : '⏸️ Pausar'}
                         </button>
                       </div>
+
                       {phraseGame.teams.length > 0 && (
-                        <div className="teams-info" style={{ display: 'flex', gap: '8px' }}>
+                        <div className="teams-info" style={{ display: 'flex', gap: '15px', flex: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
                           {phraseGame.teams.map((t, i) => {
                             const isMyTurn = phraseGame.currentTeamIdx === i && phraseGame.status === 'playing';
                             return (
