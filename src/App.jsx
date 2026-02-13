@@ -3236,7 +3236,12 @@ function App() {
                                     placeholder="Respuesta..."
                                     value={pasapalabra.inputValue}
                                     onChange={(e) => setPasapalabra(prev => ({ ...prev, inputValue: e.target.value }))}
-                                    onKeyDown={(e) => e.key === 'Enter' && handlePasapalabraAnswer(pasapalabra.inputValue)}
+                                    onKeyDown={(e) => {
+                                      if (e.key === 'Enter') {
+                                        if (pasapalabra.inputValue.trim() === '') skipPasapalabra();
+                                        else handlePasapalabraAnswer(pasapalabra.inputValue);
+                                      }
+                                    }}
                                     style={{
                                       width: '100%',
                                       padding: '12px',
