@@ -2333,28 +2333,7 @@ function App() {
               />
             </div>
 
-            <select
-              value={rankingType}
-              onChange={(e) => setRankingType(e.target.value)}
-              style={{
-                width: '220px',
-                padding: '12px',
-                borderRadius: '15px',
-                border: 'none',
-                background: 'rgba(255,255,255,0.95)',
-                fontSize: '0.9rem',
-                fontWeight: 'bold',
-                color: '#2c3e50',
-                outline: 'none',
-                cursor: 'pointer',
-                boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
-              }}
-            >
-              <option value="general">🏆 CLASIFICACIÓN</option>
-              <option value="behavior">🎖️ COMPORTAMIENTO</option>
-              <option value="reading">📖 LECTURA</option>
-              <option value="attendance">📅 ASISTENCIA</option>
-            </select>
+
 
             <button
               onClick={() => setShowRankingList(!showRankingList)}
@@ -2434,52 +2413,20 @@ function App() {
                           </div>
 
                           <div className="controls">
-                            <div className="medal-controls-row">
-                              <div className="medal-controls" title="Asistencia">
-                                <button className="medal-step" onClick={() => updateAttendance(student.id, -1)}>-</button>
-                                <span className="medal-badge attendance" style={{ background: 'linear-gradient(135deg, #1abc9c, #16a085)', minWidth: '60px', padding: '4px 8px', fontSize: '0.8rem' }}>
-                                  📅 {student.attendance || 0}
-                                </span>
-                                <button className="medal-step" onClick={() => updateAttendance(student.id, 1)}>+</button>
-                              </div>
-                              <div className="medal-controls" title="Lectura">
-                                <button className="medal-step" onClick={() => updateReadingMerits(student.id, -1)}>-</button>
-                                <span className="medal-badge reading" style={{ background: 'linear-gradient(135deg, #3498db, #2980b9)', minWidth: '60px', padding: '4px 8px', fontSize: '0.8rem' }}>
-                                  📖 {student.readingMerits || 0}
-                                </span>
-                                <button className="medal-step" onClick={() => updateReadingMerits(student.id, 1)}>+</button>
-                              </div>
-                              <div className="medal-controls" title="Buen Comportamiento">
-                                <button className="medal-step" onClick={() => updateMedals(student.id, -1)}>-</button>
-                                <span className="medal-badge behavior" style={{ background: 'linear-gradient(135deg, #e74c3c, #c0392b)', minWidth: '60px', padding: '4px 8px', fontSize: '0.8rem' }}>
-                                  🎖️ {student.behaviorMedals || 0}
-                                </span>
-                                <button className="medal-step" onClick={() => updateMedals(student.id, 1)}>+</button>
-                              </div>
-                            </div>
-
                             <div className="action-buttons-row" style={{ justifyContent: 'flex-start', marginTop: '5px', gap: '5px' }}>
                               <button
                                 className="btn-point"
-                                style={{ background: '#4a90e2', width: '35px', height: '35px' }}
-                                onClick={() => openAula(student.id)}
-                                title="Pregunta Bíblica"
-                              >
-                                <HelpCircle size={16} />
-                              </button>
-                              <button
-                                className="btn-point"
                                 style={{ background: '#f39c12', width: '35px', height: '35px' }}
-                                onClick={() => updatePoints(student.id, -10)}
-                                title="Quitar Puntos (-10)"
+                                onClick={() => updatePoints(student.id, -5)}
+                                title="Quitar Puntos (-5)"
                               >
                                 <Minus size={16} />
                               </button>
                               <button
                                 className="btn-point"
                                 style={{ background: '#2ecc71', width: '35px', height: '35px' }}
-                                onClick={() => updatePoints(student.id, 10)}
-                                title="Añadir Puntos (+10)"
+                                onClick={() => updatePoints(student.id, 5)}
+                                title="Añadir Puntos (+5)"
                               >
                                 <Plus size={16} />
                               </button>
