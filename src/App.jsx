@@ -1704,6 +1704,16 @@ function App() {
   const remaining = sortedStudents.slice(5);
 
   // Manejo de teclado para el RANKING PRINCIPAL
+  // Usamos un ref para evitar que el "Enter" del login abra la ficha del primer alumno
+  const loginEnterGuardRef = useRef(true);
+  useEffect(() => {
+    // Resetear el guard tras un pequeño tiempo después de montar el componente principal
+    const timer = setTimeout(() => {
+      loginEnterGuardRef.current = false;
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     const handleMainNavigation = (e) => {
       // Solo si no hay ningún modal abierto
@@ -1733,6 +1743,9 @@ function App() {
       } else if (e.key === 'ArrowUp') {
         setMainFocusIdx(prev => (prev - 4 + total) % total);
       } else if (e.key === 'Enter' || e.key === 'OK') {
+        // Si acabamos de loguear con Enter, ignoramos esta primera pulsación
+        if (loginEnterGuardRef.current) return;
+
         const student = sortedStudents[mainFocusIdx];
         if (!student) return;
 
