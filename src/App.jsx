@@ -336,6 +336,7 @@ const INITIAL_STUDENTS = [
   { id: 112, name: 'Valentina', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/VALENTINA.jpg' },
   { id: 113, name: 'Lucía', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/LUCIA.png' },
   { id: 114, name: 'Elena', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/ELENA.jpg' },
+  { id: 115, name: 'Emma', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emma' },
 ];
 
 function App() {
