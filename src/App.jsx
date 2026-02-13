@@ -2072,6 +2072,7 @@ function App() {
                     key={theme}
                     layout
                     className="theme-game-card"
+                    onClick={() => toggleThemeExpanded(theme)}
                     style={{
                       background: 'white',
                       borderRadius: '30px',
@@ -2080,7 +2081,8 @@ function App() {
                       border: isCompleted ? '3px solid #2ecc71' : '1px solid rgba(0,0,0,0.03)',
                       position: 'relative',
                       overflow: 'hidden',
-                      height: 'fit-content'
+                      height: 'fit-content',
+                      cursor: 'pointer'
                     }}
                   >
                     <div style={{ position: 'absolute', top: -10, right: -10, opacity: 0.05 }}>
@@ -2090,7 +2092,10 @@ function App() {
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isExpanded ? '1.5rem' : '0' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                         <button
-                          onClick={() => markThemeCompleted(theme)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            markThemeCompleted(theme);
+                          }}
                           style={{
                             width: '55px',
                             height: '55px',
@@ -2110,8 +2115,7 @@ function App() {
                           {isCompleted ? <CheckCircle2 size={30} /> : (i % 2 === 0 ? <BookOpen size={30} /> : <Star size={30} />)}
                         </button>
                         <h3
-                          onClick={() => markThemeCompleted(theme)}
-                          style={{ fontSize: '1.3rem', fontWeight: 900, color: '#2c3e50', cursor: 'pointer' }}
+                          style={{ fontSize: '1.3rem', fontWeight: 900, color: '#2c3e50' }}
                         >
                           {theme}
                         </h3>
@@ -2119,7 +2123,10 @@ function App() {
 
                       <div style={{ display: 'flex', gap: '8px' }}>
                         <button
-                          onClick={() => markThemeCompleted(theme)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            markThemeCompleted(theme);
+                          }}
                           style={{
                             background: isCompleted ? '#2ecc71' : '#f0f4f8',
                             border: 'none',
