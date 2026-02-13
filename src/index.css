@@ -763,7 +763,7 @@ header p {
 .floating-action {
   position: fixed;
   bottom: 4rem;
-  right: 4rem;
+  right: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 15px;
