@@ -1778,6 +1778,25 @@ function App() {
     setSelectedStudent(sortedStudents[nextIndex]);
   };
 
+  // Manejo de teclado para navegar con la FICHA ABIERTA
+  useEffect(() => {
+    const handleModalNavigation = (e) => {
+      if (!selectedStudent) return;
+
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        navigateStudent(1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        navigateStudent(-1);
+      } else if (e.key === 'Escape' || e.key === 'Back' || e.key === 'X') {
+        // En algunos mandos Escape o X cierran
+        setSelectedStudent(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleModalNavigation);
+    return () => window.removeEventListener('keydown', handleModalNavigation);
+  }, [selectedStudent, sortedStudents]);
+
   if (!isAuthenticated) {
     return (
       <div className="login-screen" style={{
