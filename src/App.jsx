@@ -473,6 +473,9 @@ function App() {
   const [mainFocusIdx, setMainFocusIdx] = useState(0);
   const [mainFocusPart, setMainFocusPart] = useState('student'); // 'student', 'minus', 'plus'
 
+  // Focus para SALA DE ESTUDIO (Temas y Actividades)
+  const [aulaFocusIdx, setAulaFocusIdx] = useState(0);
+
   useEffect(() => {
     localStorage.setItem('catequesis_students', JSON.stringify(students));
   }, [students]);
@@ -1406,7 +1409,44 @@ function App() {
   useEffect(() => {
     setPickerFocusIdx(0);
     setPickerArea('students');
+    setAulaFocusIdx(0); // Reset focus when step changes
   }, [aulaStep, aulaTeams.length === 0]);
+
+  // Manejo de teclado para la SALA DE ESTUDIO (Temas y Actividades)
+  useEffect(() => {
+    const handleAulaNavigation = (e) => {
+      if (!showAulaModal) return;
+
+      // SOLO para 'themes' y 'activities'
+      if (aulaStep !== 'themes' && aulaStep !== 'activities') return;
+
+      const themes = Object.keys(AULA_TEMAS);
+      const activitiesCount = 7; // Tenemos 7 botones de actividades actualmente
+
+      if (e.key === 'ArrowRight') {
+        if (aulaStep === 'themes') setAulaFocusIdx(prev => (prev + 1) % themes.length);
+        else setAulaFocusIdx(prev => (prev + 1) % activitiesCount);
+      } else if (e.key === 'ArrowLeft') {
+        if (aulaStep === 'themes') setAulaFocusIdx(prev => (prev - 1 + themes.length) % themes.length);
+        else setAulaFocusIdx(prev => (prev - 1 + activitiesCount) % activitiesCount);
+      } else if (e.key === 'ArrowDown') {
+        if (aulaStep === 'themes') setAulaFocusIdx(prev => (prev + 2) % themes.length);
+        else setAulaFocusIdx(prev => (prev + 2) % activitiesCount);
+      } else if (e.key === 'ArrowUp') {
+        if (aulaStep === 'themes') setAulaFocusIdx(prev => (prev - 2 + themes.length) % themes.length);
+        else setAulaFocusIdx(prev => (prev - 2 + activitiesCount) % activitiesCount);
+      } else if (e.key === 'Enter' || e.key === 'OK') {
+        const buttons = document.querySelectorAll('.aula-option-btn-focusable');
+        if (buttons[aulaFocusIdx]) buttons[aulaFocusIdx].click();
+      } else if (e.key === 'Escape' || e.key === 'Back') {
+        if (aulaStep === 'activities') setAulaStep('themes');
+        else setShowAulaModal(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleAulaNavigation);
+    return () => window.removeEventListener('keydown', handleAulaNavigation);
+  }, [showAulaModal, aulaStep, aulaFocusIdx, selectedAulaTema]);
 
   const handleKeyPress = (letter) => {
     if (phraseGame.status !== 'playing') return;
@@ -2801,12 +2841,12 @@ function App() {
                       </motion.p>
                     </div>
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                      {Object.keys(AULA_TEMAS).map(tema => {
+                      {Object.keys(AULA_TEMAS).map((tema, idx) => {
                         const isCompleted = completedThemes.includes(tema);
                         return (
                           <button
                             key={tema}
-                            className="option-btn"
+                            className="option-btn aula-option-btn-focusable"
                             style={{
                               height: 'auto',
                               padding: '20px',
@@ -2814,7 +2854,10 @@ function App() {
                               flexDirection: 'column',
                               gap: '10px',
                               position: 'relative',
-                              border: isCompleted ? '2px solid #2ecc71' : '1px solid transparent'
+                              border: isCompleted ? '2px solid #2ecc71' : (aulaFocusIdx === idx ? '6px solid #1e1b4b' : '1px solid transparent'),
+                              transform: aulaFocusIdx === idx ? 'scale(1.05)' : 'scale(1)',
+                              boxShadow: aulaFocusIdx === idx ? '0 0 30px rgba(30, 27, 75, 0.5)' : 'none',
+                              transition: 'all 0.2s'
                             }}
                             onClick={() => {
                               setSelectedAulaTema(tema);
@@ -3106,7 +3149,14 @@ function App() {
 
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                      <button className="option-btn" style={{ background: 'linear-gradient(135deg, #4a90e2 0%, #357abd 100%)', color: 'white', padding: '30px', borderRadius: '25px', border: 'none', boxShadow: '0 10px 25px rgba(74, 144, 226, 0.3)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }} onClick={() => showRules({
+                      <button className="option-btn aula-option-btn-focusable" style={{
+                        background: 'linear-gradient(135deg, #4a90e2 0%, #357abd 100%)',
+                        color: 'white', padding: '30px', borderRadius: '25px',
+                        border: aulaFocusIdx === 0 ? '6px solid #1e1b4b' : 'none',
+                        transform: aulaFocusIdx === 0 ? 'scale(1.05)' : 'scale(1)',
+                        boxShadow: aulaFocusIdx === 0 ? '0 0 30px rgba(30, 27, 75, 0.5)' : '0 10px 25px rgba(74, 144, 226, 0.3)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px'
+                      }} onClick={() => showRules({
                         title: "Cuestionario Rápido",
                         description: "Responde preguntas de opción múltiple sobre el tema. ¡Rapidez y fe van de la mano!",
                         points: "✨ +15 Estrellas por cada acierto",
@@ -3121,7 +3171,14 @@ function App() {
                         </div>
                       </button>
 
-                      <button className="option-btn" style={{ background: 'linear-gradient(135deg, #3498db 0%, #2980b9 100%)', color: 'white', padding: '30px', borderRadius: '25px', border: 'none', boxShadow: '0 10px 25px rgba(52, 152, 219, 0.3)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }} onClick={() => showRules({
+                      <button className="option-btn aula-option-btn-focusable" style={{
+                        background: 'linear-gradient(135deg, #3498db 0%, #2980b9 100%)',
+                        color: 'white', padding: '30px', borderRadius: '25px',
+                        border: aulaFocusIdx === 1 ? '6px solid #1e1b4b' : 'none',
+                        transform: aulaFocusIdx === 1 ? 'scale(1.05)' : 'scale(1)',
+                        boxShadow: aulaFocusIdx === 1 ? '0 0 30px rgba(30, 27, 75, 0.5)' : '0 10px 25px rgba(52, 152, 219, 0.3)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px'
+                      }} onClick={() => showRules({
                         title: "Rosco Individual",
                         description: "Enfréntate tú solo al desafío del abecedario. ¿Podrás completar todas las letras?",
                         points: "✨ +2 Estrellas por cada palabra acertada",
@@ -3136,7 +3193,14 @@ function App() {
                         </div>
                       </button>
 
-                      <button className="option-btn" style={{ background: 'linear-gradient(135deg, #f1c40f 0%, #f39c12 100%)', color: 'white', padding: '30px', borderRadius: '25px', border: 'none', boxShadow: '0 10px 25px rgba(241, 196, 15, 0.3)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }} onClick={() => showRules({
+                      <button className="option-btn aula-option-btn-focusable" style={{
+                        background: 'linear-gradient(135deg, #f1c40f 0%, #f39c12 100%)',
+                        color: 'white', padding: '30px', borderRadius: '25px',
+                        border: aulaFocusIdx === 2 ? '6px solid #1e1b4b' : 'none',
+                        transform: aulaFocusIdx === 2 ? 'scale(1.05)' : 'scale(1)',
+                        boxShadow: aulaFocusIdx === 2 ? '0 0 30px rgba(30, 27, 75, 0.5)' : '0 10px 25px rgba(241, 196, 15, 0.3)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px'
+                      }} onClick={() => showRules({
                         title: "Reto Individual (+10)",
                         description: "Intenta descubrir la frase oculta letra a letra antes de que se agote el tiempo.",
                         points: "✨ +10 Estrellas al completar la frase",
@@ -3151,7 +3215,14 @@ function App() {
                         </div>
                       </button>
 
-                      <button className="option-btn" style={{ background: 'linear-gradient(135deg, #e67e22 0%, #d35400 100%)', color: 'white', padding: '30px', borderRadius: '25px', border: 'none', boxShadow: '0 10px 25px rgba(230, 126, 34, 0.3)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }} onClick={() => showRules({
+                      <button className="option-btn aula-option-btn-focusable" style={{
+                        background: 'linear-gradient(135deg, #e67e22 0%, #d35400 100%)',
+                        color: 'white', padding: '30px', borderRadius: '25px',
+                        border: aulaFocusIdx === 3 ? '6px solid #1e1b4b' : 'none',
+                        transform: aulaFocusIdx === 3 ? 'scale(1.05)' : 'scale(1)',
+                        boxShadow: aulaFocusIdx === 3 ? '0 0 30px rgba(30, 27, 75, 0.5)' : '0 10px 25px rgba(230, 126, 34, 0.3)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px'
+                      }} onClick={() => showRules({
                         title: "El Rosco (Pasapalabra)",
                         description: "Compite por equipos para completar el rosco circular. Se juega por turnos: si fallas o pasas la palabra, le toca al equipo contrario.",
                         points: "✨ +2 Estrellas por acierto para cada integrante",
@@ -3166,7 +3237,14 @@ function App() {
                         </div>
                       </button>
 
-                      <button className="option-btn" style={{ background: 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)', color: 'white', padding: '30px', borderRadius: '25px', border: 'none', boxShadow: '0 10px 25px rgba(46, 204, 113, 0.4)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }} onClick={() => showRules({
+                      <button className="option-btn aula-option-btn-focusable" style={{
+                        background: 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)',
+                        color: 'white', padding: '30px', borderRadius: '25px',
+                        border: aulaFocusIdx === 4 ? '6px solid #1e1b4b' : 'none',
+                        transform: aulaFocusIdx === 4 ? 'scale(1.05)' : 'scale(1)',
+                        boxShadow: aulaFocusIdx === 4 ? '0 0 30px rgba(30, 27, 75, 0.5)' : '0 10px 25px rgba(46, 204, 113, 0.4)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px'
+                      }} onClick={() => showRules({
                         title: "El Intruso",
                         description: "En cada ronda verás 4 opciones. Una de ellas no tiene nada que ver con el tema. ¡Debéis encontrar al impostor!",
                         points: "✨ +5 Estrellas por cada intruso identificado",
@@ -3181,7 +3259,14 @@ function App() {
                         </div>
                       </button>
 
-                      <button className="option-btn" style={{ background: 'linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%)', color: 'white', padding: '30px', borderRadius: '25px', border: 'none', boxShadow: '0 10px 25px rgba(155, 89, 182, 0.4)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px' }} onClick={() => showRules({
+                      <button className="option-btn aula-option-btn-focusable" style={{
+                        background: 'linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%)',
+                        color: 'white', padding: '30px', borderRadius: '25px',
+                        border: aulaFocusIdx === 5 ? '6px solid #1e1b4b' : 'none',
+                        transform: aulaFocusIdx === 5 ? 'scale(1.05)' : 'scale(1)',
+                        boxShadow: aulaFocusIdx === 5 ? '0 0 30px rgba(30, 27, 75, 0.5)' : '0 10px 25px rgba(155, 89, 182, 0.4)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px'
+                      }} onClick={() => showRules({
                         title: "Ordena la Historia",
                         description: "Pon a prueba tu memoria ordenando cronológicamente los sucesos más importantes de esta historia bíblica.",
                         points: "✨ +5 Estrellas para el equipo al completar el orden",
@@ -3196,7 +3281,14 @@ function App() {
                         </div>
                       </button>
 
-                      <button className="option-btn" style={{ background: 'linear-gradient(135deg, #4a90e2 0%, #2980b9 100%)', color: 'white', padding: '30px', borderRadius: '25px', border: 'none', boxShadow: '0 10px 25px rgba(74, 144, 226, 0.4)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', gridColumn: 'span 2' }} onClick={() => showRules({
+                      <button className="option-btn aula-option-btn-focusable" style={{
+                        background: 'linear-gradient(135deg, #4a90e2 0%, #2980b9 100%)',
+                        color: 'white', padding: '30px', borderRadius: '25px',
+                        border: aulaFocusIdx === 6 ? '6px solid #1e1b4b' : 'none',
+                        transform: aulaFocusIdx === 6 ? 'scale(1.05)' : 'scale(1)',
+                        boxShadow: aulaFocusIdx === 6 ? '0 0 30px rgba(30, 27, 75, 0.5)' : '0 10px 25px rgba(74, 144, 226, 0.4)',
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px', gridColumn: 'span 2'
+                      }} onClick={() => showRules({
                         title: "Frase Oculta por Equipos",
                         description: "Un duelo de equipos para adivinar la frase secreta por turnos. Si fallas una letra, pierdes el turno.",
                         points: "✨ +10 Estrellas para el equipo ganador",
