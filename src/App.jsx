@@ -631,31 +631,31 @@ function App() {
       });
 
       // 5. Lógica de celebraciones especiales
+      const studentAfter = updated.find(s => s.id === id);
+      const studentBefore = prev.find(s => s.id === id);
+      const oldTotal = studentBefore?.totalScore || 0;
+      const newTotal = studentAfter?.totalScore || 0;
+      const hitMilestone = amount > 0 && Math.floor(newTotal / 100) > Math.floor(oldTotal / 100);
+
       const enteredPodium = !beforeIds.includes(id) && afterIds.includes(id);
-      // Se convierte en líder si: ahora es el #1 Y (antes no lo era O el #1 de antes tenía 0 puntos)
       const becameLeader = afterIds[0] === id && (beforeIds[0] !== id || beforeLeaderScore === 0);
 
       if (amount > 0) {
-        if (becameLeader) {
+        if (hitMilestone) {
           playSound('fanfare');
           setApotheosic(true);
-          setTimeout(() => setApotheosic(false), 6000);
-          // Celebración MÁXIMA: Ha alcanzado el 1er puesto (nuevo líder)
+          setTimeout(() => setApotheosic(false), 10000); // Gloria dura un poco más
           setTimeout(() => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
             triggerLeaderFireworks();
           }, 100);
+          alert(`🎉 ¡GLORIA! ${studentAfter.name} ha alcanzado un hito de ${Math.floor(newTotal / 100) * 100} estrellas. ¡Felicidades!`);
+        } else if (becameLeader) {
+          setApotheosic(false);
+          triggerLeaderFireworks();
         } else if (enteredPodium) {
-          playSound('fanfare');
-          setApotheosic(true);
-          setTimeout(() => setApotheosic(false), 5000);
-          // Celebración Grande: Ha entrado en el podio (1º, 2º o 3º) por primera vez en esta actualización
-          setTimeout(() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            triggerMassiveStars();
-          }, 100);
+          triggerMassiveStars();
         } else {
-          // Si no cambia el líder ni entra al podio, solo estrellas suaves
           triggerSuccessEffect();
         }
       }
