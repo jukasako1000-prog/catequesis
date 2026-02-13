@@ -470,6 +470,9 @@ function App() {
   const [pickerArea, setPickerArea] = useState('students'); // 'input', 'students', 'add-btn', 'start-btn'
   const teamNameInputRef = useRef(null);
 
+  const [mainFocusIdx, setMainFocusIdx] = useState(0);
+  const [mainFocusPart, setMainFocusPart] = useState('student'); // 'student', 'minus', 'plus'
+
   useEffect(() => {
     localStorage.setItem('catequesis_students', JSON.stringify(students));
   }, [students]);
@@ -1388,6 +1391,53 @@ function App() {
     window.addEventListener('keydown', handleNavigation);
     return () => window.removeEventListener('keydown', handleNavigation);
   }, [showAulaModal, aulaStep, pickerFocusIdx, pickerArea, students, aulaTeams, currentTeamName, phraseGame.selectedTeamIds]);
+
+  // Manejo de teclado para el RANKING PRINCIPAL
+  useEffect(() => {
+    const handleMainNavigation = (e) => {
+      // Solo si no hay ningún modal abierto
+      if (showAulaModal || selectedStudent || showAddModal || showQuizModal) return;
+      if (view !== 'general' && view !== 'daily') return;
+
+      const total = sortedStudents.length;
+      if (total === 0) return;
+
+      if (e.key === 'ArrowRight') {
+        if (mainFocusPart === 'student') setMainFocusPart('minus');
+        else if (mainFocusPart === 'minus') setMainFocusPart('plus');
+        else {
+          setMainFocusIdx(prev => (prev + 1) % total);
+          setMainFocusPart('student');
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (mainFocusPart === 'plus') setMainFocusPart('minus');
+        else if (mainFocusPart === 'minus') setMainFocusPart('student');
+        else {
+          setMainFocusIdx(prev => (prev - 1 + total) % total);
+          setMainFocusPart('plus');
+        }
+      } else if (e.key === 'ArrowDown') {
+        // Asumiendo 4 columnas para el salto de fila
+        setMainFocusIdx(prev => (prev + 4) % total);
+      } else if (e.key === 'ArrowUp') {
+        setMainFocusIdx(prev => (prev - 4 + total) % total);
+      } else if (e.key === 'Enter' || e.key === 'OK') {
+        const student = sortedStudents[mainFocusIdx];
+        if (!student) return;
+
+        if (mainFocusPart === 'student') {
+          setSelectedStudent(student);
+        } else if (mainFocusPart === 'minus') {
+          updatePoints(student.id, -5);
+        } else if (mainFocusPart === 'plus') {
+          updatePoints(student.id, 5);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleMainNavigation);
+    return () => window.removeEventListener('keydown', handleMainNavigation);
+  }, [showAulaModal, selectedStudent, showAddModal, showQuizModal, view, sortedStudents, mainFocusIdx, mainFocusPart]);
 
   // Sincronizar foco del input
   useEffect(() => {
@@ -2433,47 +2483,89 @@ function App() {
             >
               <div className="ranking-list">
                 <AnimatePresence>
-                  {sortedStudents.map((student, index) => (
-                    <motion.div key={student.id} id={`student-${student.id}`} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="student-card">
-                      <div className="rank-number">#{index + 1}</div>
+                  {sortedStudents.map((student, index) => {
+                    const isCardFocused = mainFocusIdx === index && mainFocusPart === 'student';
+                    const isMinusFocused = mainFocusIdx === index && mainFocusPart === 'minus';
+                    const isPlusFocused = mainFocusIdx === index && mainFocusPart === 'plus';
 
-                      <div className="small-avatar" onClick={() => setSelectedStudent(student)} style={{ cursor: 'pointer' }}>
-                        <img src={student.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                      </div>
+                    return (
+                      <motion.div
+                        key={student.id}
+                        id={`student-${student.id}`}
+                        layout
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="student-card"
+                        style={{
+                          border: isCardFocused ? '4px solid #f1c40f' : '1px solid rgba(0,0,0,0.05)',
+                          transform: isCardFocused ? 'scale(1.05)' : 'scale(1)',
+                          boxShadow: isCardFocused ? '0 10px 30px rgba(241, 196, 15, 0.3)' : '0 5px 15px rgba(0,0,0,0.05)',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        <div className="rank-number">#{index + 1}</div>
 
-                      <div className="student-details-right" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px' }}>
-                        <div className="student-info" style={{ textAlign: 'left', marginBottom: '2px' }}>
-                          <div className="student-name" style={{ fontSize: '1.2rem', fontWeight: 950, color: '#1e3a8a', lineHeight: 1.1 }}>
-                            {student.name}
-                          </div>
-                          <div className="student-scores" style={{ justifyContent: 'flex-start', fontSize: '0.9rem' }}>
-                            <span>✨ {student.totalScore}</span>
-                          </div>
+                        <div
+                          className="small-avatar"
+                          onClick={() => setSelectedStudent(student)}
+                          style={{
+                            cursor: 'pointer',
+                            border: isCardFocused ? '2px solid #f1c40f' : 'none'
+                          }}
+                        >
+                          <img src={student.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
 
-                        <div className="controls">
-                          <div className="action-buttons-row" style={{ justifyContent: 'flex-start', marginTop: '5px', gap: '5px' }}>
-                            <button
-                              className="btn-point"
-                              style={{ background: '#f39c12', width: '35px', height: '35px' }}
-                              onClick={() => updatePoints(student.id, -5)}
-                              title="Quitar Puntos (-5)"
-                            >
-                              <Minus size={16} />
-                            </button>
-                            <button
-                              className="btn-point"
-                              style={{ background: '#2ecc71', width: '35px', height: '35px' }}
-                              onClick={() => updatePoints(student.id, 5)}
-                              title="Añadir Puntos (+5)"
-                            >
-                              <Plus size={16} />
-                            </button>
+                        <div className="student-details-right" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px' }}>
+                          <div className="student-info" style={{ textAlign: 'left', marginBottom: '2px' }}>
+                            <div className="student-name" style={{ fontSize: '1.2rem', fontWeight: 950, color: '#1e3a8a', lineHeight: 1.1 }}>
+                              {student.name}
+                            </div>
+                            <div className="student-scores" style={{ justifyContent: 'flex-start', fontSize: '0.9rem' }}>
+                              <span>✨ {student.totalScore}</span>
+                            </div>
+                          </div>
+
+                          <div className="controls">
+                            <div className="action-buttons-row" style={{ justifyContent: 'flex-start', marginTop: '5px', gap: '5px' }}>
+                              <button
+                                className="btn-point"
+                                style={{
+                                  background: '#f39c12',
+                                  width: '35px',
+                                  height: '35px',
+                                  border: isMinusFocused ? '3px solid white' : 'none',
+                                  transform: isMinusFocused ? 'scale(1.3)' : 'scale(1)',
+                                  boxShadow: isMinusFocused ? '0 0 15px #f39c12' : 'none',
+                                  zIndex: isMinusFocused ? 10 : 1
+                                }}
+                                onClick={() => updatePoints(student.id, -5)}
+                                title="Quitar Puntos (-5)"
+                              >
+                                <Minus size={16} />
+                              </button>
+                              <button
+                                className="btn-point"
+                                style={{
+                                  background: '#2ecc71',
+                                  width: '35px',
+                                  height: '35px',
+                                  border: isPlusFocused ? '3px solid white' : 'none',
+                                  transform: isPlusFocused ? 'scale(1.3)' : 'scale(1)',
+                                  boxShadow: isPlusFocused ? '0 0 15px #2ecc71' : 'none',
+                                  zIndex: isPlusFocused ? 10 : 1
+                                }}
+                                onClick={() => updatePoints(student.id, 5)}
+                                title="Añadir Puntos (+5)"
+                              >
+                                <Plus size={16} />
+                              </button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </motion.div>
-                  ))}
+                      </motion.div>
+                    );
+                  })}
                 </AnimatePresence>
               </div>
             </motion.div>
