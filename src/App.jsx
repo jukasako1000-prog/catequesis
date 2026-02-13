@@ -2501,9 +2501,9 @@ function App() {
                         animate={{ opacity: 1 }}
                         className="student-card"
                         style={{
-                          border: isCardFocused ? '6px solid #f1c40f' : '1px solid rgba(0,0,0,0.05)',
+                          border: isCardFocused ? '6px solid #1e1b4b' : '1px solid rgba(0,0,0,0.05)',
                           transform: isCardFocused ? 'scale(1.05)' : 'scale(1)',
-                          boxShadow: isCardFocused ? '0 0 40px rgba(241, 196, 15, 0.8)' : '0 5px 15px rgba(0,0,0,0.05)',
+                          boxShadow: isCardFocused ? '0 0 45px rgba(30, 27, 75, 0.9)' : '0 5px 15px rgba(0,0,0,0.05)',
                           transition: 'all 0.2s'
                         }}
                       >
@@ -2538,9 +2538,9 @@ function App() {
                                   background: '#f39c12',
                                   width: '35px',
                                   height: '35px',
-                                  border: isMinusFocused ? '5px solid white' : 'none',
+                                  border: isMinusFocused ? '5px solid #1e1b4b' : 'none',
                                   transform: isMinusFocused ? 'scale(1.5)' : 'scale(1)',
-                                  boxShadow: isMinusFocused ? '0 0 25px rgba(243, 156, 18, 1)' : 'none',
+                                  boxShadow: isMinusFocused ? '0 0 30px rgba(30, 27, 75, 1)' : 'none',
                                   zIndex: isMinusFocused ? 10 : 1
                                 }}
                                 onClick={() => updatePoints(student.id, -5)}
@@ -2554,9 +2554,9 @@ function App() {
                                   background: '#2ecc71',
                                   width: '35px',
                                   height: '35px',
-                                  border: isPlusFocused ? '5px solid white' : 'none',
+                                  border: isPlusFocused ? '5px solid #1e1b4b' : 'none',
                                   transform: isPlusFocused ? 'scale(1.5)' : 'scale(1)',
-                                  boxShadow: isPlusFocused ? '0 0 25px rgba(46, 204, 113, 1)' : 'none',
+                                  boxShadow: isPlusFocused ? '0 0 30px rgba(30, 27, 75, 1)' : 'none',
                                   zIndex: isPlusFocused ? 10 : 1
                                 }}
                                 onClick={() => updatePoints(student.id, 5)}
