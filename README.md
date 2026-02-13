@@ -341,4 +341,14 @@ Buscar las funciones:
 - **Formato Panorámico**: El ancho máximo de la aplicación se ha ampliado a **1400px** para aprovechar mejor las pantallas 16:9.
 - **Optimización Vertical**: Reajuste de alturas en el podio y cabeceras para que todo el contenido principal sea visible sin necesidad de mucho scroll en pantallas grandes.
 
-**Última actualización de diseño**: 9 de Febrero de 2026.
+**Última actualización de diseño**: 13 de Febrero de 2026.
+
+### 🎮 Soporte Total para Mandos y Navegación (Nueva Era)
+- **Navegación Universal**: Implementación de soporte completo para mandos Bluetooth y teclado en toda la app. Ahora es posible gestionar toda la clase sin tocar el ratón.
+- **Control del Podio y Cañones**: Las flechas permiten navegar por los puestos de honor y seleccionar los **cañones de confeti**. Al seleccionarlos, se agrandan visualmente y se activan con **OK/Intro**.
+- **Foco de Alta Visibilidad**: Todos los elementos seleccionables (alumnos, temas, juegos, botones +/-) ahora muestran un **marco azul marino grueso (#1e1b4b)** que garantiza visibilidad perfecta desde lejos o en proyectores.
+- **Sala de Estudio Navegable**: Acceso total a la selección de temas y actividades mediante cursores. Se ha unificado el flujo para que entrar, jugar y volver sea totalmente fluido con el mando.
+- **Gestión de Puntos con Mando**: Los botones de sumar y restar estrellas en el ranking ahora son accesibles con las flechas, facilitando el reparto de premios durante la clase.
+- **Teclas Rápidas de Retroceso**: Uso de las teclas **Escape** o **Back** (atrás) para cerrar fichas de alumnos o retroceder entre los menús de juegos de forma natural.
+- **Guard de Login**: Sistema de seguridad que evita que el "Enter" usado para entrar a la app abra accidentalmente la ficha del primer alumno.
+
