@@ -330,7 +330,7 @@ const INITIAL_STUDENTS = [
   { id: 104, name: 'MA.CASES', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGELCASES.jpg' },
   { id: 105, name: 'Miguel Angel', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGEL .jpg' },
   { id: 106, name: 'Enzo', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/enzo.jpg' },
-  { id: 108, name: 'Jose Francisco', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=JF&backgroundColor=4a90e2&fontSize=45' },
+  { id: 108, name: 'J.FRANCISCO', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=JF&backgroundColor=4a90e2&fontSize=45' },
   { id: 109, name: 'Cristina', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/CRISTINA.jpg' },
   { id: 111, name: 'Celia', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/CELIA.jpg' },
   { id: 112, name: 'Valentina', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/VALENTINA.jpg' },
@@ -362,7 +362,7 @@ function App() {
   const raffleAudioRef = useRef(null);
   const cannonPowerRef = useRef(45);
   const lastCannonClickRef = useRef(0);
-  const [showRankingList, setShowRankingList] = useState(false);
+  const [showRankingList, setShowRankingList] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passwordInput, setPasswordInput] = useState('');
   const [loginError, setLoginError] = useState(false);
@@ -2367,30 +2367,7 @@ function App() {
 
 
 
-            <button
-              onClick={() => setShowRankingList(!showRankingList)}
-              style={{
-                padding: '12px 20px',
-                borderRadius: '15px',
-                border: 'none',
-                background: showRankingList ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.2)',
-                color: showRankingList ? '#2c3e50' : 'white',
-                fontWeight: 800,
-                fontSize: '0.9rem',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all 0.3s',
-                boxShadow: showRankingList ? '0 4px 15px rgba(0,0,0,0.1)' : 'none'
-              }}
-            >
-              <Trophy size={18} />
-              {showRankingList ? 'OCULTAR LISTA' : 'VER LISTA'}
-              <motion.div animate={{ rotate: showRankingList ? 180 : 0 }}>
-                <ChevronDown size={18} />
-              </motion.div>
-            </button>
+
 
             <button
               onClick={() => setView('learning')}
@@ -2417,60 +2394,58 @@ function App() {
           </div>
 
           <AnimatePresence>
-            {showRankingList && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                style={{ overflow: 'hidden' }}
-              >
-                <div className="ranking-list">
-                  <AnimatePresence>
-                    {sortedStudents.map((student, index) => (
-                      <motion.div key={student.id} id={`student-${student.id}`} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="student-card">
-                        <div className="rank-number">#{index + 1}</div>
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              style={{ overflow: 'hidden' }}
+            >
+              <div className="ranking-list">
+                <AnimatePresence>
+                  {sortedStudents.map((student, index) => (
+                    <motion.div key={student.id} id={`student-${student.id}`} layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="student-card">
+                      <div className="rank-number">#{index + 1}</div>
 
-                        <div className="small-avatar" onClick={() => setSelectedStudent(student)} style={{ cursor: 'pointer' }}>
-                          <img src={student.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        </div>
+                      <div className="small-avatar" onClick={() => setSelectedStudent(student)} style={{ cursor: 'pointer' }}>
+                        <img src={student.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      </div>
 
-                        <div className="student-details-right" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px' }}>
-                          <div className="student-info" style={{ textAlign: 'left', marginBottom: '2px' }}>
-                            <div className="student-name" style={{ fontSize: '1.2rem', fontWeight: 950, color: '#1e3a8a', lineHeight: 1.1 }}>
-                              {student.name}
-                            </div>
-                            <div className="student-scores" style={{ justifyContent: 'flex-start', fontSize: '0.9rem' }}>
-                              <span>✨ {student.totalScore}</span>
-                            </div>
+                      <div className="student-details-right" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '8px' }}>
+                        <div className="student-info" style={{ textAlign: 'left', marginBottom: '2px' }}>
+                          <div className="student-name" style={{ fontSize: '1.2rem', fontWeight: 950, color: '#1e3a8a', lineHeight: 1.1 }}>
+                            {student.name}
                           </div>
-
-                          <div className="controls">
-                            <div className="action-buttons-row" style={{ justifyContent: 'flex-start', marginTop: '5px', gap: '5px' }}>
-                              <button
-                                className="btn-point"
-                                style={{ background: '#f39c12', width: '35px', height: '35px' }}
-                                onClick={() => updatePoints(student.id, -5)}
-                                title="Quitar Puntos (-5)"
-                              >
-                                <Minus size={16} />
-                              </button>
-                              <button
-                                className="btn-point"
-                                style={{ background: '#2ecc71', width: '35px', height: '35px' }}
-                                onClick={() => updatePoints(student.id, 5)}
-                                title="Añadir Puntos (+5)"
-                              >
-                                <Plus size={16} />
-                              </button>
-                            </div>
+                          <div className="student-scores" style={{ justifyContent: 'flex-start', fontSize: '0.9rem' }}>
+                            <span>✨ {student.totalScore}</span>
                           </div>
                         </div>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-                </div>
-              </motion.div>
-            )}
+
+                        <div className="controls">
+                          <div className="action-buttons-row" style={{ justifyContent: 'flex-start', marginTop: '5px', gap: '5px' }}>
+                            <button
+                              className="btn-point"
+                              style={{ background: '#f39c12', width: '35px', height: '35px' }}
+                              onClick={() => updatePoints(student.id, -5)}
+                              title="Quitar Puntos (-5)"
+                            >
+                              <Minus size={16} />
+                            </button>
+                            <button
+                              className="btn-point"
+                              style={{ background: '#2ecc71', width: '35px', height: '35px' }}
+                              onClick={() => updatePoints(student.id, 5)}
+                              title="Añadir Puntos (+5)"
+                            >
+                              <Plus size={16} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              </div>
+            </motion.div>
           </AnimatePresence>
         </div>
       )}
