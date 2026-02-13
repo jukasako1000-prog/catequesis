@@ -396,7 +396,7 @@ function App() {
   const [phraseGame, setPhraseGame] = useState({
     original: '',
     revealed: [],
-    timeLeft: 60,
+    timeLeft: 120,
     status: 'playing', // 'playing', 'won', 'lost'
     usedLetters: [],
     isPaused: false,
@@ -409,7 +409,7 @@ function App() {
   const [pasapalabra, setPasapalabra] = useState({
     rosco: [], // [{ letter: 'A', question: '...', answer: '...', status: 'pending' }]
     currentIdx: 0,
-    timeLeft: 300,
+    timeLeft: 480,
     status: 'playing', // 'playing', 'finished'
     teams: [],
     currentTeamIdx: 0,
@@ -854,7 +854,7 @@ function App() {
     setPasapalabra({
       rosco: roscoData,
       currentIdx: 0,
-      timeLeft: 300,
+      timeLeft: 480,
       status: 'playing',
       teams: teams.map(t => ({ ...t, hits: 0, errors: 0 })),
       currentTeamIdx: initialTeamIdx,
@@ -1176,7 +1176,7 @@ function App() {
       ...prev,
       original: phrase,
       revealed: revealedIndices,
-      timeLeft: 60, // 1 minuto fijo
+      timeLeft: 120, // 2 minutos fijo
       usedLetters: [],
       isPaused: false,
       teams: teams,
