@@ -466,6 +466,8 @@ function App() {
     onComplete: null
   });
 
+  const [pickerFocusIdx, setPickerFocusIdx] = useState(0);
+
   useEffect(() => {
     localStorage.setItem('catequesis_students', JSON.stringify(students));
   }, [students]);
@@ -1338,6 +1340,35 @@ function App() {
       }, 1000);
     }
   }, [historiaGame.status, historiaGame.pointsAwarded, aulaStep, showAulaModal]);
+
+  // Manejo de teclado para selección de equipos con mando
+  useEffect(() => {
+    const handleNavigation = (e) => {
+      if (!showAulaModal) return;
+      const teamSteps = ['select-team', 'select-team-pasapalabra', 'select-team-intruso', 'select-team-historia'];
+      if (!teamSteps.includes(aulaStep)) return;
+
+      const available = students.filter(s => !aulaTeams.some(team => team.studentIds.includes(s.id)));
+      if (available.length === 0) return;
+
+      if (e.key === 'ArrowRight') {
+        setPickerFocusIdx(prev => (prev + 1) % available.length);
+      } else if (e.key === 'ArrowLeft') {
+        setPickerFocusIdx(prev => (prev - 1 + available.length) % available.length);
+      } else if (e.key === 'Enter' || e.key === 'OK') {
+        // Si el foco está en un alumno, lo seleccionamos
+        const student = available[pickerFocusIdx];
+        if (student) toggleTeamMember(student.id);
+      }
+    };
+
+    window.addEventListener('keydown', handleNavigation);
+    return () => window.removeEventListener('keydown', handleNavigation);
+  }, [showAulaModal, aulaStep, pickerFocusIdx, students, aulaTeams]);
+
+  useEffect(() => {
+    setPickerFocusIdx(0);
+  }, [aulaStep, aulaTeams]);
 
   const handleKeyPress = (letter) => {
     if (phraseGame.status !== 'playing') return;
@@ -2759,12 +2790,33 @@ function App() {
                       <div className="student-picker" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(95px, 1fr))', gap: '12px', maxHeight: '300px', overflowY: 'auto', padding: '10px' }}>
                         {students
                           .filter(s => !aulaTeams.some(team => team.studentIds.includes(s.id)))
-                          .map(s => {
+                          .map((s, idx) => {
                             const isSelected = phraseGame.selectedTeamIds.includes(s.id);
+                            const isFocused = pickerFocusIdx === idx;
                             return (
-                              <button key={s.id} onClick={() => toggleTeamMember(s.id)} style={{ background: isSelected ? '#4a90e2' : 'white', borderRadius: '15px', padding: '8px', cursor: 'pointer', border: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', transition: 'all 0.2s' }}>
+                              <button
+                                key={s.id}
+                                onClick={() => {
+                                  setPickerFocusIdx(idx);
+                                  toggleTeamMember(s.id);
+                                }}
+                                style={{
+                                  background: isSelected ? '#4a90e2' : 'white',
+                                  borderRadius: '15px',
+                                  padding: '8px',
+                                  cursor: 'pointer',
+                                  border: isFocused ? '3px solid #f1c40f' : '3px solid transparent',
+                                  display: 'flex',
+                                  flexDirection: 'column',
+                                  alignItems: 'center',
+                                  transition: 'all 0.2s',
+                                  transform: isFocused ? 'scale(1.1)' : 'scale(1)',
+                                  boxShadow: isFocused ? '0 0 15px rgba(241, 196, 15, 0.5)' : 'none',
+                                  zIndex: isFocused ? 10 : 1
+                                }}
+                              >
                                 <img src={s.avatar} alt="" style={{ width: '30px', height: '30px', borderRadius: '50%', marginBottom: '4px' }} />
-                                <span style={{ fontSize: '0.6rem', fontWeight: 800, color: isSelected ? 'white' : '#2c3e50', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.name}</span>
+                                <span style={{ fontSize: '0.6rem', fontWeight: 800, color: (isSelected) ? 'white' : '#2c3e50', width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.name}</span>
                               </button>
                             );
                           })}
