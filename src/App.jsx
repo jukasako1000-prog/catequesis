@@ -467,6 +467,8 @@ function App() {
   });
 
   const [pickerFocusIdx, setPickerFocusIdx] = useState(0);
+  const [pickerArea, setPickerArea] = useState('students'); // 'input', 'students', 'add-btn', 'start-btn'
+  const teamNameInputRef = useRef(null);
 
   useEffect(() => {
     localStorage.setItem('catequesis_students', JSON.stringify(students));
@@ -1349,26 +1351,55 @@ function App() {
       if (!teamSteps.includes(aulaStep)) return;
 
       const available = students.filter(s => !aulaTeams.some(team => team.studentIds.includes(s.id)));
-      if (available.length === 0) return;
 
-      if (e.key === 'ArrowRight') {
-        setPickerFocusIdx(prev => (prev + 1) % available.length);
-      } else if (e.key === 'ArrowLeft') {
-        setPickerFocusIdx(prev => (prev - 1 + available.length) % available.length);
+      if (e.key === 'ArrowRight' && pickerArea === 'students') {
+        if (available.length > 0) setPickerFocusIdx(prev => (prev + 1) % available.length);
+      } else if (e.key === 'ArrowLeft' && pickerArea === 'students') {
+        if (available.length > 0) setPickerFocusIdx(prev => (prev - 1 + available.length) % available.length);
+      } else if (e.key === 'ArrowUp') {
+        if (pickerArea === 'students') setPickerArea('input');
+        else if (pickerArea === 'add-btn') setPickerArea('students');
+        else if (pickerArea === 'start-btn') setPickerArea('add-btn');
+      } else if (e.key === 'ArrowDown') {
+        if (pickerArea === 'input') setPickerArea('students');
+        else if (pickerArea === 'students') setPickerArea('add-btn');
+        else if (pickerArea === 'add-btn') setPickerArea('start-btn');
       } else if (e.key === 'Enter' || e.key === 'OK') {
-        // Si el foco está en un alumno, lo seleccionamos
-        const student = available[pickerFocusIdx];
-        if (student) toggleTeamMember(student.id);
+        if (pickerArea === 'students') {
+          const student = available[pickerFocusIdx];
+          if (student) toggleTeamMember(student.id);
+        } else if (pickerArea === 'input' || pickerArea === 'add-btn') {
+          // Lógica de "Añadir Equipo"
+          if (currentTeamName && phraseGame.selectedTeamIds.length > 0) {
+            setAulaTeams([...aulaTeams, { name: currentTeamName, studentIds: [...phraseGame.selectedTeamIds] }]);
+            setCurrentTeamName('');
+            setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] }));
+            setPickerArea('students'); // Volver a los alumnos para el siguiente equipo
+          }
+        } else if (pickerArea === 'start-btn') {
+          if (aulaTeams.length >= 2) {
+            const startBtn = document.getElementById('btn-start-challenge');
+            if (startBtn) startBtn.click();
+          }
+        }
       }
     };
 
     window.addEventListener('keydown', handleNavigation);
     return () => window.removeEventListener('keydown', handleNavigation);
-  }, [showAulaModal, aulaStep, pickerFocusIdx, students, aulaTeams]);
+  }, [showAulaModal, aulaStep, pickerFocusIdx, pickerArea, students, aulaTeams, currentTeamName, phraseGame.selectedTeamIds]);
+
+  // Sincronizar foco del input
+  useEffect(() => {
+    if (pickerArea === 'input' && teamNameInputRef.current) {
+      teamNameInputRef.current.focus();
+    }
+  }, [pickerArea]);
 
   useEffect(() => {
     setPickerFocusIdx(0);
-  }, [aulaStep, aulaTeams]);
+    setPickerArea('students');
+  }, [aulaStep, aulaTeams.length === 0]);
 
   const handleKeyPress = (letter) => {
     if (phraseGame.status !== 'playing') return;
@@ -2744,11 +2775,22 @@ function App() {
                     {/* Creador de Equipo */}
                     <div style={{ background: 'rgba(74, 144, 226, 0.05)', padding: '20px', borderRadius: '25px', marginBottom: '1.5rem', border: '2px dashed rgba(74, 144, 226, 0.2)' }}>
                       <input
+                        ref={teamNameInputRef}
                         type="text"
                         placeholder="Nombre del Equipo (ej: Los Leones)"
                         value={currentTeamName}
                         onChange={(e) => setCurrentTeamName(e.target.value)}
-                        style={{ width: '100%', padding: '12px', borderRadius: '15px', border: '2px solid white', marginBottom: '1rem', fontWeight: 800, outline: 'none' }}
+                        style={{
+                          width: '100%',
+                          padding: '12px',
+                          borderRadius: '15px',
+                          border: pickerArea === 'input' ? '3px solid #f1c40f' : '2px solid white',
+                          marginBottom: '1rem',
+                          fontWeight: 800,
+                          outline: 'none',
+                          boxShadow: pickerArea === 'input' ? '0 0 15px rgba(241, 196, 15, 0.4)' : 'none',
+                          transition: 'all 0.2s'
+                        }}
                       />
                       <div className="student-picker" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(95px, 1fr))', gap: '12px', maxHeight: '300px', overflowY: 'auto', padding: '10px' }}>
                         {students
@@ -2786,12 +2828,22 @@ function App() {
                       </div>
                       <button
                         className="btn-primary"
-                        style={{ width: '100%', marginTop: '1rem', background: '#2ecc71', padding: '10px' }}
+                        style={{
+                          width: '100%',
+                          marginTop: '1rem',
+                          background: '#2ecc71',
+                          padding: '10px',
+                          border: pickerArea === 'add-btn' ? '4px solid #f1c40f' : 'none',
+                          transform: pickerArea === 'add-btn' ? 'scale(1.02)' : 'scale(1)',
+                          transition: 'all 0.2s',
+                          boxShadow: pickerArea === 'add-btn' ? '0 0 20px rgba(46, 204, 113, 0.5)' : 'none'
+                        }}
                         disabled={!currentTeamName || phraseGame.selectedTeamIds.length === 0}
                         onClick={() => {
                           setAulaTeams([...aulaTeams, { name: currentTeamName, studentIds: [...phraseGame.selectedTeamIds] }]);
                           setCurrentTeamName('');
                           setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] }));
+                          setPickerArea('students');
                         }}
                       >
                         ➕ Añadir Equipo
@@ -2799,9 +2851,19 @@ function App() {
                     </div>
 
                     <button
+                      id="btn-start-challenge"
                       disabled={aulaTeams.length < 2}
                       className="btn-primary"
-                      style={{ width: '100%', opacity: aulaTeams.length < 2 ? 0.5 : 1, fontSize: '1.2rem', padding: '15px' }}
+                      style={{
+                        width: '100%',
+                        opacity: aulaTeams.length < 2 ? 0.5 : 1,
+                        fontSize: '1.2rem',
+                        padding: '15px',
+                        border: pickerArea === 'start-btn' ? '4px solid #f1c40f' : 'none',
+                        transform: pickerArea === 'start-btn' ? 'scale(1.05)' : 'scale(1)',
+                        transition: 'all 0.2s',
+                        boxShadow: pickerArea === 'start-btn' ? '0 0 25px rgba(241, 196, 15, 0.3)' : 'none'
+                      }}
                       onClick={() => {
                         runCoolRaffle(aulaTeams, (winnerIdx) => {
                           if (aulaStep === 'select-team-pasapalabra') {
