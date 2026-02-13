@@ -1394,52 +1394,7 @@ function App() {
     return () => window.removeEventListener('keydown', handleNavigation);
   }, [showAulaModal, aulaStep, pickerFocusIdx, pickerArea, students, aulaTeams, currentTeamName, phraseGame.selectedTeamIds]);
 
-  // Manejo de teclado para el RANKING PRINCIPAL
-  useEffect(() => {
-    const handleMainNavigation = (e) => {
-      // Solo si no hay ningún modal abierto
-      if (showAulaModal || selectedStudent || showAddModal || showQuizModal) return;
-      if (view !== 'general' && view !== 'daily') return;
 
-      const total = sortedStudents.length;
-      if (total === 0) return;
-
-      if (e.key === 'ArrowRight') {
-        if (mainFocusPart === 'student') setMainFocusPart('minus');
-        else if (mainFocusPart === 'minus') setMainFocusPart('plus');
-        else {
-          setMainFocusIdx(prev => (prev + 1) % total);
-          setMainFocusPart('student');
-        }
-      } else if (e.key === 'ArrowLeft') {
-        if (mainFocusPart === 'plus') setMainFocusPart('minus');
-        else if (mainFocusPart === 'minus') setMainFocusPart('student');
-        else {
-          setMainFocusIdx(prev => (prev - 1 + total) % total);
-          setMainFocusPart('plus');
-        }
-      } else if (e.key === 'ArrowDown') {
-        // Asumiendo 4 columnas para el salto de fila
-        setMainFocusIdx(prev => (prev + 4) % total);
-      } else if (e.key === 'ArrowUp') {
-        setMainFocusIdx(prev => (prev - 4 + total) % total);
-      } else if (e.key === 'Enter' || e.key === 'OK') {
-        const student = sortedStudents[mainFocusIdx];
-        if (!student) return;
-
-        if (mainFocusPart === 'student') {
-          setSelectedStudent(student);
-        } else if (mainFocusPart === 'minus') {
-          updatePoints(student.id, -5);
-        } else if (mainFocusPart === 'plus') {
-          updatePoints(student.id, 5);
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleMainNavigation);
-    return () => window.removeEventListener('keydown', handleMainNavigation);
-  }, [showAulaModal, selectedStudent, showAddModal, showQuizModal, view, sortedStudents, mainFocusIdx, mainFocusPart]);
 
   // Sincronizar foco del input
   useEffect(() => {
@@ -1747,6 +1702,53 @@ function App() {
   // El podio siempre muestra los 5 mejores para que las estructuras estén visibles
   const podium = sortedStudents.slice(0, 5);
   const remaining = sortedStudents.slice(5);
+
+  // Manejo de teclado para el RANKING PRINCIPAL
+  useEffect(() => {
+    const handleMainNavigation = (e) => {
+      // Solo si no hay ningún modal abierto
+      if (showAulaModal || selectedStudent || showAddModal || showQuizModal) return;
+      if (view !== 'general' && view !== 'daily') return;
+
+      const total = sortedStudents.length;
+      if (total === 0) return;
+
+      if (e.key === 'ArrowRight') {
+        if (mainFocusPart === 'student') setMainFocusPart('minus');
+        else if (mainFocusPart === 'minus') setMainFocusPart('plus');
+        else {
+          setMainFocusIdx(prev => (prev + 1) % total);
+          setMainFocusPart('student');
+        }
+      } else if (e.key === 'ArrowLeft') {
+        if (mainFocusPart === 'plus') setMainFocusPart('minus');
+        else if (mainFocusPart === 'minus') setMainFocusPart('student');
+        else {
+          setMainFocusIdx(prev => (prev - 1 + total) % total);
+          setMainFocusPart('plus');
+        }
+      } else if (e.key === 'ArrowDown') {
+        // Asumiendo 4 columnas para el salto de fila
+        setMainFocusIdx(prev => (prev + 4) % total);
+      } else if (e.key === 'ArrowUp') {
+        setMainFocusIdx(prev => (prev - 4 + total) % total);
+      } else if (e.key === 'Enter' || e.key === 'OK') {
+        const student = sortedStudents[mainFocusIdx];
+        if (!student) return;
+
+        if (mainFocusPart === 'student') {
+          setSelectedStudent(student);
+        } else if (mainFocusPart === 'minus') {
+          updatePoints(student.id, -5);
+        } else if (mainFocusPart === 'plus') {
+          updatePoints(student.id, 5);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleMainNavigation);
+    return () => window.removeEventListener('keydown', handleMainNavigation);
+  }, [showAulaModal, selectedStudent, showAddModal, showQuizModal, view, sortedStudents, mainFocusIdx, mainFocusPart]);
 
   const getDailyStudentScore = (studentId) => {
     const dayData = history[selectedDate] || {};
@@ -3548,7 +3550,7 @@ function App() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '600px', margin: '0 auto' }}>
                       {historiaGame.challenges[historiaGame.currentIdx]?.items.map((item, idx) => {
                         const isCorrectPosition = item.originalIdx === idx;
-                        const isWinState = historiaGame.challenges[historiaGame.currentIdx].items.every((it, i) => it.originalIdx === i);
+                        const isWinState = historiaGame.challenges[historiaGame.currentIdx].items.every((itElem, i) => itElem.originalIdx === i);
 
                         return (
                           <motion.div
