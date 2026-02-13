@@ -660,8 +660,10 @@ function App() {
           alert(`🎉 ¡GLORIA! ${studentAfter.name} ha alcanzado un hito de ${Math.floor(newTotal / 100) * 100} estrellas. ¡Felicidades!`);
         } else if (becameLeader) {
           setApotheosic(false);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           triggerLeaderFireworks();
         } else if (enteredPodium) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
           triggerMassiveStars();
         } else {
           triggerSuccessEffect();
