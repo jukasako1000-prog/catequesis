@@ -336,7 +336,7 @@ const INITIAL_STUDENTS = [
   { id: 112, name: 'Valentina', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/VALENTINA.jpg' },
   { id: 113, name: 'Lucía', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/LUCIA.png' },
   { id: 114, name: 'Elena', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/ELENA.jpg' },
-  { id: 115, name: 'Emma', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emma' },
+  { id: 115, name: 'Emma', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emma&top=longHair&mouth=smile' },
 ];
 
 function App() {
@@ -2567,22 +2567,10 @@ function App() {
                     <Edit size={18} />
                   </button>
                 </div>
-                <div className="detail-stats" style={{ gridTemplateColumns: '1fr 1fr', display: 'grid', gap: '15px' }}>
-                  <div className="stat-item" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '10px', borderRadius: '15px', border: '1px solid rgba(255, 255, 255, 0.1)', gridColumn: 'span 2' }}>
+                <div className="detail-stats" style={{ gridTemplateColumns: '1fr', display: 'grid', gap: '15px' }}>
+                  <div className="stat-item" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '10px', borderRadius: '15px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
                     <span className="stat-label">Total Estrellas</span>
-                    <span className="stat-value" style={{ color: '#f39c12', fontSize: '2rem' }}>✨ {selectedStudent.totalScore}</span>
-                  </div>
-                  <div className="stat-item" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '10px', borderRadius: '15px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                    <span className="stat-label">Asistencia</span>
-                    <span className="stat-value" style={{ color: '#1abc9c', fontSize: '1.4rem' }}>📅 {selectedStudent.attendance || 0}</span>
-                  </div>
-                  <div className="stat-item" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '10px', borderRadius: '15px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                    <span className="stat-label">Lectura</span>
-                    <span className="stat-value" style={{ color: '#3498db', fontSize: '1.4rem' }}>📖 {selectedStudent.readingMerits || 0}</span>
-                  </div>
-                  <div className="stat-item" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '10px', borderRadius: '15px', border: '1px solid rgba(255, 255, 255, 0.1)', gridColumn: 'span 2' }}>
-                    <span className="stat-label">Buen Comportamiento</span>
-                    <span className="stat-value" style={{ color: '#e74c3c', fontSize: '1.4rem' }}>🎖️ {selectedStudent.behaviorMedals || 0} Medallas</span>
+                    <span className="stat-value" style={{ color: '#f39c12', fontSize: '2.5rem' }}>✨ {selectedStudent.totalScore}</span>
                   </div>
                 </div>
                 <button
