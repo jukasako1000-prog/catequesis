@@ -1412,7 +1412,7 @@ function App() {
     setAulaFocusIdx(0); // Reset focus when step changes
   }, [aulaStep, aulaTeams.length === 0]);
 
-  // Manejo de teclado para la SALA DE ESTUDIO (Temas y Actividades)
+  // Manejo de teclado para la SALA DE ESTUDIO (Modal)
   useEffect(() => {
     const handleAulaNavigation = (e) => {
       if (!showAulaModal) return;
@@ -1420,24 +1420,19 @@ function App() {
       // SOLO para 'themes' y 'activities'
       if (aulaStep !== 'themes' && aulaStep !== 'activities') return;
 
-      const themes = Object.keys(AULA_TEMAS);
-      const activitiesCount = 7; // Tenemos 7 botones de actividades actualmente
+      const focusables = document.querySelectorAll('.aula-option-btn-focusable');
+      if (focusables.length === 0) return;
 
       if (e.key === 'ArrowRight') {
-        if (aulaStep === 'themes') setAulaFocusIdx(prev => (prev + 1) % themes.length);
-        else setAulaFocusIdx(prev => (prev + 1) % activitiesCount);
+        setAulaFocusIdx(prev => (prev + 1) % focusables.length);
       } else if (e.key === 'ArrowLeft') {
-        if (aulaStep === 'themes') setAulaFocusIdx(prev => (prev - 1 + themes.length) % themes.length);
-        else setAulaFocusIdx(prev => (prev - 1 + activitiesCount) % activitiesCount);
+        setAulaFocusIdx(prev => (prev - 1 + focusables.length) % focusables.length);
       } else if (e.key === 'ArrowDown') {
-        if (aulaStep === 'themes') setAulaFocusIdx(prev => (prev + 2) % themes.length);
-        else setAulaFocusIdx(prev => (prev + 2) % activitiesCount);
+        setAulaFocusIdx(prev => (prev + 2) % focusables.length);
       } else if (e.key === 'ArrowUp') {
-        if (aulaStep === 'themes') setAulaFocusIdx(prev => (prev - 2 + themes.length) % themes.length);
-        else setAulaFocusIdx(prev => (prev - 2 + activitiesCount) % activitiesCount);
+        setAulaFocusIdx(prev => (prev - 2 + focusables.length) % focusables.length);
       } else if (e.key === 'Enter' || e.key === 'OK') {
-        const buttons = document.querySelectorAll('.aula-option-btn-focusable');
-        if (buttons[aulaFocusIdx]) buttons[aulaFocusIdx].click();
+        if (focusables[aulaFocusIdx]) focusables[aulaFocusIdx].click();
       } else if (e.key === 'Escape' || e.key === 'Back') {
         if (aulaStep === 'activities') setAulaStep('themes');
         else setShowAulaModal(false);
@@ -1447,6 +1442,29 @@ function App() {
     window.addEventListener('keydown', handleAulaNavigation);
     return () => window.removeEventListener('keydown', handleAulaNavigation);
   }, [showAulaModal, aulaStep, aulaFocusIdx, selectedAulaTema]);
+
+  // Manejo de teclado para la SALA DE ESTUDIO (Vista aprendizaje no modal)
+  useEffect(() => {
+    const handleLearningViewNavigation = (e) => {
+      if (view !== 'learning' || showAulaModal) return;
+
+      const focusables = document.querySelectorAll('.learning-focusable');
+      if (focusables.length === 0) return;
+
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        setAulaFocusIdx(prev => (prev + 1) % focusables.length);
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        setAulaFocusIdx(prev => (prev - 1 + focusables.length) % focusables.length);
+      } else if (e.key === 'Enter' || e.key === 'OK') {
+        if (focusables[aulaFocusIdx]) focusables[aulaFocusIdx].click();
+      } else if (e.key === 'Escape' || e.key === 'Back') {
+        setView('general');
+      }
+    };
+
+    window.addEventListener('keydown', handleLearningViewNavigation);
+    return () => window.removeEventListener('keydown', handleLearningViewNavigation);
+  }, [view, showAulaModal, aulaFocusIdx]);
 
   const handleKeyPress = (letter) => {
     if (phraseGame.status !== 'playing') return;
@@ -1763,38 +1781,61 @@ function App() {
       const total = sortedStudents.length;
       if (total === 0) return;
 
+      // Desplazamiento horizontal (incluyendo cañones)
       if (e.key === 'ArrowRight') {
-        if (mainFocusPart === 'student') setMainFocusPart('minus');
-        else if (mainFocusPart === 'minus') setMainFocusPart('plus');
-        else {
-          setMainFocusIdx(prev => (prev + 1) % total);
-          setMainFocusPart('student');
+        if (mainFocusIdx === -2) setMainFocusIdx(3); // Del cañón izquierdo al puesto 4
+        else if (mainFocusIdx === 3) setMainFocusIdx(1);
+        else if (mainFocusIdx === 1) setMainFocusIdx(0);
+        else if (mainFocusIdx === 0) setMainFocusIdx(2);
+        else if (mainFocusIdx === 2) setMainFocusIdx(4);
+        else if (mainFocusIdx === 4) setMainFocusIdx(-3); // Del puesto 5 al cañón derecho
+        else if (mainFocusIdx >= 0) {
+          if (mainFocusPart === 'student') setMainFocusPart('minus');
+          else if (mainFocusPart === 'minus') setMainFocusPart('plus');
+          else {
+            setMainFocusIdx(prev => (prev + 1) % total);
+            setMainFocusPart('student');
+          }
         }
       } else if (e.key === 'ArrowLeft') {
-        if (mainFocusPart === 'plus') setMainFocusPart('minus');
-        else if (mainFocusPart === 'minus') setMainFocusPart('student');
-        else {
-          setMainFocusIdx(prev => (prev - 1 + total) % total);
-          setMainFocusPart('plus');
+        if (mainFocusIdx === -3) setMainFocusIdx(4); // Del cañón derecho al puesto 5
+        else if (mainFocusIdx === 4) setMainFocusIdx(2);
+        else if (mainFocusIdx === 2) setMainFocusIdx(0);
+        else if (mainFocusIdx === 0) setMainFocusIdx(1);
+        else if (mainFocusIdx === 1) setMainFocusIdx(3);
+        else if (mainFocusIdx === 3) setMainFocusIdx(-2); // Del puesto 4 al cañón izquierdo
+        else if (mainFocusIdx >= 0) {
+          if (mainFocusPart === 'plus') setMainFocusPart('minus');
+          else if (mainFocusPart === 'minus') setMainFocusPart('student');
+          else {
+            setMainFocusIdx(prev => (prev - 1 + total) % total);
+            setMainFocusPart('plus');
+          }
         }
       } else if (e.key === 'ArrowDown') {
-        // Asumiendo 4 columnas para el salto de fila
-        setMainFocusIdx(prev => (prev + 4) % total);
+        if (mainFocusIdx >= 0 && mainFocusIdx <= 4) setMainFocusIdx(-1); // Del podio al botón Sala
+        else if (mainFocusIdx === -1) setMainFocusIdx(Math.min(5, total - 1)); // Del botón Sala al ranking
+        else if (mainFocusIdx === -2 || mainFocusIdx === -3) setMainFocusIdx(-1); // De cañones al botón Sala
+        else if (mainFocusIdx >= 5) setMainFocusIdx(prev => Math.min(prev + 4, total - 1));
       } else if (e.key === 'ArrowUp') {
-        setMainFocusIdx(prev => (prev - 4 + total) % total);
+        if (mainFocusIdx >= 5 && mainFocusIdx <= 8) setMainFocusIdx(-1); // Del ranking al botón Sala
+        else if (mainFocusIdx === -1) setMainFocusIdx(0); // Del botón Sala al líder
+        else if (mainFocusIdx >= 0 && mainFocusIdx <= 4) { /* Tope superior */ }
+        else if (mainFocusIdx >= 9) setMainFocusIdx(prev => prev - 4);
       } else if (e.key === 'Enter' || e.key === 'OK') {
-        // Si acabamos de loguear con Enter, ignoramos esta primera pulsación
         if (loginEnterGuardRef.current) return;
 
-        const student = sortedStudents[mainFocusIdx];
-        if (!student) return;
-
-        if (mainFocusPart === 'student') {
-          setSelectedStudent(student);
-        } else if (mainFocusPart === 'minus') {
-          updatePoints(student.id, -5);
-        } else if (mainFocusPart === 'plus') {
-          updatePoints(student.id, 5);
+        if (mainFocusIdx === -1) {
+          setView('learning');
+          setMainFocusIdx(0);
+        } else if (mainFocusIdx === -2 || mainFocusIdx === -3) {
+          triggerFlares();
+        } else {
+          const student = sortedStudents[mainFocusIdx];
+          if (!student) return;
+          if (mainFocusPart === 'student') setSelectedStudent(student);
+          else if (mainFocusPart === 'minus') updatePoints(student.id, -5);
+          else if (mainFocusPart === 'plus') updatePoints(student.id, 5);
         }
       }
     };
@@ -1954,47 +1995,57 @@ function App() {
       {/* Podium */}
       <div className="podium-container" style={{ position: 'relative' }}>
         {/* Cañones de Confeti (Click en uno activa ambos) */}
-        {['left', 'right'].map(side => (
-          <div
-            key={side}
-            className={`confetti-cannon cannon-${side}`}
-            onClick={() => {
-              playSound('stars');
-              const now = Date.now();
-              // Si hace clic rápido (menos de 600ms), sube la potencia
-              if (now - lastCannonClickRef.current < 600) {
-                cannonPowerRef.current = Math.min(cannonPowerRef.current + 15, 120);
-              } else {
-                cannonPowerRef.current = 45; // Reset a potencia normal
-              }
-              lastCannonClickRef.current = now;
+        {['left', 'right'].map((side, idx) => {
+          const isCannonFocused = (side === 'left' && mainFocusIdx === -2) || (side === 'right' && mainFocusIdx === -3);
+          return (
+            <div
+              key={side}
+              className={`confetti-cannon cannon-${side}`}
+              onClick={() => {
+                playSound('stars');
+                const now = Date.now();
+                // Si hace clic rápido (menos de 600ms), sube la potencia
+                if (now - lastCannonClickRef.current < 600) {
+                  cannonPowerRef.current = Math.min(cannonPowerRef.current + 15, 120);
+                } else {
+                  cannonPowerRef.current = 45; // Reset a potencia normal
+                }
+                lastCannonClickRef.current = now;
 
-              const power = cannonPowerRef.current;
+                const power = cannonPowerRef.current;
 
-              // Disparar desde la izquierda
-              confetti({
-                particleCount: 80 + (power / 2),
-                angle: 60,
-                spread: 55 + (power / 4),
-                startVelocity: power,
-                origin: { x: 0.1, y: 0.8 },
-                colors: ['#ffd700', '#ffffff', '#ff0000', '#00ff00', '#0000ff'],
-                shapes: ['star', 'circle']
-              });
-              // Disparar desde la derecha
-              confetti({
-                particleCount: 80 + (power / 2),
-                angle: 120,
-                spread: 55 + (power / 4),
-                startVelocity: power,
-                origin: { x: 0.9, y: 0.8 },
-                colors: ['#ffd700', '#ffffff', '#ff0000', '#00ff00', '#0000ff'],
-                shapes: ['star', 'circle']
-              });
-            }}
-            title="¡Pulsa rápido para más potencia!"
-          ></div>
-        ))}
+                // Disparar desde la izquierda
+                confetti({
+                  particleCount: 80 + (power / 2),
+                  angle: 60,
+                  spread: 55 + (power / 4),
+                  startVelocity: power,
+                  origin: { x: 0.1, y: 0.8 },
+                  colors: ['#ffd700', '#ffffff', '#ff0000', '#00ff00', '#0000ff'],
+                  shapes: ['star', 'circle']
+                });
+                // Disparar desde la derecha
+                confetti({
+                  particleCount: 80 + (power / 2),
+                  angle: 120,
+                  spread: 55 + (power / 4),
+                  startVelocity: power,
+                  origin: { x: 0.9, y: 0.8 },
+                  colors: ['#ffd700', '#ffffff', '#ff0000', '#00ff00', '#0000ff'],
+                  shapes: ['star', 'circle']
+                });
+              }}
+              style={{
+                border: isCannonFocused ? '6px solid #1e1b4b' : 'none',
+                transform: isCannonFocused ? 'scale(1.3) rotate(15deg)' : 'scale(1)',
+                boxShadow: isCannonFocused ? '0 0 40px rgba(30, 27, 75, 1)' : 'none',
+                zIndex: 100,
+                transition: 'all 0.2s'
+              }}
+              title="¡Pulsa rápido para más potencia!"
+            ></div>
+          );
+        })}
         {podium.length > 3 && (
           <motion.div className="podium-spot podium-4" layout>
             {((view === 'general' ? podium[3]?.totalScore : podium[3]?.dailyScore) || 0) > 0 ? (
@@ -2226,14 +2277,15 @@ function App() {
           <div className="learning-view animate-fade-in" style={{ padding: '2rem 0' }}>
             <div className="learning-header" style={{ position: 'relative', textAlign: 'center', marginBottom: '3rem' }}>
               <button
+                className="learning-focusable"
                 onClick={() => setView('general')}
                 style={{
                   position: 'absolute',
                   left: 0,
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  background: 'rgba(255,255,255,0.2)',
-                  border: 'none',
+                  background: aulaFocusIdx === 0 ? '#1e1b4b' : 'rgba(255,255,255,0.2)',
+                  border: aulaFocusIdx === 0 ? '4px solid white' : 'none',
                   color: 'white',
                   padding: '10px 20px',
                   borderRadius: '15px',
@@ -2242,7 +2294,9 @@ function App() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
-                  backdropFilter: 'blur(5px)'
+                  backdropFilter: 'blur(5px)',
+                  boxShadow: aulaFocusIdx === 0 ? '0 0 30px rgba(30,27,75,0.8)' : 'none',
+                  transition: 'all 0.2s'
                 }}
               >
                 <ArrowLeft size={20} /> Volver
@@ -2255,23 +2309,26 @@ function App() {
               {Object.keys(AULA_TEMAS).map((theme, i) => {
                 const isExpanded = expandedThemes[theme] ?? false;
                 const isCompleted = completedThemes.includes(theme);
+                const isThemeFocused = (view === 'learning' && !showAulaModal && aulaFocusIdx === (i + 1));
 
                 return (
                   <motion.div
                     key={theme}
                     layout
-                    className="theme-game-card"
+                    className="theme-game-card learning-focusable"
                     onClick={() => toggleThemeExpanded(theme)}
                     style={{
                       background: 'white',
                       borderRadius: '30px',
                       padding: '25px',
-                      boxShadow: '0 15px 40px rgba(0,0,0,0.06)',
-                      border: isCompleted ? '3px solid #2ecc71' : '1px solid rgba(0,0,0,0.03)',
+                      boxShadow: isThemeFocused ? '0 0 40px rgba(30, 27, 75, 0.6)' : '0 15px 40px rgba(0,0,0,0.06)',
+                      border: isThemeFocused ? '6px solid #1e1b4b' : (isCompleted ? '3px solid #2ecc71' : '1px solid rgba(0,0,0,0.03)'),
                       position: 'relative',
                       overflow: 'hidden',
                       height: 'fit-content',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
+                      transform: isThemeFocused ? 'scale(1.05)' : 'scale(1)',
+                      transition: 'all 0.2s'
                     }}
                   >
                     <div style={{ position: 'absolute', top: -10, right: -10, opacity: 0.05 }}>
@@ -2527,11 +2584,14 @@ function App() {
 
 
             <button
-              onClick={() => setView('learning')}
+              onClick={() => {
+                setView('learning');
+                setMainFocusIdx(-1); // Focus Sala Button is special
+              }}
               style={{
                 padding: '12px 25px',
                 borderRadius: '15px',
-                border: 'none',
+                border: mainFocusIdx === -1 ? '6px solid #1e1b4b' : 'none',
                 background: 'linear-gradient(135deg, #4a90e2, #357abd)',
                 color: 'white',
                 fontWeight: 800,
@@ -2540,8 +2600,10 @@ function App() {
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                boxShadow: '0 4px 15px rgba(74, 144, 226, 0.3)',
-                transition: 'all 0.3s'
+                boxShadow: mainFocusIdx === -1 ? '0 0 30px rgba(30, 27, 75, 1)' : '0 4px 15px rgba(74, 144, 226, 0.3)',
+                transform: mainFocusIdx === -1 ? 'scale(1.15)' : 'scale(1)',
+                transition: 'all 0.2s',
+                zIndex: 10
               }}
               onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
               onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
@@ -3108,7 +3170,25 @@ function App() {
                 {/* STEP 2: Selección de Actividad */}
                 {aulaStep === 'activities' && (
                   <div className="aula-step-activities">
-                    <button className="btn-back" onClick={() => setAulaStep('themes')} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', marginBottom: '1.5rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 800 }}>
+                    <button
+                      className="btn-back aula-option-btn-focusable"
+                      onClick={() => setAulaStep('themes')}
+                      style={{
+                        background: aulaFocusIdx === 0 ? '#1e1b4b' : 'none',
+                        border: aulaFocusIdx === 0 ? '4px solid white' : 'none',
+                        color: 'white',
+                        marginBottom: '1.5rem',
+                        padding: '10px 15px',
+                        borderRadius: '15px',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        fontWeight: 800,
+                        boxShadow: aulaFocusIdx === 0 ? '0 0 30px rgba(30,27,75,0.8)' : 'none',
+                        transition: 'all 0.2s'
+                      }}
+                    >
                       ⬅️ Volver a Temas
                     </button>
 
