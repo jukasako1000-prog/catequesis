@@ -4109,6 +4109,27 @@ function App() {
                                       <Mic size={18} className={isListening ? "animate-pulse" : ""} />
                                     </button>
                                   </div>
+                                  <button
+                                    onClick={skipPasapalabra}
+                                    style={{
+                                      width: '100%',
+                                      marginTop: '5px',
+                                      padding: '12px',
+                                      background: 'linear-gradient(135deg, #4a90e2, #357abd)',
+                                      color: 'white',
+                                      border: 'none',
+                                      borderRadius: '15px',
+                                      fontWeight: 900,
+                                      fontSize: '1rem',
+                                      cursor: 'pointer',
+                                      textTransform: 'uppercase',
+                                      letterSpacing: '2px',
+                                      boxShadow: '0 4px 15px rgba(74, 144, 226, 0.3)',
+                                      transition: 'all 0.2s'
+                                    }}
+                                  >
+                                    ⏩ PASAPALABRA
+                                  </button>
 
                                 </div>
                               </>
