@@ -2080,63 +2080,47 @@ function App() {
       const total = sortedStudents.length;
       if (total === 0) return;
 
-      // Desplazamiento horizontal (incluyendo cañones)
+      const cols = 4; // Cuadrícula de 4 columnas en la lista
+
       if (e.key === 'ArrowDown') {
-        if (mainFocusIdx >= 0 && mainFocusIdx <= 4 && mainFocusIdx < 5) {
-          // Si estamos en el podio (donde no hay lista), vamos a Sala
-          // Pero como Adrián (0) está en ambos, si el foco viene del podio (arriba), va a Sala
-          setMainFocusIdx(-1);
-        }
-        else if (mainFocusIdx === -1) {
-          setMainFocusIdx(0); // Del botón Sala al primero de la lista (Adrián)
+        if (mainFocusIdx === -1) {
+          setMainFocusIdx(0); // De Sala a Adrián
           setMainFocusPart('student');
-        }
-        else if (mainFocusIdx === -2 || mainFocusIdx === -3) setMainFocusIdx(-1);
-        else if (mainFocusIdx >= 0) {
-          const nextIdx = mainFocusIdx + 4;
+        } else if (mainFocusIdx === -2 || mainFocusIdx === -3) {
+          setMainFocusIdx(-1); // De cañones a Sala
+        } else if (mainFocusIdx >= 0) {
+          const nextIdx = mainFocusIdx + cols;
           if (nextIdx < total) setMainFocusIdx(nextIdx);
         }
       } else if (e.key === 'ArrowUp') {
-        if (mainFocusIdx >= 0 && mainFocusIdx <= 3) {
-          // Del inicio de la lista (incluyendo a Adrián #1) subimos al botón Sala
-          setMainFocusIdx(-1);
-        }
-        else if (mainFocusIdx === -1) {
-          setMainFocusIdx(0); // Del botón Sala al líder del podio (arriba)
-          setMainFocusPart('student');
-        }
-        else if (mainFocusIdx >= 4) {
-          setMainFocusIdx(prev => prev - 4);
+        if (mainFocusIdx >= 0 && mainFocusIdx < cols) {
+          setMainFocusIdx(-1); // De la primera fila a Sala
+        } else if (mainFocusIdx >= cols) {
+          setMainFocusIdx(prev => prev - cols);
+        } else if (mainFocusIdx === -1) {
+          // Bloqueado hacia arriba (no entra al podio)
         }
       } else if (e.key === 'ArrowRight') {
-        if (mainFocusIdx === -2) setMainFocusIdx(3);
-        else if (mainFocusIdx === 3) setMainFocusIdx(1);
-        else if (mainFocusIdx === 1) setMainFocusIdx(0);
-        else if (mainFocusIdx === 0) setMainFocusIdx(2);
-        else if (mainFocusIdx === 2) setMainFocusIdx(4);
-        else if (mainFocusIdx === 4) setMainFocusIdx(-3);
-        else if (mainFocusIdx >= 0) {
+        if (mainFocusIdx >= 0) {
           if (mainFocusPart === 'student') setMainFocusPart('minus');
           else if (mainFocusPart === 'minus') setMainFocusPart('plus');
           else {
-            if (mainFocusIdx + 1 < total) {
+            // Solo pasar al siguiente si NO es el final de la fila visual
+            const col = mainFocusIdx % cols;
+            if (col < cols - 1 && mainFocusIdx + 1 < total) {
               setMainFocusIdx(prev => prev + 1);
               setMainFocusPart('student');
             }
           }
         }
       } else if (e.key === 'ArrowLeft') {
-        if (mainFocusIdx === -3) setMainFocusIdx(4);
-        else if (mainFocusIdx === 4) setMainFocusIdx(2);
-        else if (mainFocusIdx === 2) setMainFocusIdx(0);
-        else if (mainFocusIdx === 0) setMainFocusIdx(1);
-        else if (mainFocusIdx === 1) setMainFocusIdx(3);
-        else if (mainFocusIdx === 3) setMainFocusIdx(-2);
-        else if (mainFocusIdx >= 0) {
+        if (mainFocusIdx >= 0) {
           if (mainFocusPart === 'plus') setMainFocusPart('minus');
           else if (mainFocusPart === 'minus') setMainFocusPart('student');
           else {
-            if (mainFocusIdx - 1 >= 0) {
+            // Solo pasar al anterior si NO es el inicio de la fila visual
+            const col = mainFocusIdx % cols;
+            if (col > 0) {
               setMainFocusIdx(prev => prev - 1);
               setMainFocusPart('plus');
             }
@@ -2150,7 +2134,7 @@ function App() {
           setMainFocusIdx(0);
         } else if (mainFocusIdx === -2 || mainFocusIdx === -3) {
           triggerFlares();
-        } else {
+        } else if (mainFocusIdx >= 0) {
           const student = sortedStudents[mainFocusIdx];
           if (!student) return;
           if (mainFocusPart === 'student') setSelectedStudent(student);
@@ -2367,18 +2351,7 @@ function App() {
           );
         })}
         {podium.length > 3 && (
-          <motion.div
-            className="podium-spot podium-4"
-            layout
-            style={{
-              border: mainFocusIdx === 3 ? '6px solid #1e1b4b' : 'none',
-              transform: mainFocusIdx === 3 ? 'scale(1.15)' : 'scale(1)',
-              boxShadow: mainFocusIdx === 3 ? '0 0 30px rgba(30, 27, 75, 0.8)' : 'none',
-              borderRadius: '20px',
-              padding: '10px',
-              transition: 'all 0.2s'
-            }}
-          >
+          <motion.div className="podium-spot podium-4" layout>
             {((view === 'general' ? podium[3]?.totalScore : podium[3]?.dailyScore) || 0) > 0 ? (
               <div className="avatar-container" onClick={() => handleStudentClick(podium[3])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
@@ -2410,18 +2383,7 @@ function App() {
         )}
 
         {podium.length > 1 && (
-          <motion.div
-            className="podium-spot podium-2"
-            layout
-            style={{
-              border: mainFocusIdx === 1 ? '6px solid #1e1b4b' : 'none',
-              transform: mainFocusIdx === 1 ? 'scale(1.15)' : 'scale(1)',
-              boxShadow: mainFocusIdx === 1 ? '0 0 30px rgba(30, 27, 75, 0.8)' : 'none',
-              borderRadius: '20px',
-              padding: '10px',
-              transition: 'all 0.2s'
-            }}
-          >
+          <motion.div className="podium-spot podium-2" layout>
             {((view === 'general' ? podium[1]?.totalScore : podium[1]?.dailyScore) || 0) > 0 ? (
               <div className="avatar-container" onClick={() => handleStudentClick(podium[1])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
@@ -2453,19 +2415,7 @@ function App() {
         )}
 
         {podium.length > 0 && (
-          <motion.div
-            className="podium-spot podium-1"
-            layout
-            style={{
-              border: mainFocusIdx === 0 ? '6px solid #1e1b4b' : 'none',
-              transform: mainFocusIdx === 0 ? 'scale(1.15)' : 'scale(1)',
-              boxShadow: mainFocusIdx === 0 ? '0 0 30px rgba(255, 215, 0, 0.6)' : 'none',
-              borderRadius: '25px',
-              padding: '15px',
-              transition: 'all 0.2s',
-              zIndex: 10
-            }}
-          >
+          <motion.div className="podium-spot podium-1" layout>
             {((view === 'general' ? podium[0]?.totalScore : podium[0]?.dailyScore) || 0) > 0 ? (
               <div className="avatar-container" onClick={() => handleStudentClick(podium[0])} style={{ cursor: 'pointer' }}>
                 <div className="halo" style={{ borderColor: 'gold', boxShadow: '0 0 20px gold' }}></div>
@@ -2498,18 +2448,7 @@ function App() {
         )}
 
         {podium.length > 2 && (
-          <motion.div
-            className="podium-spot podium-3"
-            layout
-            style={{
-              border: mainFocusIdx === 2 ? '6px solid #1e1b4b' : 'none',
-              transform: mainFocusIdx === 2 ? 'scale(1.15)' : 'scale(1)',
-              boxShadow: mainFocusIdx === 2 ? '0 0 30px rgba(30, 27, 75, 0.8)' : 'none',
-              borderRadius: '20px',
-              padding: '10px',
-              transition: 'all 0.2s'
-            }}
-          >
+          <motion.div className="podium-spot podium-3" layout>
             {((view === 'general' ? podium[2]?.totalScore : podium[2]?.dailyScore) || 0) > 0 ? (
               <div className="avatar-container" onClick={() => handleStudentClick(podium[2])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
@@ -2541,18 +2480,7 @@ function App() {
         )}
 
         {podium.length > 4 && (
-          <motion.div
-            className="podium-spot podium-5"
-            layout
-            style={{
-              border: mainFocusIdx === 4 ? '6px solid #1e1b4b' : 'none',
-              transform: mainFocusIdx === 4 ? 'scale(1.15)' : 'scale(1)',
-              boxShadow: mainFocusIdx === 4 ? '0 0 30px rgba(30, 27, 75, 0.8)' : 'none',
-              borderRadius: '20px',
-              padding: '10px',
-              transition: 'all 0.2s'
-            }}
-          >
+          <motion.div className="podium-spot podium-5" layout>
             {((view === 'general' ? podium[4]?.totalScore : podium[4]?.dailyScore) || 0) > 0 ? (
               <div className="avatar-container" onClick={() => handleStudentClick(podium[4])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
@@ -3424,6 +3352,31 @@ function App() {
                             transition: 'all 0.2s'
                           }}
                         />
+                        <button
+                          onClick={() => {
+                            const adjectives = ['Leones', 'Águilas', 'Valientes', 'Guerreros', 'Rayo', 'Estrellas', 'Héroes', 'Guardianes', 'Luz', 'Fuego', 'Trueno', 'Paz', 'Amistad'];
+                            const prefixes = ['Los', 'El Equipo', 'Club', 'Súper', 'Gran'];
+                            const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+                            const pre = prefixes[Math.floor(Math.random() * prefixes.length)];
+                            setCurrentTeamName(`${pre} ${adj}`);
+                          }}
+                          style={{
+                            background: '#f1c40f',
+                            color: '#1e1b4b',
+                            border: 'none',
+                            borderRadius: '15px',
+                            width: '50px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transition: 'all 0.3s',
+                            boxShadow: '0 4px 10px rgba(241, 196, 15, 0.3)'
+                          }}
+                          title="Nombre aleatorio"
+                        >
+                          <span style={{ fontSize: '1.5rem' }}>🪄</span>
+                        </button>
                         <button
                           onClick={startTeamSelectionVoice}
                           style={{
