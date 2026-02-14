@@ -678,6 +678,11 @@ function App() {
         }
       }
 
+      // SINCRONIZAR FICHA ABIERTA
+      if (selectedStudent && selectedStudent.id === id) {
+        setSelectedStudent(studentAfter);
+      }
+
       return updated;
     });
   };
@@ -3188,25 +3193,67 @@ function App() {
                     <Edit size={18} />
                   </button>
                 </div>
-                <div className="detail-stats" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                  <div className="stat-item" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '15px', borderRadius: '15px', border: '1px solid rgba(255, 255, 255, 0.1)', gridColumn: 'span 2' }}>
-                    <span className="stat-label" style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.7)', fontWeight: 700, textTransform: 'uppercase' }}>Total Estrellas</span>
-                    <span className="stat-value" style={{ color: '#f39c12', fontSize: '3rem', fontWeight: 950, display: 'block', marginTop: '5px' }}>✨ {selectedStudent.totalScore}</span>
-                  </div>
+                <div className="detail-stats" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}>
+                  <div className="stat-item" style={{
+                    background: 'rgba(255, 255, 255, 0.05)',
+                    padding: '25px',
+                    borderRadius: '30px',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    width: '100%',
+                    textAlign: 'center',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+                  }}>
+                    <span className="stat-label" style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.7)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px' }}>Total Estrellas</span>
+                    <span className="stat-value" style={{ color: '#f39c12', fontSize: '4.5rem', fontWeight: 950, display: 'block', margin: '10px 0', textShadow: '0 0 20px rgba(243, 156, 18, 0.3)' }}>✨ {selectedStudent.totalScore}</span>
 
-                  <div className="stat-item" style={{ background: 'rgba(46, 204, 113, 0.1)', padding: '12px', borderRadius: '15px', border: '1px solid rgba(46, 204, 113, 0.2)' }}>
-                    <span className="stat-label" style={{ fontSize: '0.7rem', color: '#2ecc71', fontWeight: 800 }}>MÉDALLAS (+)</span>
-                    <span className="stat-value" style={{ color: 'white', fontSize: '1.5rem', fontWeight: 900, display: 'block' }}>🏅 {selectedStudent.behaviorMedals || 0}</span>
-                  </div>
-
-                  <div className="stat-item" style={{ background: 'rgba(52, 152, 219, 0.1)', padding: '12px', borderRadius: '15px', border: '1px solid rgba(52, 152, 219, 0.2)' }}>
-                    <span className="stat-label" style={{ fontSize: '0.7rem', color: '#3498db', fontWeight: 800 }}>LECTURAS</span>
-                    <span className="stat-value" style={{ color: 'white', fontSize: '1.5rem', fontWeight: 900, display: 'block' }}>📖 {selectedStudent.readingMerits || 0}</span>
-                  </div>
-
-                  <div className="stat-item" style={{ background: 'rgba(155, 89, 182, 0.1)', padding: '12px', borderRadius: '15px', border: '1px solid rgba(155, 89, 182, 0.2)', gridColumn: 'span 2' }}>
-                    <span className="stat-label" style={{ fontSize: '0.7rem', color: '#9b59b6', fontWeight: 800 }}>ASISTENCIA</span>
-                    <span className="stat-value" style={{ color: 'white', fontSize: '1.5rem', fontWeight: 900, display: 'block' }}>📅 {selectedStudent.attendance || 0}</span>
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginTop: '20px' }}>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); updatePoints(selectedStudent.id, -5); }}
+                        style={{
+                          background: '#e67e22',
+                          color: 'white',
+                          border: 'none',
+                          width: '75px',
+                          height: '75px',
+                          borderRadius: '50%',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 8px 20px rgba(230, 126, 34, 0.4)',
+                          transform: 'scale(1)',
+                          transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                        className="learning-focusable"
+                      >
+                        <Minus size={40} strokeWidth={3} />
+                      </button>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); updatePoints(selectedStudent.id, 5); }}
+                        style={{
+                          background: '#2ecc71',
+                          color: 'white',
+                          border: 'none',
+                          width: '75px',
+                          height: '75px',
+                          borderRadius: '50%',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          boxShadow: '0 8px 20px rgba(46, 204, 113, 0.4)',
+                          transform: 'scale(1)',
+                          transition: 'all 0.2s'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                        className="learning-focusable"
+                      >
+                        <Plus size={40} strokeWidth={3} />
+                      </button>
+                    </div>
                   </div>
                 </div>
                 <button
