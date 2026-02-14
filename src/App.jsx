@@ -2082,18 +2082,32 @@ function App() {
 
       // Desplazamiento horizontal (incluyendo cañones)
       if (e.key === 'ArrowDown') {
-        if (mainFocusIdx >= 0 && mainFocusIdx <= 4) setMainFocusIdx(-1); // Del podio al botón Sala
-        else if (mainFocusIdx === -1) setMainFocusIdx(5); // Del botón Sala al primero del ranking
+        if (mainFocusIdx >= 0 && mainFocusIdx <= 4 && mainFocusIdx < 5) {
+          // Si estamos en el podio (donde no hay lista), vamos a Sala
+          // Pero como Adrián (0) está en ambos, si el foco viene del podio (arriba), va a Sala
+          setMainFocusIdx(-1);
+        }
+        else if (mainFocusIdx === -1) {
+          setMainFocusIdx(0); // Del botón Sala al primero de la lista (Adrián)
+          setMainFocusPart('student');
+        }
         else if (mainFocusIdx === -2 || mainFocusIdx === -3) setMainFocusIdx(-1);
-        else if (mainFocusIdx >= 5) {
+        else if (mainFocusIdx >= 0) {
           const nextIdx = mainFocusIdx + 4;
           if (nextIdx < total) setMainFocusIdx(nextIdx);
         }
       } else if (e.key === 'ArrowUp') {
-        if (mainFocusIdx >= 5 && mainFocusIdx <= 8) setMainFocusIdx(-1); // Del ranking al botón Sala
-        else if (mainFocusIdx === -1) setMainFocusIdx(0); // Del botón Sala al líder
-        else if (mainFocusIdx >= 5) setMainFocusIdx(prev => prev - 4);
-        else if (mainFocusIdx >= 0 && mainFocusIdx <= 4) { /* Tope superior */ }
+        if (mainFocusIdx >= 0 && mainFocusIdx <= 3) {
+          // Del inicio de la lista (incluyendo a Adrián #1) subimos al botón Sala
+          setMainFocusIdx(-1);
+        }
+        else if (mainFocusIdx === -1) {
+          setMainFocusIdx(0); // Del botón Sala al líder del podio (arriba)
+          setMainFocusPart('student');
+        }
+        else if (mainFocusIdx >= 4) {
+          setMainFocusIdx(prev => prev - 4);
+        }
       } else if (e.key === 'ArrowRight') {
         if (mainFocusIdx === -2) setMainFocusIdx(3);
         else if (mainFocusIdx === 3) setMainFocusIdx(1);
@@ -2101,11 +2115,10 @@ function App() {
         else if (mainFocusIdx === 0) setMainFocusIdx(2);
         else if (mainFocusIdx === 2) setMainFocusIdx(4);
         else if (mainFocusIdx === 4) setMainFocusIdx(-3);
-        else if (mainFocusIdx >= 5) {
+        else if (mainFocusIdx >= 0) {
           if (mainFocusPart === 'student') setMainFocusPart('minus');
           else if (mainFocusPart === 'minus') setMainFocusPart('plus');
           else {
-            // Ir al siguiente alumno independientemente de la columna
             if (mainFocusIdx + 1 < total) {
               setMainFocusIdx(prev => prev + 1);
               setMainFocusPart('student');
@@ -2119,12 +2132,11 @@ function App() {
         else if (mainFocusIdx === 0) setMainFocusIdx(1);
         else if (mainFocusIdx === 1) setMainFocusIdx(3);
         else if (mainFocusIdx === 3) setMainFocusIdx(-2);
-        else if (mainFocusIdx >= 5) {
+        else if (mainFocusIdx >= 0) {
           if (mainFocusPart === 'plus') setMainFocusPart('minus');
           else if (mainFocusPart === 'minus') setMainFocusPart('student');
           else {
-            // Ir al alumno anterior independientemente de la columna hasta el index 5
-            if (mainFocusIdx - 1 >= 5) {
+            if (mainFocusIdx - 1 >= 0) {
               setMainFocusIdx(prev => prev - 1);
               setMainFocusPart('plus');
             }
@@ -2355,7 +2367,18 @@ function App() {
           );
         })}
         {podium.length > 3 && (
-          <motion.div className="podium-spot podium-4" layout>
+          <motion.div
+            className="podium-spot podium-4"
+            layout
+            style={{
+              border: mainFocusIdx === 3 ? '6px solid #1e1b4b' : 'none',
+              transform: mainFocusIdx === 3 ? 'scale(1.15)' : 'scale(1)',
+              boxShadow: mainFocusIdx === 3 ? '0 0 30px rgba(30, 27, 75, 0.8)' : 'none',
+              borderRadius: '20px',
+              padding: '10px',
+              transition: 'all 0.2s'
+            }}
+          >
             {((view === 'general' ? podium[3]?.totalScore : podium[3]?.dailyScore) || 0) > 0 ? (
               <div className="avatar-container" onClick={() => handleStudentClick(podium[3])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
@@ -2387,7 +2410,18 @@ function App() {
         )}
 
         {podium.length > 1 && (
-          <motion.div className="podium-spot podium-2" layout>
+          <motion.div
+            className="podium-spot podium-2"
+            layout
+            style={{
+              border: mainFocusIdx === 1 ? '6px solid #1e1b4b' : 'none',
+              transform: mainFocusIdx === 1 ? 'scale(1.15)' : 'scale(1)',
+              boxShadow: mainFocusIdx === 1 ? '0 0 30px rgba(30, 27, 75, 0.8)' : 'none',
+              borderRadius: '20px',
+              padding: '10px',
+              transition: 'all 0.2s'
+            }}
+          >
             {((view === 'general' ? podium[1]?.totalScore : podium[1]?.dailyScore) || 0) > 0 ? (
               <div className="avatar-container" onClick={() => handleStudentClick(podium[1])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
@@ -2419,7 +2453,19 @@ function App() {
         )}
 
         {podium.length > 0 && (
-          <motion.div className="podium-spot podium-1" layout>
+          <motion.div
+            className="podium-spot podium-1"
+            layout
+            style={{
+              border: mainFocusIdx === 0 ? '6px solid #1e1b4b' : 'none',
+              transform: mainFocusIdx === 0 ? 'scale(1.15)' : 'scale(1)',
+              boxShadow: mainFocusIdx === 0 ? '0 0 30px rgba(255, 215, 0, 0.6)' : 'none',
+              borderRadius: '25px',
+              padding: '15px',
+              transition: 'all 0.2s',
+              zIndex: 10
+            }}
+          >
             {((view === 'general' ? podium[0]?.totalScore : podium[0]?.dailyScore) || 0) > 0 ? (
               <div className="avatar-container" onClick={() => handleStudentClick(podium[0])} style={{ cursor: 'pointer' }}>
                 <div className="halo" style={{ borderColor: 'gold', boxShadow: '0 0 20px gold' }}></div>
@@ -2452,7 +2498,18 @@ function App() {
         )}
 
         {podium.length > 2 && (
-          <motion.div className="podium-spot podium-3" layout>
+          <motion.div
+            className="podium-spot podium-3"
+            layout
+            style={{
+              border: mainFocusIdx === 2 ? '6px solid #1e1b4b' : 'none',
+              transform: mainFocusIdx === 2 ? 'scale(1.15)' : 'scale(1)',
+              boxShadow: mainFocusIdx === 2 ? '0 0 30px rgba(30, 27, 75, 0.8)' : 'none',
+              borderRadius: '20px',
+              padding: '10px',
+              transition: 'all 0.2s'
+            }}
+          >
             {((view === 'general' ? podium[2]?.totalScore : podium[2]?.dailyScore) || 0) > 0 ? (
               <div className="avatar-container" onClick={() => handleStudentClick(podium[2])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
@@ -2484,7 +2541,18 @@ function App() {
         )}
 
         {podium.length > 4 && (
-          <motion.div className="podium-spot podium-5" layout>
+          <motion.div
+            className="podium-spot podium-5"
+            layout
+            style={{
+              border: mainFocusIdx === 4 ? '6px solid #1e1b4b' : 'none',
+              transform: mainFocusIdx === 4 ? 'scale(1.15)' : 'scale(1)',
+              boxShadow: mainFocusIdx === 4 ? '0 0 30px rgba(30, 27, 75, 0.8)' : 'none',
+              borderRadius: '20px',
+              padding: '10px',
+              transition: 'all 0.2s'
+            }}
+          >
             {((view === 'general' ? podium[4]?.totalScore : podium[4]?.dailyScore) || 0) > 0 ? (
               <div className="avatar-container" onClick={() => handleStudentClick(podium[4])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
