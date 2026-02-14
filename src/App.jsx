@@ -4066,9 +4066,11 @@ function App() {
                                       value={pasapalabra.inputValue}
                                       onChange={(e) => setPasapalabra(prev => ({ ...prev, inputValue: e.target.value }))}
                                       onKeyDown={(e) => {
-                                        if (e.key === 'Enter') {
+                                        if (e.key === 'Enter' || e.key === 'OK') {
                                           if (pasapalabra.inputValue.trim() === '') skipPasapalabra();
                                           else handlePasapalabraAnswer(pasapalabra.inputValue);
+                                        } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                                          if (pasapalabra.inputValue.trim() === '') skipPasapalabra();
                                         }
                                       }}
                                       style={{
