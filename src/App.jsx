@@ -2627,7 +2627,7 @@ function App() {
             <div className="themes-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '25px' }}>
               {(() => {
                 let currentFocusCount = 0; // El 0 es Volver
-                return Object.keys(AULA_TEMAS).map((theme) => {
+                return Object.keys(AULA_TEMAS).map((theme, i) => {
                   currentFocusCount++; // Índice para la tarjeta del tema
                   const themeIdx = currentFocusCount;
                   const isExpanded = expandedThemes[theme] ?? false;
@@ -3188,10 +3188,25 @@ function App() {
                     <Edit size={18} />
                   </button>
                 </div>
-                <div className="detail-stats" style={{ gridTemplateColumns: '1fr', display: 'grid', gap: '15px' }}>
-                  <div className="stat-item" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '10px', borderRadius: '15px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                    <span className="stat-label">Total Estrellas</span>
-                    <span className="stat-value" style={{ color: '#f39c12', fontSize: '2.5rem' }}>✨ {selectedStudent.totalScore}</span>
+                <div className="detail-stats" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                  <div className="stat-item" style={{ background: 'rgba(255, 255, 255, 0.05)', padding: '15px', borderRadius: '15px', border: '1px solid rgba(255, 255, 255, 0.1)', gridColumn: 'span 2' }}>
+                    <span className="stat-label" style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.7)', fontWeight: 700, textTransform: 'uppercase' }}>Total Estrellas</span>
+                    <span className="stat-value" style={{ color: '#f39c12', fontSize: '3rem', fontWeight: 950, display: 'block', marginTop: '5px' }}>✨ {selectedStudent.totalScore}</span>
+                  </div>
+
+                  <div className="stat-item" style={{ background: 'rgba(46, 204, 113, 0.1)', padding: '12px', borderRadius: '15px', border: '1px solid rgba(46, 204, 113, 0.2)' }}>
+                    <span className="stat-label" style={{ fontSize: '0.7rem', color: '#2ecc71', fontWeight: 800 }}>MÉDALLAS (+)</span>
+                    <span className="stat-value" style={{ color: 'white', fontSize: '1.5rem', fontWeight: 900, display: 'block' }}>🏅 {selectedStudent.behaviorMedals || 0}</span>
+                  </div>
+
+                  <div className="stat-item" style={{ background: 'rgba(52, 152, 219, 0.1)', padding: '12px', borderRadius: '15px', border: '1px solid rgba(52, 152, 219, 0.2)' }}>
+                    <span className="stat-label" style={{ fontSize: '0.7rem', color: '#3498db', fontWeight: 800 }}>LECTURAS</span>
+                    <span className="stat-value" style={{ color: 'white', fontSize: '1.5rem', fontWeight: 900, display: 'block' }}>📖 {selectedStudent.readingMerits || 0}</span>
+                  </div>
+
+                  <div className="stat-item" style={{ background: 'rgba(155, 89, 182, 0.1)', padding: '12px', borderRadius: '15px', border: '1px solid rgba(155, 89, 182, 0.2)', gridColumn: 'span 2' }}>
+                    <span className="stat-label" style={{ fontSize: '0.7rem', color: '#9b59b6', fontWeight: 800 }}>ASISTENCIA</span>
+                    <span className="stat-value" style={{ color: 'white', fontSize: '1.5rem', fontWeight: 900, display: 'block' }}>📅 {selectedStudent.attendance || 0}</span>
                   </div>
                 </div>
                 <button
