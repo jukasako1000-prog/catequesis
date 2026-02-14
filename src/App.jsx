@@ -951,6 +951,39 @@ function App() {
     recognition.start();
   };
 
+  // Reconocimiento de Voz para Buscador Principal
+  const startSearchVoice = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("El reconocimiento de voz no está disponible en este navegador o requiere HTTPS.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => setIsListening(false);
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      const cleanTranscript = transcript.replace(/\.$/, '');
+      setSearchTerm(cleanTranscript);
+      // Disparar la búsqueda manualmente
+      const student = students.find(s =>
+        s.name.toLowerCase().includes(cleanTranscript.toLowerCase())
+      );
+      if (student) {
+        const element = document.getElementById(`student-${student.id}`);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          element.style.backgroundColor = 'rgba(74, 144, 226, 0.2)';
+          setTimeout(() => { element.style.backgroundColor = 'white'; }, 2000);
+        }
+      }
+    };
+    recognition.start();
+  };
+
   const handlePasapalabraAnswer = (answer) => {
     if (pasapalabra.status !== 'playing' || pasapalabra.isPaused) return;
 
@@ -2588,25 +2621,48 @@ function App() {
             width: '100%'
           }}>
             <div className="search-bar-container" style={{ flex: '1 1 300px', minWidth: '250px', position: 'relative' }}>
-              <div style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: '#95a5a6' }}>
+              <div style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: '#95a5a6', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <Search size={20} />
               </div>
               <input
                 type="text"
-                placeholder="Buscar joven..."
+                placeholder={isListening ? "Escuchando nombre..." : "Buscar joven..."}
                 value={searchTerm}
                 onChange={handleSearch}
                 style={{
                   width: '100%',
-                  padding: '12px 12px 12px 45px',
+                  padding: '12px 60px 12px 45px',
                   borderRadius: '15px',
-                  border: 'none',
-                  background: 'rgba(255,255,255,0.95)',
+                  border: isListening ? '2px solid #e74c3c' : 'none',
+                  background: isListening ? '#fff5f5' : 'rgba(255,255,255,0.95)',
                   fontSize: '1rem',
                   outline: 'none',
-                  boxShadow: '0 4px 15px rgba(0,0,0,0.05)'
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+                  transition: 'all 0.3s'
                 }}
               />
+              <button
+                onClick={startSearchVoice}
+                style={{
+                  position: 'absolute',
+                  right: '10px',
+                  top: '50%',
+                  transform: 'translateY(-50%)',
+                  background: isListening ? '#e74c3c' : '#4a90e2',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '10px',
+                  width: '35px',
+                  height: '35px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  boxShadow: isListening ? '0 0 15px rgba(231, 76, 60, 0.4)' : 'none'
+                }}
+              >
+                <Mic size={18} className={isListening ? "animate-pulse" : ""} />
+              </button>
             </div>
 
 
