@@ -1039,6 +1039,48 @@ function App() {
     recognition.start();
   };
 
+  // Reconocimiento de Voz para Selección de Equipos
+  const startTeamSelectionVoice = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("El reconocimiento de voz no está disponible.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => setIsListening(false);
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript.toUpperCase().replace(/\.$/, "").trim();
+      const normalizedTranscript = transcript.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+      // Buscamos si el nombre coincide con algún alumno
+      const studentToToggle = students.find(s => {
+        const normalizedName = s.name.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        return normalizedName === normalizedTranscript;
+      });
+
+      if (studentToToggle) {
+        toggleTeamMember(studentToToggle.id);
+        playSound('success');
+      } else {
+        // Coincidencia parcial
+        const partialMatch = students.find(s => {
+          const normalizedName = s.name.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+          return normalizedName.includes(normalizedTranscript) || normalizedTranscript.includes(normalizedName);
+        });
+        if (partialMatch) {
+          toggleTeamMember(partialMatch.id);
+          playSound('success');
+        } else {
+          playSound('error');
+        }
+      }
+    };
+    recognition.start();
+  };
+
   const handlePasapalabraAnswer = (answer) => {
     if (pasapalabra.status !== 'playing' || pasapalabra.isPaused) return;
 
@@ -1356,6 +1398,16 @@ function App() {
       updatePoints(quizStudentId, -10);
       alert('⚠️ Penalización aplicada: -10 estrellas.');
     }
+  };
+
+  const handleStudentClick = (student) => {
+    setSelectedStudent(student);
+    setTimeout(() => {
+      const element = document.getElementById(`student-${student.id}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
   };
 
   // Timer para el juego de la frase
@@ -2245,7 +2297,7 @@ function App() {
         {podium.length > 3 && (
           <motion.div className="podium-spot podium-4" layout>
             {((view === 'general' ? podium[3]?.totalScore : podium[3]?.dailyScore) || 0) > 0 ? (
-              <div className="avatar-container" onClick={() => setSelectedStudent(podium[3])} style={{ cursor: 'pointer' }}>
+              <div className="avatar-container" onClick={() => handleStudentClick(podium[3])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
                 <div className="arms-container">
                   <div className="arm arm-left"></div>
@@ -2277,7 +2329,7 @@ function App() {
         {podium.length > 1 && (
           <motion.div className="podium-spot podium-2" layout>
             {((view === 'general' ? podium[1]?.totalScore : podium[1]?.dailyScore) || 0) > 0 ? (
-              <div className="avatar-container" onClick={() => setSelectedStudent(podium[1])} style={{ cursor: 'pointer' }}>
+              <div className="avatar-container" onClick={() => handleStudentClick(podium[1])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
                 <div className="arms-container">
                   <div className="arm arm-left"></div>
@@ -2309,7 +2361,7 @@ function App() {
         {podium.length > 0 && (
           <motion.div className="podium-spot podium-1" layout>
             {((view === 'general' ? podium[0]?.totalScore : podium[0]?.dailyScore) || 0) > 0 ? (
-              <div className="avatar-container" onClick={() => setSelectedStudent(podium[0])} style={{ cursor: 'pointer' }}>
+              <div className="avatar-container" onClick={() => handleStudentClick(podium[0])} style={{ cursor: 'pointer' }}>
                 <div className="halo" style={{ borderColor: 'gold', boxShadow: '0 0 20px gold' }}></div>
                 <div className="arms-container">
                   <div className="arm arm-left"></div>
@@ -2342,7 +2394,7 @@ function App() {
         {podium.length > 2 && (
           <motion.div className="podium-spot podium-3" layout>
             {((view === 'general' ? podium[2]?.totalScore : podium[2]?.dailyScore) || 0) > 0 ? (
-              <div className="avatar-container" onClick={() => setSelectedStudent(podium[2])} style={{ cursor: 'pointer' }}>
+              <div className="avatar-container" onClick={() => handleStudentClick(podium[2])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
                 <div className="arms-container">
                   <div className="arm arm-left"></div>
@@ -2374,7 +2426,7 @@ function App() {
         {podium.length > 4 && (
           <motion.div className="podium-spot podium-5" layout>
             {((view === 'general' ? podium[4]?.totalScore : podium[4]?.dailyScore) || 0) > 0 ? (
-              <div className="avatar-container" onClick={() => setSelectedStudent(podium[4])} style={{ cursor: 'pointer' }}>
+              <div className="avatar-container" onClick={() => handleStudentClick(podium[4])} style={{ cursor: 'pointer' }}>
                 <div className="halo"></div>
                 <div className="arms-container">
                   <div className="arm arm-left"></div>
@@ -2864,7 +2916,7 @@ function App() {
 
                         <div
                           className="small-avatar"
-                          onClick={() => setSelectedStudent(student)}
+                          onClick={() => handleStudentClick(student)}
                           style={{
                             cursor: 'pointer',
                             border: isCardFocused ? '2px solid #f1c40f' : 'none'
@@ -3226,24 +3278,44 @@ function App() {
 
                     {/* Creador de Equipo */}
                     <div style={{ background: 'rgba(74, 144, 226, 0.05)', padding: '20px', borderRadius: '25px', marginBottom: '1.5rem', border: '2px dashed rgba(74, 144, 226, 0.2)' }}>
-                      <input
-                        ref={teamNameInputRef}
-                        type="text"
-                        placeholder="Nombre del Equipo (ej: Los Leones)"
-                        value={currentTeamName}
-                        onChange={(e) => setCurrentTeamName(e.target.value)}
-                        style={{
-                          width: '100%',
-                          padding: '12px',
-                          borderRadius: '15px',
-                          border: pickerArea === 'input' ? '3px solid #f1c40f' : '2px solid white',
-                          marginBottom: '1rem',
-                          fontWeight: 800,
-                          outline: 'none',
-                          boxShadow: pickerArea === 'input' ? '0 0 15px rgba(241, 196, 15, 0.4)' : 'none',
-                          transition: 'all 0.2s'
-                        }}
-                      />
+                      <div style={{ display: 'flex', gap: '10px', marginBottom: '1rem' }}>
+                        <input
+                          ref={teamNameInputRef}
+                          type="text"
+                          placeholder="Nombre del Equipo (ej: Los Leones)"
+                          value={currentTeamName}
+                          onChange={(e) => setCurrentTeamName(e.target.value)}
+                          style={{
+                            flex: 1,
+                            padding: '12px',
+                            borderRadius: '15px',
+                            border: pickerArea === 'input' ? '3px solid #f1c40f' : '2px solid white',
+                            fontWeight: 800,
+                            outline: 'none',
+                            boxShadow: pickerArea === 'input' ? '0 0 15px rgba(241, 196, 15, 0.4)' : 'none',
+                            transition: 'all 0.2s'
+                          }}
+                        />
+                        <button
+                          onClick={startTeamSelectionVoice}
+                          style={{
+                            background: isListening ? '#e74c3c' : '#4a90e2',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '15px',
+                            width: '50px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            transition: 'all 0.3s',
+                            boxShadow: '0 4px 10px rgba(74, 144, 226, 0.3)'
+                          }}
+                          title="Seleccionar por voz"
+                        >
+                          <Mic size={24} className={isListening ? 'animate-mic-pulse' : ''} />
+                        </button>
+                      </div>
                       <div className="student-picker" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(95px, 1fr))', gap: '12px', maxHeight: '300px', overflowY: 'auto', padding: '10px' }}>
                         {students
                           .filter(s => !aulaTeams.some(team => team.studentIds.includes(s.id)))
