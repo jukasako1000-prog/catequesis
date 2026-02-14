@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Trophy, Star, Minus, Plus, Cloud, Church, Sun, Heart, UserPlus, HelpCircle, X, ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, Download, Upload, Medal, Calendar, History, TrendingUp, Gamepad2, Sparkles, BookOpen, Search, ArrowLeft, Edit, ZoomIn, ZoomOut, Monitor, Mic } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Reorder } from 'framer-motion';
 
 // Banco de datos del Aula por Temas
 const AULA_TEMAS = {
@@ -1305,6 +1305,40 @@ function App() {
       isPaused: false
     });
     setAulaStep('historia');
+  };
+
+  const handleHistoriaReorder = (newItems) => {
+    setHistoriaGame(prev => {
+      const isCorrect = newItems.every((item, idx) => item.originalIdx === idx);
+
+      const newChallenges = prev.challenges.map((c, i) =>
+        i === prev.currentIdx ? { ...c, items: newItems } : c
+      );
+
+      if (isCorrect && prev.status === 'playing') {
+        playSound('success');
+        const pointsWin = 5;
+        prev.teams[prev.currentTeamIdx].studentIds.forEach(id => updatePoints(id, pointsWin));
+
+        if (prev.currentIdx + 1 < prev.challenges.length) {
+          setTimeout(() => {
+            setHistoriaGame(curr => ({
+              ...curr,
+              currentIdx: curr.currentIdx + 1,
+              currentTeamIdx: (curr.currentTeamIdx + 1) % curr.teams.length
+            }));
+          }, 1500);
+        } else {
+          setTimeout(() => {
+            setHistoriaGame(curr => ({ ...curr, status: 'finished' }));
+            playSound('fanfare');
+            triggerLeaderFireworks();
+          }, 1000);
+        }
+      }
+
+      return { ...prev, challenges: newChallenges };
+    });
   };
 
   const handleHistoriaMove = (fromIdx, toIdx) => {
@@ -4289,65 +4323,56 @@ function App() {
                       {historiaGame.challenges[historiaGame.currentIdx]?.title}
                     </p>
 
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '600px', margin: '0 auto' }}>
+                    <Reorder.Group
+                      axis="y"
+                      values={historiaGame.challenges[historiaGame.currentIdx]?.items || []}
+                      onReorder={handleHistoriaReorder}
+                      style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '600px', margin: '0 auto', listStyle: 'none', padding: 0 }}
+                    >
                       {historiaGame.challenges[historiaGame.currentIdx]?.items.map((item, idx) => {
                         const isWinState = historiaGame.challenges[historiaGame.currentIdx].items.every((itElem, i) => itElem.originalIdx === i);
-                        const isFocused = historiaFocusIdx === idx && !historiaGame.isPaused && historiaGame.status === 'playing';
-                        const isBeingMoved = isMovingItem && isFocused;
 
                         return (
-                          <motion.div
+                          <Reorder.Item
                             key={item.id}
-                            layout
+                            value={item}
+                            disabled={isWinState || historiaGame.isPaused}
                             style={{
                               display: 'flex',
                               alignItems: 'center',
                               gap: '15px',
-                              background: isWinState ? 'rgba(46, 204, 113, 0.1)' : (isBeingMoved ? 'rgba(243, 156, 18, 0.1)' : (isFocused ? 'rgba(30, 27, 75, 0.05)' : 'white')),
+                              background: isWinState ? 'rgba(46, 204, 113, 0.1)' : 'white',
                               padding: '20px',
                               borderRadius: '25px',
-                              border: isWinState ? '3px solid #2ecc71' : (isBeingMoved ? '6px solid #f39c12' : (isFocused ? '6px solid #1e1b4b' : '3px solid #eee')),
-                              boxShadow: isFocused ? '0 10px 25px rgba(30, 27, 75, 0.15)' : '0 5px 15px rgba(0,0,0,0.05)',
-                              transform: isFocused ? 'scale(1.02)' : 'scale(1)',
-                              transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                              position: 'relative'
+                              border: isWinState ? '3px solid #2ecc71' : '3px solid #eee',
+                              boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
+                              cursor: (isWinState || historiaGame.isPaused) ? 'default' : 'grab',
+                              position: 'relative',
+                              zIndex: 1
+                            }}
+                            whileDrag={{
+                              scale: 1.05,
+                              boxShadow: '0 20px 40px rgba(0,0,0,0.2)',
+                              zIndex: 10,
+                              cursor: 'grabbing'
                             }}
                           >
-                            <div style={{ background: isWinState ? '#2ecc71' : (isBeingMoved ? '#f39c12' : '#9b59b6'), color: 'white', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0, boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+                            <div style={{ background: isWinState ? '#2ecc71' : '#9b59b6', color: 'white', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0, boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
                               {idx + 1}
                             </div>
                             <div style={{ flex: 1, fontWeight: 800, color: '#2c3e50', fontSize: '1.2rem' }}>
                               {item.text}
                             </div>
 
-                            {isFocused && !isWinState && (
-                              <div style={{ position: 'absolute', top: '-12px', right: '50px', background: isBeingMoved ? '#f39c12' : '#1e1b4b', color: 'white', fontSize: '0.7rem', padding: '2px 10px', borderRadius: '10px', fontWeight: 900, boxShadow: '0 4px 10px rgba(0,0,0,0.2)' }}>
-                                {isBeingMoved ? '⇅ MOVIENDO (Flechas + OK para soltar)' : 'OK PARA MOVER'}
+                            {!isWinState && !historiaGame.isPaused && (
+                              <div style={{ color: '#9b59b6', opacity: 0.5 }}>
+                                <Monitor size={20} />
                               </div>
                             )}
-
-                            {historiaGame.status === 'playing' && !isWinState && (
-                              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                                <button
-                                  disabled={idx === 0}
-                                  onClick={() => handleHistoriaMove(idx, idx - 1)}
-                                  style={{ background: isBeingMoved ? 'rgba(243, 156, 18, 0.2)' : '#eee', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer', opacity: idx === 0 ? 0.3 : 1, transition: 'all 0.2s' }}
-                                >
-                                  ▲
-                                </button>
-                                <button
-                                  disabled={idx === historiaGame.challenges[historiaGame.currentIdx].items.length - 1}
-                                  onClick={() => handleHistoriaMove(idx, idx + 1)}
-                                  style={{ background: isBeingMoved ? 'rgba(243, 156, 18, 0.2)' : '#eee', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer', opacity: idx === historiaGame.challenges[historiaGame.currentIdx].items.length - 1 ? 0.3 : 1, transition: 'all 0.2s' }}
-                                >
-                                  ▼
-                                </button>
-                              </div>
-                            )}
-                          </motion.div>
+                          </Reorder.Item>
                         );
                       })}
-                    </div>
+                    </Reorder.Group>
 
                     {historiaGame.status === 'finished' && (
                       <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ textAlign: 'center', marginTop: '30px', background: 'rgba(46, 204, 113, 0.1)', padding: '30px', borderRadius: '30px', border: '3px dashed #2ecc71' }}>
