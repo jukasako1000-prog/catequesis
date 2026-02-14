@@ -2105,8 +2105,8 @@ function App() {
           if (mainFocusPart === 'student') setMainFocusPart('minus');
           else if (mainFocusPart === 'minus') setMainFocusPart('plus');
           else {
-            const col = (mainFocusIdx - 5) % 4;
-            if (col < 3 && mainFocusIdx + 1 < total) {
+            // Ir al siguiente alumno independientemente de la columna
+            if (mainFocusIdx + 1 < total) {
               setMainFocusIdx(prev => prev + 1);
               setMainFocusPart('student');
             }
@@ -2123,8 +2123,8 @@ function App() {
           if (mainFocusPart === 'plus') setMainFocusPart('minus');
           else if (mainFocusPart === 'minus') setMainFocusPart('student');
           else {
-            const col = (mainFocusIdx - 5) % 4;
-            if (col > 0) {
+            // Ir al alumno anterior independientemente de la columna hasta el index 5
+            if (mainFocusIdx - 1 >= 5) {
               setMainFocusIdx(prev => prev - 1);
               setMainFocusPart('plus');
             }
