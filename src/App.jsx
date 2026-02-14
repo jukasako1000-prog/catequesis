@@ -2601,9 +2601,9 @@ function App() {
                   left: 0,
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  background: aulaFocusIdx === 0 ? '#1e1b4b' : 'rgba(255,255,255,0.2)',
-                  border: aulaFocusIdx === 0 ? '4px solid white' : 'none',
-                  color: 'white',
+                  background: aulaFocusIdx === 0 ? '#feff9c' : 'rgba(255,255,255,0.2)',
+                  border: aulaFocusIdx === 0 ? '15px solid #f1c40f' : '1px solid transparent',
+                  color: aulaFocusIdx === 0 ? '#1e1b4b' : 'white',
                   padding: '10px 20px',
                   borderRadius: '15px',
                   cursor: 'pointer',
@@ -2611,9 +2611,11 @@ function App() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
+                  outline: 'none',
                   backdropFilter: 'blur(5px)',
-                  boxShadow: aulaFocusIdx === 0 ? '0 0 30px rgba(30,27,75,0.8)' : 'none',
-                  transition: 'all 0.2s'
+                  boxShadow: aulaFocusIdx === 0 ? '0 0 50px #f1c40f' : 'none',
+                  transform: aulaFocusIdx === 0 ? 'scale(1.1)' : 'scale(1)',
+                  transition: 'all 0.15s'
                 }}
               >
                 <ArrowLeft size={20} /> Volver
@@ -2635,17 +2637,19 @@ function App() {
                     className="theme-game-card learning-focusable"
                     onClick={() => toggleThemeExpanded(theme)}
                     style={{
-                      background: 'white',
+                      background: isThemeFocused ? '#feff9c' : 'white',
                       borderRadius: '30px',
                       padding: '25px',
-                      boxShadow: isThemeFocused ? '0 0 40px rgba(30, 27, 75, 0.6)' : '0 15px 40px rgba(0,0,0,0.06)',
-                      border: isThemeFocused ? '6px solid #1e1b4b' : (isCompleted ? '3px solid #2ecc71' : '1px solid rgba(0,0,0,0.03)'),
+                      outline: 'none',
+                      boxShadow: isThemeFocused ? '0 0 60px #f1c40f' : '0 15px 40px rgba(0,0,0,0.06)',
+                      border: isThemeFocused ? '15px solid #f1c40f' : (isCompleted ? '3px solid #2ecc71' : '5px solid transparent'),
                       position: 'relative',
                       overflow: 'hidden',
                       height: 'fit-content',
                       cursor: 'pointer',
-                      transform: isThemeFocused ? 'scale(1.05)' : 'scale(1)',
-                      transition: 'all 0.2s'
+                      transform: isThemeFocused ? 'scale(1.08)' : 'scale(1)',
+                      zIndex: isThemeFocused ? 10 : 1,
+                      transition: 'all 0.15s'
                     }}
                   >
                     <div style={{ position: 'absolute', top: -10, right: -10, opacity: 0.05 }}>
