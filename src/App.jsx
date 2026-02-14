@@ -3243,11 +3243,13 @@ function App() {
                               flexDirection: 'column',
                               gap: '10px',
                               position: 'relative',
-                              border: aulaFocusIdx === idx ? '8px solid #f1c40f' : (isCompleted ? '4px solid #2ecc71' : '1px solid transparent'),
-                              transform: aulaFocusIdx === idx ? 'scale(1.08)' : 'scale(1)',
-                              boxShadow: aulaFocusIdx === idx ? '0 0 40px rgba(241, 196, 15, 0.8)' : 'none',
-                              zIndex: aulaFocusIdx === idx ? 10 : 1,
-                              transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                              // BORDE ROJO EXTREMO Y FONDO AMARILLO AL SELECCIONAR
+                              background: aulaFocusIdx === idx ? '#feff9c' : 'white',
+                              border: aulaFocusIdx === idx ? '10px solid #ff0000' : (isCompleted ? '4px solid #2ecc71' : '1px solid transparent'),
+                              transform: aulaFocusIdx === idx ? 'scale(1.1)' : 'scale(1)',
+                              boxShadow: aulaFocusIdx === idx ? '0 0 50px #ff0000' : 'none',
+                              zIndex: aulaFocusIdx === idx ? 100 : 1,
+                              transition: 'all 0.2s ease-out'
                             }}
                             onClick={() => {
                               setSelectedAulaTema(tema);
@@ -3604,14 +3606,15 @@ function App() {
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
                       <button className="option-btn aula-option-btn-focusable" style={{
-                        background: 'linear-gradient(135deg, #4a90e2 0%, #357abd 100%)',
-                        color: 'white', padding: '30px', borderRadius: '25px',
-                        border: aulaFocusIdx === 1 ? '8px solid #f1c40f' : 'none',
-                        transform: aulaFocusIdx === 1 ? 'scale(1.08)' : 'scale(1)',
-                        boxShadow: aulaFocusIdx === 1 ? '0 0 40px rgba(241, 196, 15, 0.7)' : '0 10px 25px rgba(74, 144, 226, 0.3)',
+                        background: aulaFocusIdx === 1 ? '#feff9c' : 'linear-gradient(135deg, #4a90e2 0%, #357abd 100%)',
+                        color: aulaFocusIdx === 1 ? '#1e1b4b' : 'white',
+                        padding: '30px', borderRadius: '25px',
+                        border: aulaFocusIdx === 1 ? '10px solid #ff0000' : 'none',
+                        transform: aulaFocusIdx === 1 ? 'scale(1.1)' : 'scale(1)',
+                        boxShadow: aulaFocusIdx === 1 ? '0 0 50px #ff0000' : '0 10px 25px rgba(74, 144, 226, 0.3)',
                         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px',
                         zIndex: aulaFocusIdx === 1 ? 10 : 1,
-                        transition: 'all 0.3s'
+                        transition: 'all 0.2s'
                       }} onClick={() => showRules({
                         title: "Cuestionario Rápido",
                         description: "Responde preguntas de opción múltiple sobre el tema. ¡Rapidez y fe van de la mano!",
@@ -3628,14 +3631,15 @@ function App() {
                       </button>
 
                       <button className="option-btn aula-option-btn-focusable" style={{
-                        background: 'linear-gradient(135deg, #3498db 0%, #2980b9 100%)',
-                        color: 'white', padding: '30px', borderRadius: '25px',
-                        border: aulaFocusIdx === 2 ? '8px solid #f1c40f' : 'none',
-                        transform: aulaFocusIdx === 2 ? 'scale(1.08)' : 'scale(1)',
-                        boxShadow: aulaFocusIdx === 2 ? '0 0 40px rgba(241, 196, 15, 0.7)' : '0 10px 25px rgba(52, 152, 219, 0.3)',
+                        background: aulaFocusIdx === 2 ? '#feff9c' : 'linear-gradient(135deg, #3498db 0%, #2980b9 100%)',
+                        color: aulaFocusIdx === 2 ? '#1e1b4b' : 'white',
+                        padding: '30px', borderRadius: '25px',
+                        border: aulaFocusIdx === 2 ? '10px solid #ff0000' : 'none',
+                        transform: aulaFocusIdx === 2 ? 'scale(1.1)' : 'scale(1)',
+                        boxShadow: aulaFocusIdx === 2 ? '0 0 50px #ff0000' : '0 10px 25px rgba(52, 152, 219, 0.3)',
                         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px',
                         zIndex: aulaFocusIdx === 2 ? 10 : 1,
-                        transition: 'all 0.3s'
+                        transition: 'all 0.2s'
                       }} onClick={() => showRules({
                         title: "Rosco Individual",
                         description: "Enfréntate tú solo al desafío del abecedario. ¿Podrás completar todas las letras?",
