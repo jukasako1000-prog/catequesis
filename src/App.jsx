@@ -984,6 +984,57 @@ function App() {
     recognition.start();
   };
 
+  // Reconocimiento de Voz para Juego de la Frase
+  const startPhraseVoice = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("El reconocimiento de voz no está disponible en este navegador o requiere HTTPS.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => setIsListening(false);
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript.toUpperCase().replace(/\.$/, '');
+
+      // 1. Verificamos si ha dicho una sola letra
+      if (transcript.length === 1 || (transcript.length <= 2 && transcript.startsWith(' '))) {
+        handleKeyPress(transcript.trim());
+        return;
+      }
+
+      // 2. Verificamos si ha dicho palabras cortas que son letras (A, de, etc)
+      const alphabet = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+      if (transcript.length <= 3 && alphabet.includes(transcript.trim())) {
+        handleKeyPress(transcript.trim());
+        return;
+      }
+
+      // 3. Verificamos si ha intentado decir la frase completa
+      const normalizedOriginal = phraseGame.original.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      const normalizedTranscript = transcript.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+      if (normalizedTranscript === normalizedOriginal) {
+        // Revelar todo y ganar
+        setPhraseGame(prev => ({
+          ...prev,
+          revealed: prev.original.split('').map((_, i) => i),
+          status: 'won'
+        }));
+        playSound('fanfare');
+      } else {
+        // Si no es la frase completa, buscamos si alguna palabra de la frase es la que ha dicho
+        // O simplemente ignoramos si no es una letra clara.
+        // Por ahora, si es una letra la marcamos.
+        if (transcript.length === 1) handleKeyPress(transcript);
+      }
+    };
+    recognition.start();
+  };
+
   const handlePasapalabraAnswer = (answer) => {
     if (pasapalabra.status !== 'playing' || pasapalabra.isPaused) return;
 
@@ -3697,20 +3748,7 @@ function App() {
                                       <Mic size={18} className={isListening ? "animate-pulse" : ""} />
                                     </button>
                                   </div>
-                                  <div style={{ display: 'flex', gap: '8px' }}>
-                                    <button
-                                      onClick={() => handlePasapalabraAnswer(pasapalabra.inputValue)}
-                                      style={{ flex: 2, background: '#2ecc71', color: 'white', border: 'none', padding: '12px', borderRadius: '12px', fontWeight: 900, cursor: 'pointer' }}
-                                    >
-                                      COMPROBAR
-                                    </button>
-                                    <button
-                                      onClick={skipPasapalabra}
-                                      style={{ flex: 1, background: '#f39c12', color: 'white', border: 'none', padding: '12px', borderRadius: '12px', fontWeight: 900, cursor: 'pointer', fontSize: '0.7rem' }}
-                                    >
-                                      PASAPALABRA
-                                    </button>
-                                  </div>
+
                                 </div>
                               </>
                             )}
@@ -4067,33 +4105,57 @@ function App() {
                     </div>
 
                     {phraseGame.status === 'playing' ? (
-                      <div className="alphabet-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(40px, 1fr))', gap: '8px' }}>
-                        {"ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split('').map(letter => {
-                          const isUsed = phraseGame.usedLetters.includes(letter);
-                          const isCorrect = isUsed && phraseGame.original.normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(letter);
+                      <div className="alphabet-container" style={{ position: 'relative' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '15px' }}>
+                          <button
+                            onClick={startPhraseVoice}
+                            style={{
+                              background: isListening ? '#e74c3c' : '#4a90e2',
+                              color: 'white',
+                              border: 'none',
+                              padding: '12px 25px',
+                              borderRadius: '20px',
+                              fontWeight: 900,
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '10px',
+                              boxShadow: isListening ? '0 0 20px rgba(231, 76, 60, 0.4)' : '0 4px 15px rgba(74, 144, 226, 0.2)',
+                              transition: 'all 0.3s'
+                            }}
+                          >
+                            <Mic size={20} className={isListening ? "animate-pulse" : ""} />
+                            {isListening ? "ESCUCHANDO LETRA O FRASE..." : "CANTAR LETRA / FRASE"}
+                          </button>
+                        </div>
+                        <div className="alphabet-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(40px, 1fr))', gap: '8px' }}>
+                          {"ABCDEFGHIJKLMNÑOPQRSTUVWXYZ".split('').map(letter => {
+                            const isUsed = phraseGame.usedLetters.includes(letter);
+                            const isCorrect = isUsed && phraseGame.original.normalize("NFD").replace(/[\u0300-\u036f]/g, "").includes(letter);
 
-                          return (
-                            <button
-                              key={letter}
-                              disabled={isUsed}
-                              onClick={() => handleKeyPress(letter)}
-                              style={{
-                                padding: '10px 5px',
-                                borderRadius: '10px',
-                                border: 'none',
-                                background: isUsed ? (isCorrect ? '#d4edda' : '#f8d7da') : 'white',
-                                color: isUsed ? (isCorrect ? '#155724' : '#721c24') : '#2c3e50',
-                                fontWeight: 800,
-                                cursor: isUsed ? 'default' : 'pointer',
-                                boxShadow: isUsed ? 'none' : '0 2px 5px rgba(0,0,0,0.1)',
-                                fontSize: '1.1rem',
-                                transition: 'all 0.2s'
-                              }}
-                            >
-                              {letter}
-                            </button>
-                          );
-                        })}
+                            return (
+                              <button
+                                key={letter}
+                                disabled={isUsed}
+                                onClick={() => handleKeyPress(letter)}
+                                style={{
+                                  padding: '10px 5px',
+                                  borderRadius: '10px',
+                                  border: 'none',
+                                  background: isUsed ? (isCorrect ? '#d4edda' : '#f8d7da') : 'white',
+                                  color: isUsed ? (isCorrect ? '#155724' : '#721c24') : '#2c3e50',
+                                  fontWeight: 800,
+                                  cursor: isUsed ? 'default' : 'pointer',
+                                  boxShadow: isUsed ? 'none' : '0 2px 5px rgba(0,0,0,0.1)',
+                                  fontSize: '1.1rem',
+                                  transition: 'all 0.2s'
+                                }}
+                              >
+                                {letter}
+                              </button>
+                            );
+                          })}
+                        </div>
                       </div>
                     ) : (
                       <div style={{ textAlign: 'center', padding: '20px' }}>
