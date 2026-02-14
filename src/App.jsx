@@ -4191,7 +4191,7 @@ function App() {
                               style={{
                                 padding: '30px',
                                 borderRadius: '25px',
-                                border: (intrusoFocusIdx === idx && intrusoGame.showExplanation === null) ? '6px solid #1e1b4b' : '4px solid #eee',
+                                border: '4px solid #eee',
                                 background: intrusoGame.showExplanation !== null
                                   ? (idx === intrusoGame.challenges[intrusoGame.currentIdx].correct ? '#2ecc71' : '#f8d7da')
                                   : 'white',
@@ -4199,8 +4199,8 @@ function App() {
                                 fontSize: '1.5rem',
                                 fontWeight: 900,
                                 cursor: 'pointer',
-                                transform: (intrusoFocusIdx === idx && intrusoGame.showExplanation === null) ? 'scale(1.05)' : 'scale(1)',
-                                boxShadow: (intrusoFocusIdx === idx && intrusoGame.showExplanation === null) ? '0 0 30px rgba(30, 27, 75, 0.5)' : '0 10px 20px rgba(0,0,0,0.05)',
+                                transform: 'scale(1)',
+                                boxShadow: '0 10px 20px rgba(0,0,0,0.05)',
                                 transition: 'all 0.3s'
                               }}
                             >
