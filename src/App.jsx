@@ -3121,11 +3121,11 @@ function App() {
           flexDirection: 'column',
           gap: '8px',
           alignItems: 'center',
-          background: 'rgba(0,0,0,0.3)',
+          background: 'rgba(0,0,0,0.8)',
           padding: '10px',
           borderRadius: '30px',
-          backdropFilter: 'blur(10px)',
-          border: '2px solid rgba(255,255,255,0.1)'
+          border: '2px solid rgba(255,255,255,0.1)',
+          willChange: 'transform'
         }}>
           <button
             className="action-btn"
@@ -4578,14 +4578,14 @@ function App() {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    background: 'rgba(0,0,0,0.85)',
-                    backdropFilter: 'blur(10px)',
+                    background: '#1a1a1ae6',
                     zIndex: 2000,
                     display: 'flex',
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    borderRadius: '30px'
+                    borderRadius: '30px',
+                    willChange: 'opacity, transform'
                   }}>
                     <motion.div
                       initial={{ scale: 0.8, opacity: 0 }}
