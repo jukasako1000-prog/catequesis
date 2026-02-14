@@ -1570,11 +1570,11 @@ function App() {
       const cols = 6; // Asumimos 6 columnas para el picker en TV
 
       if (e.key === 'ArrowRight' && pickerArea === 'students') {
-        if ((pickerFocusIdx + 1) % cols !== 0 && pickerFocusIdx + 1 < available.length) {
+        if (pickerFocusIdx + 1 < available.length) {
           setPickerFocusIdx(prev => prev + 1);
         }
       } else if (e.key === 'ArrowLeft' && pickerArea === 'students') {
-        if (pickerFocusIdx % cols !== 0) {
+        if (pickerFocusIdx > 0) {
           setPickerFocusIdx(prev => prev - 1);
         }
       } else if (e.key === 'ArrowDown') {
@@ -1607,6 +1607,7 @@ function App() {
             setAulaTeams([...aulaTeams, { name: currentTeamName, studentIds: [...phraseGame.selectedTeamIds] }]);
             setCurrentTeamName('');
             setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] }));
+            setPickerFocusIdx(0); // Reiniciar el foco al principio de la nueva lista
             setPickerArea('students');
           }
         } else if (pickerArea === 'start-btn') {
@@ -3370,18 +3371,6 @@ function App() {
                             outline: 'none',
                             boxShadow: pickerArea === 'input' ? '0 0 15px rgba(241, 196, 15, 0.4)' : 'none',
                             transition: 'all 0.2s'
-                          }}
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
-                              if (currentTeamName.trim() && phraseGame.selectedTeamIds.length > 0) {
-                                setAulaTeams([...aulaTeams, { name: currentTeamName, studentIds: [...phraseGame.selectedTeamIds] }]);
-                                setCurrentTeamName('');
-                                setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] }));
-                                setPickerArea('students');
-                              } else {
-                                setPickerArea('students'); // Si no hay datos, al menos bajamos el foco
-                              }
-                            }
                           }}
                         />
                         <button
