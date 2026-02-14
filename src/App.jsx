@@ -3050,7 +3050,7 @@ function App() {
       {
         selectedStudent && (
           <div className="overlay" onClick={() => setSelectedStudent(null)}>
-            <div className="modal-slider-container" onClick={e => e.stopPropagation()} style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '20px' }}>
+            <div className="modal-slider-container" onClick={e => e.stopPropagation()} style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '20px', margin: 'auto' }}>
               {sortedStudents.length > 1 && (
                 <button
                   className="nav-arrow-btn"
@@ -3067,7 +3067,7 @@ function App() {
                 animate={{ x: 0, opacity: 1 }}
                 exit={{ x: -50, opacity: 0 }}
                 className="student-detail-card"
-                style={{ margin: 0 }}
+                style={{ margin: 'auto' }}
               >
                 <button className="close-modal" onClick={() => setSelectedStudent(null)}><X /></button>
                 <div className="detail-avatar-container">
