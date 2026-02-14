@@ -430,6 +430,7 @@ function App() {
     pointsAwarded: false,
     showExplanation: null
   });
+  const [intrusoFocusIdx, setIntrusoFocusIdx] = useState(0);
 
   // Ordenar Historia State
   const [historiaGame, setHistoriaGame] = useState({
@@ -1179,6 +1180,7 @@ function App() {
   };
 
   const nextIntrusoChallenge = () => {
+    setIntrusoFocusIdx(0);
     setIntrusoGame(prev => {
       const nextIdx = prev.currentIdx + 1;
       const nextTeamIdx = prev.teams.length > 1 ? (prev.currentTeamIdx + 1) % prev.teams.length : 0;
@@ -1553,6 +1555,35 @@ function App() {
     window.addEventListener('keydown', handleAulaNavigation);
     return () => window.removeEventListener('keydown', handleAulaNavigation);
   }, [showAulaModal, aulaStep, aulaFocusIdx, selectedAulaTema]);
+
+  // Navegación para el juego El Intruso
+  useEffect(() => {
+    const handleIntrusoNavigation = (e) => {
+      if (aulaStep !== 'intruso' || !showAulaModal || intrusoGame.status !== 'playing') return;
+
+      if (intrusoGame.showExplanation !== null) {
+        if (e.key === 'Enter' || e.key === 'OK') {
+          nextIntrusoChallenge();
+        }
+        return;
+      }
+
+      if (e.key === 'ArrowRight') {
+        setIntrusoFocusIdx(prev => (prev + 1) % 4);
+      } else if (e.key === 'ArrowLeft') {
+        setIntrusoFocusIdx(prev => (prev - 1 + 4) % 4);
+      } else if (e.key === 'ArrowDown') {
+        setIntrusoFocusIdx(prev => (prev + 2) % 4);
+      } else if (e.key === 'ArrowUp') {
+        setIntrusoFocusIdx(prev => (prev - 2 + 4) % 4);
+      } else if (e.key === 'Enter' || e.key === 'OK') {
+        handleIntrusoAnswer(intrusoFocusIdx);
+      }
+    };
+
+    window.addEventListener('keydown', handleIntrusoNavigation);
+    return () => window.removeEventListener('keydown', handleIntrusoNavigation);
+  }, [showAulaModal, aulaStep, intrusoGame, intrusoFocusIdx]);
 
   // Manejo de teclado para la SALA DE ESTUDIO (Vista aprendizaje no modal)
   useEffect(() => {
@@ -3809,7 +3840,7 @@ function App() {
                               style={{
                                 padding: '30px',
                                 borderRadius: '25px',
-                                border: '4px solid #eee',
+                                border: (intrusoFocusIdx === idx && intrusoGame.showExplanation === null) ? '6px solid #1e1b4b' : '4px solid #eee',
                                 background: intrusoGame.showExplanation !== null
                                   ? (idx === intrusoGame.challenges[intrusoGame.currentIdx].correct ? '#2ecc71' : '#f8d7da')
                                   : 'white',
@@ -3817,7 +3848,8 @@ function App() {
                                 fontSize: '1.5rem',
                                 fontWeight: 900,
                                 cursor: 'pointer',
-                                boxShadow: '0 10px 20px rgba(0,0,0,0.05)',
+                                transform: (intrusoFocusIdx === idx && intrusoGame.showExplanation === null) ? 'scale(1.05)' : 'scale(1)',
+                                boxShadow: (intrusoFocusIdx === idx && intrusoGame.showExplanation === null) ? '0 0 30px rgba(30, 27, 75, 0.5)' : '0 10px 20px rgba(0,0,0,0.05)',
                                 transition: 'all 0.3s'
                               }}
                             >
@@ -3834,7 +3866,12 @@ function App() {
                             <p style={{ fontWeight: 700, color: '#2c3e50' }}>{intrusoGame.showExplanation}</p>
                             <button
                               className="btn-primary"
-                              style={{ marginTop: '20px', background: '#27ae60' }}
+                              style={{
+                                marginTop: '20px',
+                                background: '#27ae60',
+                                border: intrusoGame.showExplanation !== null ? '4px solid #1e1b4b' : 'none',
+                                transform: intrusoGame.showExplanation !== null ? 'scale(1.05)' : 'scale(1)'
+                              }}
                               onClick={nextIntrusoChallenge}
                             >
                               SIGUIENTE RETO ➔
@@ -4125,7 +4162,7 @@ function App() {
                             }}
                           >
                             <Mic size={20} className={isListening ? "animate-pulse" : ""} />
-                            {isListening ? "ESCUCHANDO LETRA O FRASE..." : "CANTAR LETRA / FRASE"}
+                            {isListening ? "ESCUCHANDO..." : "CANTAR LETRA O FRASE"}
                           </button>
                         </div>
                         <div className="alphabet-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(40px, 1fr))', gap: '8px' }}>
