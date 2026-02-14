@@ -2625,241 +2625,278 @@ function App() {
             </div>
 
             <div className="themes-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '25px' }}>
-              {Object.keys(AULA_TEMAS).map((theme, i) => {
-                const isExpanded = expandedThemes[theme] ?? false;
-                const isCompleted = completedThemes.includes(theme);
-                const isThemeFocused = (view === 'learning' && !showAulaModal && aulaFocusIdx === (i + 1));
+              {(() => {
+                let currentFocusCount = 0; // El 0 es Volver
+                return Object.keys(AULA_TEMAS).map((theme) => {
+                  currentFocusCount++; // Índice para la tarjeta del tema
+                  const themeIdx = currentFocusCount;
+                  const isExpanded = expandedThemes[theme] ?? false;
+                  const isCompleted = completedThemes.includes(theme);
+                  const isThemeFocused = (view === 'learning' && !showAulaModal && aulaFocusIdx === themeIdx);
 
-                return (
-                  <motion.div
-                    key={theme}
-                    layout
-                    className="theme-game-card learning-focusable"
-                    onClick={() => toggleThemeExpanded(theme)}
-                    style={{
-                      background: isThemeFocused ? '#feff9c' : 'white',
-                      borderRadius: '30px',
-                      padding: '25px',
-                      outline: 'none',
-                      boxShadow: isThemeFocused ? '0 0 60px #f1c40f' : '0 15px 40px rgba(0,0,0,0.06)',
-                      border: isThemeFocused ? '15px solid #f1c40f' : (isCompleted ? '3px solid #2ecc71' : '5px solid transparent'),
-                      position: 'relative',
-                      overflow: 'hidden',
-                      height: 'fit-content',
-                      cursor: 'pointer',
-                      transform: isThemeFocused ? 'scale(1.08)' : 'scale(1)',
-                      zIndex: isThemeFocused ? 10 : 1,
-                      transition: 'all 0.15s'
-                    }}
-                  >
-                    <div style={{ position: 'absolute', top: -10, right: -10, opacity: 0.05 }}>
-                      <Sparkles size={100} />
-                    </div>
+                  // Índices para los juegos internos si está expandido
+                  const gameIndices = [];
+                  if (isExpanded) {
+                    for (let j = 0; j < 4; j++) {
+                      currentFocusCount++;
+                      gameIndices.push(currentFocusCount);
+                    }
+                  }
 
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isExpanded ? '1.5rem' : '0' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            markThemeCompleted(theme);
-                          }}
-                          style={{
-                            width: '55px',
-                            height: '55px',
-                            borderRadius: '16px',
-                            background: isCompleted ? '#2ecc71' : '#f0f4f8',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: isCompleted ? 'white' : '#bdc3c7',
-                            transition: 'all 0.3s',
-                            border: 'none',
-                            cursor: 'pointer',
-                            boxShadow: isCompleted ? '0 5px 15px rgba(46, 204, 113, 0.3)' : 'none'
-                          }}
-                          title={isCompleted ? "Marcar como no completado" : "Marcar como completado"}
-                        >
-                          {isCompleted ? <CheckCircle2 size={30} /> : (i % 2 === 0 ? <BookOpen size={30} /> : <Star size={30} />)}
-                        </button>
-                        <h3
-                          style={{ fontSize: '1.3rem', fontWeight: 900, color: '#2c3e50' }}
-                        >
-                          {theme}
-                        </h3>
+                  return (
+                    <motion.div
+                      key={theme}
+                      layout
+                      className="theme-game-card learning-focusable"
+                      onClick={() => toggleThemeExpanded(theme)}
+                      style={{
+                        background: isThemeFocused ? '#feff9c' : 'white',
+                        borderRadius: '30px',
+                        padding: '25px',
+                        outline: 'none',
+                        boxShadow: isThemeFocused ? '0 0 60px #f1c40f' : '0 15px 40px rgba(0,0,0,0.06)',
+                        border: isThemeFocused ? '15px solid #f1c40f' : (isCompleted ? '3px solid #2ecc71' : '5px solid transparent'),
+                        position: 'relative',
+                        overflow: 'hidden',
+                        height: 'fit-content',
+                        cursor: 'pointer',
+                        transform: isThemeFocused ? 'scale(1.08)' : 'scale(1)',
+                        zIndex: isThemeFocused ? 10 : 1,
+                        transition: 'all 0.15s'
+                      }}
+                    >
+                      <div style={{ position: 'absolute', top: -10, right: -10, opacity: 0.05 }}>
+                        <Sparkles size={100} />
                       </div>
 
-                      <div style={{ display: 'flex', gap: '8px' }}>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            markThemeCompleted(theme);
-                          }}
-                          style={{
-                            background: isCompleted ? '#2ecc71' : '#f0f4f8',
-                            border: 'none',
-                            width: '45px',
-                            height: '45px',
-                            borderRadius: '12px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            color: isCompleted ? 'white' : '#bdc3c7',
-                            transition: 'all 0.3s'
-                          }}
-                          title={isCompleted ? "Marcar como no completado" : "Marcar como completado"}
-                        >
-                          <CheckCircle2 size={24} />
-                        </button>
-                        <button
-                          onClick={() => toggleThemeExpanded(theme)}
-                          style={{ background: '#f0f4f8', border: 'none', width: '35px', height: '35px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#7f8c8d' }}
-                        >
-                          <motion.div animate={{ rotate: isExpanded ? 0 : 180 }}>
-                            <ChevronRight size={20} style={{ transform: 'rotate(90deg)' }} />
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: isExpanded ? '1.5rem' : '0' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              markThemeCompleted(theme);
+                            }}
+                            style={{
+                              width: '55px',
+                              height: '55px',
+                              borderRadius: '16px',
+                              background: isCompleted ? '#2ecc71' : '#f0f4f8',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: isCompleted ? 'white' : '#bdc3c7',
+                              transition: 'all 0.3s',
+                              border: 'none',
+                              cursor: 'pointer',
+                              boxShadow: isCompleted ? '0 5px 15px rgba(46, 204, 113, 0.3)' : 'none'
+                            }}
+                            title={isCompleted ? "Marcar como no completado" : "Marcar como completado"}
+                          >
+                            {isCompleted ? <CheckCircle2 size={30} /> : (i % 2 === 0 ? <BookOpen size={30} /> : <Star size={30} />)}
+                          </button>
+                          <h3
+                            style={{ fontSize: '1.3rem', fontWeight: 900, color: '#2c3e50' }}
+                          >
+                            {theme}
+                          </h3>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              markThemeCompleted(theme);
+                            }}
+                            style={{
+                              background: isCompleted ? '#2ecc71' : '#f0f4f8',
+                              border: 'none',
+                              width: '45px',
+                              height: '45px',
+                              borderRadius: '12px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              cursor: 'pointer',
+                              color: isCompleted ? 'white' : '#bdc3c7',
+                              transition: 'all 0.3s'
+                            }}
+                            title={isCompleted ? "Marcar como no completado" : "Marcar como completado"}
+                          >
+                            <CheckCircle2 size={24} />
+                          </button>
+                          <button
+                            onClick={() => toggleThemeExpanded(theme)}
+                            style={{ background: '#f0f4f8', border: 'none', width: '35px', height: '35px', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#7f8c8d' }}
+                          >
+                            <motion.div animate={{ rotate: isExpanded ? 0 : 180 }}>
+                              <ChevronRight size={20} style={{ transform: 'rotate(90deg)' }} />
+                            </motion.div>
+                          </button>
+                        </div>
+                      </div>
+
+                      <AnimatePresence>
+                        {isExpanded && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            style={{ overflow: 'hidden' }}
+                          >
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px' }}>
+                              {/* Juego 1: Frase Oculta */}
+                              <button
+                                onClick={() => {
+                                  setSelectedAulaTema(theme);
+                                  setQuizStudentId(null);
+                                  setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] }));
+                                  setAulaStep('select-team');
+                                  setShowAulaModal(true);
+                                }}
+                                className="learning-focusable"
+                                style={{
+                                  width: '100%',
+                                  padding: '12px',
+                                  borderRadius: '15px',
+                                  border: aulaFocusIdx === gameIndices[0] ? '10px solid #f1c40f' : 'none',
+                                  background: aulaFocusIdx === gameIndices[0] ? '#feff9c' : 'linear-gradient(135deg, #4a90e2, #357abd)',
+                                  color: aulaFocusIdx === gameIndices[0] ? '#2c3e50' : 'white',
+                                  fontWeight: 800,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: '8px',
+                                  outline: 'none',
+                                  transform: aulaFocusIdx === gameIndices[0] ? 'scale(1.05)' : 'scale(1)',
+                                  boxShadow: aulaFocusIdx === gameIndices[0] ? '0 0 30px #f1c40f' : 'none',
+                                  transition: 'all 0.15s'
+                                }}
+                              >
+                                <Sparkles size={18} color={aulaFocusIdx === gameIndices[0] ? '#2c3e50' : 'white'} />
+                                <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+                                  <span style={{ fontSize: '0.90rem' }}>Adivinar la Frase</span>
+                                  <span style={{ fontSize: '0.70rem', opacity: 0.9 }}> (POR EQUIPOS)</span>
+                                </div>
+                              </button>
+
+                              {/* Juego 2: Rosco Pasapalabra */}
+                              <button
+                                onClick={() => {
+                                  setSelectedAulaTema(theme);
+                                  setQuizStudentId(null);
+                                  setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] }));
+                                  setAulaStep('select-team-pasapalabra');
+                                  setShowAulaModal(true);
+                                }}
+                                className="learning-focusable"
+                                style={{
+                                  width: '100%',
+                                  padding: '12px',
+                                  borderRadius: '15px',
+                                  border: aulaFocusIdx === gameIndices[1] ? '10px solid #f1c40f' : 'none',
+                                  background: aulaFocusIdx === gameIndices[1] ? '#feff9c' : 'linear-gradient(135deg, #e67e22, #d35400)',
+                                  color: aulaFocusIdx === gameIndices[1] ? '#2c3e50' : 'white',
+                                  fontWeight: 800,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: '8px',
+                                  outline: 'none',
+                                  transform: aulaFocusIdx === gameIndices[1] ? 'scale(1.05)' : 'scale(1)',
+                                  boxShadow: aulaFocusIdx === gameIndices[1] ? '0 0 30px #f1c40f' : 'none',
+                                  transition: 'all 0.15s'
+                                }}
+                              >
+                                <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: aulaFocusIdx === gameIndices[1] ? '#2c3e50' : 'white', color: aulaFocusIdx === gameIndices[1] ? '#feff9c' : '#e67e22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 900 }}>A</div>
+                                <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+                                  <span style={{ fontSize: '0.90rem' }}>Rosco Pasapalabra</span>
+                                  <span style={{ fontSize: '0.70rem', opacity: 0.9 }}> (POR EQUIPOS)</span>
+                                </div>
+                              </button>
+
+                              {/* Juego 3: El Intruso */}
+                              <button
+                                onClick={() => {
+                                  setSelectedAulaTema(theme);
+                                  setQuizStudentId(null);
+                                  setAulaTeams([]); // Limpiar equipos al empezar
+                                  setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] })); // Limpiar seleccionados
+                                  setAulaStep('select-team-intruso');
+                                  setShowAulaModal(true);
+                                }}
+                                className="learning-focusable"
+                                style={{
+                                  width: '100%',
+                                  padding: '12px',
+                                  borderRadius: '15px',
+                                  border: aulaFocusIdx === gameIndices[2] ? '10px solid #f1c40f' : 'none',
+                                  background: aulaFocusIdx === gameIndices[2] ? '#feff9c' : 'linear-gradient(135deg, #2ecc71, #27ae60)',
+                                  color: aulaFocusIdx === gameIndices[2] ? '#2c3e50' : 'white',
+                                  fontWeight: 800,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: '8px',
+                                  outline: 'none',
+                                  transform: aulaFocusIdx === gameIndices[2] ? 'scale(1.05)' : 'scale(1)',
+                                  boxShadow: aulaFocusIdx === gameIndices[2] ? '0 0 30px #f1c40f' : 'none',
+                                  transition: 'all 0.15s'
+                                }}
+                              >
+                                <Search size={18} color={aulaFocusIdx === gameIndices[2] ? '#2c3e50' : 'white'} />
+                                <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+                                  <span style={{ fontSize: '0.90rem' }}>El Intruso</span>
+                                  <span style={{ fontSize: '0.70rem', opacity: 0.9 }}> (POR EQUIPOS)</span>
+                                </div>
+                              </button>
+
+                              {/* Juego 4: Ordena la Historia */}
+                              <button
+                                onClick={() => {
+                                  setSelectedAulaTema(theme);
+                                  setQuizStudentId(null);
+                                  setAulaTeams([]); // Limpiar equipos al empezar
+                                  setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] })); // Limpiar seleccionados
+                                  setAulaStep('select-team-historia');
+                                  setShowAulaModal(true);
+                                }}
+                                className="learning-focusable"
+                                style={{
+                                  width: '100%',
+                                  padding: '12px',
+                                  borderRadius: '15px',
+                                  border: aulaFocusIdx === gameIndices[3] ? '10px solid #f1c40f' : 'none',
+                                  background: aulaFocusIdx === gameIndices[3] ? '#feff9c' : 'linear-gradient(135deg, #9b59b6, #8e44ad)',
+                                  color: aulaFocusIdx === gameIndices[3] ? '#2c3e50' : 'white',
+                                  fontWeight: 800,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  gap: '8px',
+                                  outline: 'none',
+                                  transform: aulaFocusIdx === gameIndices[3] ? 'scale(1.05)' : 'scale(1)',
+                                  boxShadow: aulaFocusIdx === gameIndices[3] ? '0 0 30px #f1c40f' : 'none',
+                                  transition: 'all 0.15s'
+                                }}
+                              >
+                                <History size={18} color={aulaFocusIdx === gameIndices[3] ? '#2c3e50' : 'white'} />
+                                <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
+                                  <span style={{ fontSize: '0.90rem' }}>Ordena la Historia</span>
+                                  <span style={{ fontSize: '0.65rem', opacity: 0.9 }}> (SOLO PARTICIPA EL EQUIPO QUE GANE EL SORTEO)</span>
+                                </div>
+                              </button>
+                            </div>
                           </motion.div>
-                        </button>
-                      </div>
-                    </div>
-
-                    <AnimatePresence>
-                      {isExpanded && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          style={{ overflow: 'hidden' }}
-                        >
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '10px' }}>
-                            <button
-                              onClick={() => {
-                                setSelectedAulaTema(theme);
-                                setQuizStudentId(null);
-                                setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] }));
-                                setAulaStep('select-team');
-                                setShowAulaModal(true);
-                              }}
-                              className="game-btn"
-                              style={{
-                                width: '100%',
-                                padding: '12px',
-                                borderRadius: '15px',
-                                border: 'none',
-                                background: 'linear-gradient(135deg, #4a90e2, #357abd)',
-                                color: 'white',
-                                fontWeight: 800,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '8px'
-                              }}
-                            >
-                              <Sparkles size={18} />
-                              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-                                <span style={{ fontSize: '0.90rem' }}>Adivinar la Frase</span>
-                                <span style={{ fontSize: '0.70rem', opacity: 0.9 }}> (POR EQUIPOS)</span>
-                              </div>
-                            </button>
-                            <button
-                              onClick={() => {
-                                setSelectedAulaTema(theme);
-                                setQuizStudentId(null);
-                                setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] }));
-                                setAulaStep('select-team-pasapalabra');
-                                setShowAulaModal(true);
-                              }}
-                              className="game-btn"
-                              style={{
-                                width: '100%',
-                                padding: '12px',
-                                borderRadius: '15px',
-                                border: 'none',
-                                background: 'linear-gradient(135deg, #e67e22, #d35400)',
-                                color: 'white',
-                                fontWeight: 800,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '8px'
-                              }}
-                            >
-                              <div style={{ width: '22px', height: '22px', borderRadius: '50%', background: 'white', color: '#e67e22', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem', fontWeight: 900 }}>A</div>
-                              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-                                <span style={{ fontSize: '0.90rem' }}>Rosco Pasapalabra</span>
-                                <span style={{ fontSize: '0.70rem', opacity: 0.9 }}> (POR EQUIPOS)</span>
-                              </div>
-                            </button>
-                            <button
-                              onClick={() => {
-                                setSelectedAulaTema(theme);
-                                setQuizStudentId(null);
-                                setAulaTeams([]); // Limpiar equipos al empezar
-                                setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] })); // Limpiar seleccionados
-                                setAulaStep('select-team-intruso');
-                                setShowAulaModal(true);
-                              }}
-                              className="game-btn"
-                              style={{
-                                width: '100%',
-                                padding: '12px',
-                                borderRadius: '15px',
-                                border: 'none',
-                                background: 'linear-gradient(135deg, #2ecc71, #27ae60)',
-                                color: 'white',
-                                fontWeight: 800,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '8px'
-                              }}
-                            >
-                              <Search size={18} />
-                              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-                                <span style={{ fontSize: '0.90rem' }}>El Intruso</span>
-                                <span style={{ fontSize: '0.70rem', opacity: 0.9 }}> (POR EQUIPOS)</span>
-                              </div>
-                            </button>
-                            <button
-                              onClick={() => {
-                                setSelectedAulaTema(theme);
-                                setQuizStudentId(null);
-                                setAulaTeams([]); // Limpiar equipos al empezar
-                                setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] })); // Limpiar seleccionados
-                                setAulaStep('select-team-historia');
-                                setShowAulaModal(true);
-                              }}
-                              className="game-btn"
-                              style={{
-                                width: '100%',
-                                padding: '12px',
-                                borderRadius: '15px',
-                                border: 'none',
-                                background: 'linear-gradient(135deg, #9b59b6, #8e44ad)',
-                                color: 'white',
-                                fontWeight: 800,
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '8px'
-                              }}
-                            >
-                              <History size={18} />
-                              <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'center' }}>
-                                <span style={{ fontSize: '0.90rem' }}>Ordena la Historia</span>
-                                <span style={{ fontSize: '0.65rem', opacity: 0.9 }}> (SOLO PARTICIPA EL EQUIPO QUE GANE EL SORTEO)</span>
-                              </div>
-                            </button>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
-                );
-              })}
+                        )}
+                      </AnimatePresence>
+                    </motion.div>
+                  );
+                });
+              })()}
             </div>
           </div>
         )
