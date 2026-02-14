@@ -1041,54 +1041,83 @@ function App() {
 
   // Reconocimiento de Voz para Selección de Equipos
   const startTeamSelectionVoice = () => {
+    setIsListening(true); // Feedback visual inmediato
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      alert("El reconocimiento de voz no está disponible.");
+      alert("El reconocimiento de voz no está soportado en este navegador. Prueba con Google Chrome.");
+      setIsListening(false);
       return;
     }
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'es-ES';
-    recognition.onstart = () => setIsListening(true);
-    recognition.onend = () => setIsListening(false);
-    recognition.onerror = () => setIsListening(false);
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript.toUpperCase().replace(/\.$/, "").trim();
-      const normalizedTranscript = transcript.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      // 1. Comprobar si quiere poner el nombre del equipo (Ej: "Equipo Los Leones" o "Nombre Los Halcones")
-      if (normalizedTranscript.startsWith("EQUIPO") || normalizedTranscript.startsWith("NOMBRE")) {
-        const namePart = transcript.replace(/^(EQUIPO|NOMBRE)(\s|:)+/i, "").trim();
-        if (namePart) {
-          setCurrentTeamName(namePart);
-          playSound('success');
-          return;
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'es-ES';
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      recognition.onstart = () => {
+        console.log("Micro activado");
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognition.onerror = (event) => {
+        console.error("Error micro:", event.error);
+        setIsListening(false);
+        if (event.error === 'not-allowed') {
+          alert("Debes permitir el acceso al micrófono en el navegador (mira arriba en la barra de direcciones).");
+        } else {
+          alert("Error al activar micro: " + event.error);
         }
-      }
+      };
 
-      // 2. Buscamos si el nombre coincide con algún alumno
-      const studentToToggle = students.find(s => {
-        const normalizedName = s.name.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        return normalizedName === normalizedTranscript;
-      });
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript.toUpperCase().replace(/\.$/, "").trim();
+        const normalizedTranscript = transcript.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      if (studentToToggle) {
-        toggleTeamMember(studentToToggle.id);
-        playSound('success');
-      } else {
-        // Coincidencia parcial para alumnos
-        const partialMatch = students.find(s => {
+        // 1. Comprobar si quiere poner el nombre del equipo (Ej: "Equipo Los Leones" o "Nombre Los Halcones")
+        if (normalizedTranscript.startsWith("EQUIPO") || normalizedTranscript.startsWith("NOMBRE")) {
+          const namePart = transcript.replace(/^(EQUIPO|NOMBRE)(\s|:)+/i, "").trim();
+          if (namePart) {
+            setCurrentTeamName(namePart);
+            playSound('success');
+            return;
+          }
+        }
+
+        // 2. Buscamos si el nombre coincide con algún alumno
+        const studentToToggle = students.find(s => {
           const normalizedName = s.name.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-          return normalizedName.includes(normalizedTranscript) || normalizedTranscript.includes(normalizedName);
+          return normalizedName === normalizedTranscript;
         });
-        if (partialMatch) {
-          toggleTeamMember(partialMatch.id);
+
+        if (studentToToggle) {
+          toggleTeamMember(studentToToggle.id);
           playSound('success');
         } else {
-          playSound('error');
+          // Coincidencia parcial para alumnos
+          const partialMatch = students.find(s => {
+            const normalizedName = s.name.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            return normalizedName.includes(normalizedTranscript) || normalizedTranscript.includes(normalizedName);
+          });
+          if (partialMatch) {
+            toggleTeamMember(partialMatch.id);
+            playSound('success');
+          } else {
+            playSound('error');
+          }
         }
-      }
-    };
-    recognition.start();
+      };
+
+      recognition.start();
+    } catch (e) {
+      console.error(e);
+      setIsListening(false);
+      alert("No se pudo iniciar el reconocimiento: " + e.message);
+    }
   };
 
   const handlePasapalabraAnswer = (answer) => {
