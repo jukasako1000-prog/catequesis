@@ -1635,6 +1635,12 @@ function App() {
     setPickerFocusIdx(0);
     setPickerArea('students');
     setAulaFocusIdx(0); // Reset focus when step changes
+
+    // LIMPIEZA DE SEGURIDAD: Al entrar en cualquier paso de equipo,
+    // nos aseguramos de que no haya restos de selecciones anteriores
+    if (aulaStep.startsWith('select-team') && aulaTeams.length === 0) {
+      setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] }));
+    }
   }, [aulaStep, aulaTeams.length === 0]);
 
   // Manejo de teclado para la SALA DE ESTUDIO (Modal)
@@ -2784,6 +2790,8 @@ function App() {
                               onClick={() => {
                                 setSelectedAulaTema(theme);
                                 setQuizStudentId(null);
+                                setAulaTeams([]); // Limpiar equipos al empezar
+                                setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] })); // Limpiar seleccionados
                                 setAulaStep('select-team-intruso');
                                 setShowAulaModal(true);
                               }}
@@ -2813,6 +2821,8 @@ function App() {
                               onClick={() => {
                                 setSelectedAulaTema(theme);
                                 setQuizStudentId(null);
+                                setAulaTeams([]); // Limpiar equipos al empezar
+                                setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] })); // Limpiar seleccionados
                                 setAulaStep('select-team-historia');
                                 setShowAulaModal(true);
                               }}
@@ -3704,13 +3714,14 @@ function App() {
 
                       <button className="option-btn aula-option-btn-focusable" style={{
                         background: aulaFocusIdx === 5 ? '#feff9c' : 'linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)',
-                        color: aulaFocusIdx === 5 ? '#1e1b4b' : 'white', padding: '30px', borderRadius: '25px',
-                        border: aulaFocusIdx === 5 ? '12px solid #f1c40f' : 'none',
-                        transform: aulaFocusIdx === 5 ? 'scale(1.1)' : 'scale(1)',
-                        boxShadow: aulaFocusIdx === 5 ? '0 0 50px #f1c40f' : '0 10px 25px rgba(46, 204, 113, 0.4)',
+                        color: aulaFocusIdx === 5 ? '#2c3e50' : 'white', padding: '30px', borderRadius: '25px',
+                        outline: 'none',
+                        border: aulaFocusIdx === 5 ? '15px solid #f1c40f' : '5px solid transparent',
+                        transform: aulaFocusIdx === 5 ? 'scale(1.12)' : 'scale(1)',
+                        boxShadow: aulaFocusIdx === 5 ? '0 0 60px #f1c40f' : '0 10px 25px rgba(46, 204, 113, 0.4)',
                         display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '15px',
                         zIndex: aulaFocusIdx === 5 ? 10 : 1,
-                        transition: 'all 0.2s'
+                        transition: 'all 0.15s'
                       }} onClick={() => showRules({
                         title: "El Intruso",
                         description: "En cada ronda verás 4 opciones. Una de ellas no tiene nada que ver con el tema. ¡Debéis encontrar al impostor!",
