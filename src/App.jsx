@@ -443,6 +443,8 @@ function App() {
     timeLeft: 60,
     isPaused: false
   });
+  const [historiaFocusIdx, setHistoriaFocusIdx] = useState(0);
+  const [isMovingItem, setIsMovingItem] = useState(false);
 
   const [aulaTeams, setAulaTeams] = useState([]); // Equipos para el juego actual
   const [currentTeamName, setCurrentTeamName] = useState('');
@@ -1584,6 +1586,47 @@ function App() {
     window.addEventListener('keydown', handleIntrusoNavigation);
     return () => window.removeEventListener('keydown', handleIntrusoNavigation);
   }, [showAulaModal, aulaStep, intrusoGame, intrusoFocusIdx]);
+
+  // Navegación para el juego Ordenar la Historia
+  useEffect(() => {
+    const handleHistoriaNavigation = (e) => {
+      if (aulaStep !== 'historia' || !showAulaModal || historiaGame.status !== 'playing' || historiaGame.isPaused) return;
+
+      const itemsCount = historiaGame.challenges[historiaGame.currentIdx]?.items.length || 0;
+
+      if (e.key === 'ArrowDown') {
+        if (isMovingItem) {
+          // Si estamos moviendo, bajamos el item
+          if (historiaFocusIdx < itemsCount - 1) {
+            handleHistoriaMove(historiaFocusIdx, historiaFocusIdx + 1);
+            setHistoriaFocusIdx(prev => prev + 1);
+          }
+        } else {
+          // Si no, solo bajamos el foco
+          setHistoriaFocusIdx(prev => (prev + 1) % itemsCount);
+        }
+      } else if (e.key === 'ArrowUp') {
+        if (isMovingItem) {
+          // Si estamos moviendo, subimos el item
+          if (historiaFocusIdx > 0) {
+            handleHistoriaMove(historiaFocusIdx, historiaFocusIdx - 1);
+            setHistoriaFocusIdx(prev => prev - 1);
+          }
+        } else {
+          // Si no, solo subimos el foco
+          setHistoriaFocusIdx(prev => (prev - 1 + itemsCount) % itemsCount);
+        }
+      } else if (e.key === 'Enter' || e.key === 'OK') {
+        // Toggle de modo "mover"
+        setIsMovingItem(prev => !prev);
+      } else if (e.key === 'Escape' || e.key === 'Back') {
+        if (isMovingItem) setIsMovingItem(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleHistoriaNavigation);
+    return () => window.removeEventListener('keydown', handleHistoriaNavigation);
+  }, [showAulaModal, aulaStep, historiaGame, historiaFocusIdx, isMovingItem]);
 
   // Manejo de teclado para la SALA DE ESTUDIO (Vista aprendizaje no modal)
   useEffect(() => {
@@ -3940,8 +3983,9 @@ function App() {
 
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '600px', margin: '0 auto' }}>
                       {historiaGame.challenges[historiaGame.currentIdx]?.items.map((item, idx) => {
-                        const isCorrectPosition = item.originalIdx === idx;
                         const isWinState = historiaGame.challenges[historiaGame.currentIdx].items.every((itElem, i) => itElem.originalIdx === i);
+                        const isFocused = historiaFocusIdx === idx && !historiaGame.isPaused && historiaGame.status === 'playing';
+                        const isBeingMoved = isMovingItem && isFocused;
 
                         return (
                           <motion.div
@@ -3951,33 +3995,42 @@ function App() {
                               display: 'flex',
                               alignItems: 'center',
                               gap: '15px',
-                              background: isWinState ? 'rgba(46, 204, 113, 0.1)' : 'white',
+                              background: isWinState ? 'rgba(46, 204, 113, 0.1)' : (isBeingMoved ? 'rgba(243, 156, 18, 0.1)' : (isFocused ? 'rgba(30, 27, 75, 0.05)' : 'white')),
                               padding: '20px',
-                              borderRadius: '20px',
-                              border: `3px solid ${isWinState ? '#2ecc71' : '#eee'}`,
-                              boxShadow: '0 5px 15px rgba(0,0,0,0.05)',
-                              transition: 'all 0.3s'
+                              borderRadius: '25px',
+                              border: isWinState ? '3px solid #2ecc71' : (isBeingMoved ? '6px solid #f39c12' : (isFocused ? '6px solid #1e1b4b' : '3px solid #eee')),
+                              boxShadow: isFocused ? '0 10px 25px rgba(30, 27, 75, 0.15)' : '0 5px 15px rgba(0,0,0,0.05)',
+                              transform: isFocused ? 'scale(1.02)' : 'scale(1)',
+                              transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                              position: 'relative'
                             }}
                           >
-                            <div style={{ background: isWinState ? '#2ecc71' : '#9b59b6', color: 'white', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0 }}>
+                            <div style={{ background: isWinState ? '#2ecc71' : (isBeingMoved ? '#f39c12' : '#9b59b6'), color: 'white', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, flexShrink: 0, boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
                               {idx + 1}
                             </div>
-                            <div style={{ flex: 1, fontWeight: 800, color: '#2c3e50', fontSize: '1.1rem' }}>
+                            <div style={{ flex: 1, fontWeight: 800, color: '#2c3e50', fontSize: '1.2rem' }}>
                               {item.text}
                             </div>
+
+                            {isFocused && !isWinState && (
+                              <div style={{ position: 'absolute', top: '-12px', right: '50px', background: isBeingMoved ? '#f39c12' : '#1e1b4b', color: 'white', fontSize: '0.7rem', padding: '2px 10px', borderRadius: '10px', fontWeight: 900, boxShadow: '0 4px 10px rgba(0,0,0,0.2)' }}>
+                                {isBeingMoved ? '⇅ MOVIENDO (Flechas + OK para soltar)' : 'OK PARA MOVER'}
+                              </div>
+                            )}
+
                             {historiaGame.status === 'playing' && !isWinState && (
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
                                 <button
                                   disabled={idx === 0}
                                   onClick={() => handleHistoriaMove(idx, idx - 1)}
-                                  style={{ background: '#eee', border: 'none', borderRadius: '8px', padding: '5px', cursor: 'pointer', opacity: idx === 0 ? 0.3 : 1 }}
+                                  style={{ background: isBeingMoved ? 'rgba(243, 156, 18, 0.2)' : '#eee', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer', opacity: idx === 0 ? 0.3 : 1, transition: 'all 0.2s' }}
                                 >
                                   ▲
                                 </button>
                                 <button
                                   disabled={idx === historiaGame.challenges[historiaGame.currentIdx].items.length - 1}
                                   onClick={() => handleHistoriaMove(idx, idx + 1)}
-                                  style={{ background: '#eee', border: 'none', borderRadius: '8px', padding: '5px', cursor: 'pointer', opacity: idx === historiaGame.challenges[historiaGame.currentIdx].items.length - 1 ? 0.3 : 1 }}
+                                  style={{ background: isBeingMoved ? 'rgba(243, 156, 18, 0.2)' : '#eee', border: 'none', borderRadius: '8px', padding: '8px', cursor: 'pointer', opacity: idx === historiaGame.challenges[historiaGame.currentIdx].items.length - 1 ? 0.3 : 1, transition: 'all 0.2s' }}
                                 >
                                   ▼
                                 </button>
