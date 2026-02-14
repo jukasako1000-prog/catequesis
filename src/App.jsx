@@ -1764,18 +1764,21 @@ function App() {
   // Manejo de teclado para el RANKING PRINCIPAL
   // Usamos un ref para evitar que el "Enter" del login abra la ficha del primer alumno
   const loginEnterGuardRef = useRef(true);
+
   useEffect(() => {
-    // Resetear el guard tras un pequeño tiempo después de montar el componente principal
-    const timer = setTimeout(() => {
-      loginEnterGuardRef.current = false;
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
+    if (isAuthenticated) {
+      loginEnterGuardRef.current = true;
+      const timer = setTimeout(() => {
+        loginEnterGuardRef.current = false;
+      }, 800); // 800ms de margen tras loguear
+      return () => clearTimeout(timer);
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const handleMainNavigation = (e) => {
-      // Solo si no hay ningún modal abierto
-      if (showAulaModal || selectedStudent || showAddModal || showQuizModal) return;
+      // Solo si está autenticado y no hay ningún modal abierto
+      if (!isAuthenticated || showAulaModal || selectedStudent || showAddModal || showQuizModal) return;
       if (view !== 'general' && view !== 'daily') return;
 
       const total = sortedStudents.length;
@@ -1842,7 +1845,7 @@ function App() {
 
     window.addEventListener('keydown', handleMainNavigation);
     return () => window.removeEventListener('keydown', handleMainNavigation);
-  }, [showAulaModal, selectedStudent, showAddModal, showQuizModal, view, sortedStudents, mainFocusIdx, mainFocusPart]);
+  }, [isAuthenticated, showAulaModal, selectedStudent, showAddModal, showQuizModal, view, sortedStudents, mainFocusIdx, mainFocusPart]);
 
   const getDailyStudentScore = (studentId) => {
     const dayData = history[selectedDate] || {};
