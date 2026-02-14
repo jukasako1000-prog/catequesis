@@ -450,6 +450,7 @@ function App() {
   const [currentTeamName, setCurrentTeamName] = useState('');
   const [gameRules, setGameRules] = useState(null); // { title, description, points, icon, nextStep }
   const [isListening, setIsListening] = useState(false);
+  const aulaOverlayRef = useRef(null);
 
   const [currentTheme, setCurrentTheme] = useState(Object.keys(AULA_TEMAS)[0]); // Tema de hoy
   const [history, setHistory] = useState(() => {
@@ -1557,6 +1558,13 @@ function App() {
     window.addEventListener('keydown', handleAulaNavigation);
     return () => window.removeEventListener('keydown', handleAulaNavigation);
   }, [showAulaModal, aulaStep, aulaFocusIdx, selectedAulaTema]);
+
+  // Resetear scroll del modal cuando cambia el paso del aula
+  useEffect(() => {
+    if (aulaOverlayRef.current) {
+      aulaOverlayRef.current.scrollTo(0, 0);
+    }
+  }, [aulaStep, showAulaModal]);
 
   // Navegación para el juego El Intruso
   useEffect(() => {
@@ -3088,8 +3096,8 @@ function App() {
 
       {
         showAulaModal && (
-          <div className="overlay">
-            <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="modal" style={{ maxWidth: '950px', width: '95%' }}>
+          <div className="overlay" ref={aulaOverlayRef}>
+            <motion.div initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="modal" style={{ maxWidth: '1000px', width: '95%' }}>
               <button className="close-modal" onClick={() => setShowAulaModal(false)}><X /></button>
 
               <div className="aula-container">
