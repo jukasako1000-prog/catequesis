@@ -1055,7 +1055,17 @@ function App() {
       const transcript = event.results[0][0].transcript.toUpperCase().replace(/\.$/, "").trim();
       const normalizedTranscript = transcript.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
-      // Buscamos si el nombre coincide con algún alumno
+      // 1. Comprobar si quiere poner el nombre del equipo (Ej: "Equipo Los Leones" o "Nombre Los Halcones")
+      if (normalizedTranscript.startsWith("EQUIPO") || normalizedTranscript.startsWith("NOMBRE")) {
+        const namePart = transcript.replace(/^(EQUIPO|NOMBRE)(\s|:)+/i, "").trim();
+        if (namePart) {
+          setCurrentTeamName(namePart);
+          playSound('success');
+          return;
+        }
+      }
+
+      // 2. Buscamos si el nombre coincide con algún alumno
       const studentToToggle = students.find(s => {
         const normalizedName = s.name.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         return normalizedName === normalizedTranscript;
@@ -1065,7 +1075,7 @@ function App() {
         toggleTeamMember(studentToToggle.id);
         playSound('success');
       } else {
-        // Coincidencia parcial
+        // Coincidencia parcial para alumnos
         const partialMatch = students.find(s => {
           const normalizedName = s.name.toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
           return normalizedName.includes(normalizedTranscript) || normalizedTranscript.includes(normalizedName);
@@ -3311,7 +3321,7 @@ function App() {
                             transition: 'all 0.3s',
                             boxShadow: '0 4px 10px rgba(74, 144, 226, 0.3)'
                           }}
-                          title="Seleccionar por voz"
+                          title="Dí 'Equipo [nombre]' o el nombre de un alumno"
                         >
                           <Mic size={24} className={isListening ? 'animate-mic-pulse' : ''} />
                         </button>
