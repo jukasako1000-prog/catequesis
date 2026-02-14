@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Trophy, Star, Minus, Plus, Cloud, Church, Sun, Heart, UserPlus, HelpCircle, X, ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, Download, Upload, Medal, Calendar, History, TrendingUp, Gamepad2, Sparkles, BookOpen, Search, ArrowLeft, Edit, ZoomIn, ZoomOut, Monitor } from 'lucide-react';
+import { Trophy, Star, Minus, Plus, Cloud, Church, Sun, Heart, UserPlus, HelpCircle, X, ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, Download, Upload, Medal, Calendar, History, TrendingUp, Gamepad2, Sparkles, BookOpen, Search, ArrowLeft, Edit, ZoomIn, ZoomOut, Monitor, Mic } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -446,6 +446,7 @@ function App() {
   const [aulaTeams, setAulaTeams] = useState([]); // Equipos para el juego actual
   const [currentTeamName, setCurrentTeamName] = useState('');
   const [gameRules, setGameRules] = useState(null); // { title, description, points, icon, nextStep }
+  const [isListening, setIsListening] = useState(false);
 
   const [currentTheme, setCurrentTheme] = useState(Object.keys(AULA_TEMAS)[0]); // Tema de hoy
   const [history, setHistory] = useState(() => {
@@ -923,6 +924,32 @@ function App() {
     }
     return () => clearTimeout(timer);
   }, [pasapalabra.showAnswer, pasapalabra.isPaused, pasapalabra.status]);
+
+  // Reconocimiento de Voz para Pasapalabra
+  const startPasapalabraVoice = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("El reconocimiento de voz no está disponible en este navegador o requiere HTTPS.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'es-ES';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onstart = () => setIsListening(true);
+    recognition.onend = () => setIsListening(false);
+    recognition.onerror = () => setIsListening(false);
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      // Quitamos el punto final si el navegador lo añade
+      const cleanTranscript = transcript.replace(/\.$/, '').toUpperCase();
+      setPasapalabra(prev => ({ ...prev, inputValue: cleanTranscript }));
+    };
+
+    recognition.start();
+  };
 
   const handlePasapalabraAnswer = (answer) => {
     if (pasapalabra.status !== 'playing' || pasapalabra.isPaused) return;
@@ -3565,29 +3592,55 @@ function App() {
                                   {pasapalabra.rosco[pasapalabra.currentIdx]?.question}
                                 </div>
                                 <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
-                                  <input
-                                    type="text"
-                                    autoFocus
-                                    placeholder="Respuesta..."
-                                    value={pasapalabra.inputValue}
-                                    onChange={(e) => setPasapalabra(prev => ({ ...prev, inputValue: e.target.value }))}
-                                    onKeyDown={(e) => {
-                                      if (e.key === 'Enter') {
-                                        if (pasapalabra.inputValue.trim() === '') skipPasapalabra();
-                                        else handlePasapalabraAnswer(pasapalabra.inputValue);
-                                      }
-                                    }}
-                                    style={{
-                                      width: '100%',
-                                      padding: '12px',
-                                      borderRadius: '15px',
-                                      border: '2px solid #4a90e2',
-                                      outline: 'none',
-                                      fontSize: '1.2rem',
-                                      fontWeight: 800,
-                                      textAlign: 'center'
-                                    }}
-                                  />
+                                  <div style={{ position: 'relative', width: '100%' }}>
+                                    <input
+                                      type="text"
+                                      autoFocus
+                                      placeholder={isListening ? "Escuchando..." : "Respuesta..."}
+                                      value={pasapalabra.inputValue}
+                                      onChange={(e) => setPasapalabra(prev => ({ ...prev, inputValue: e.target.value }))}
+                                      onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                          if (pasapalabra.inputValue.trim() === '') skipPasapalabra();
+                                          else handlePasapalabraAnswer(pasapalabra.inputValue);
+                                        }
+                                      }}
+                                      style={{
+                                        width: '100%',
+                                        padding: '12px 45px 12px 12px',
+                                        borderRadius: '15px',
+                                        border: isListening ? '3px solid #e74c3c' : '2px solid #4a90e2',
+                                        outline: 'none',
+                                        fontSize: '1.2rem',
+                                        fontWeight: 800,
+                                        textAlign: 'center',
+                                        background: isListening ? '#fff5f5' : 'white',
+                                        transition: 'all 0.3s'
+                                      }}
+                                    />
+                                    <button
+                                      onClick={startPasapalabraVoice}
+                                      style={{
+                                        position: 'absolute',
+                                        right: '10px',
+                                        top: '50%',
+                                        transform: 'translateY(-50%)',
+                                        background: isListening ? '#e74c3c' : '#4a90e2',
+                                        color: 'white',
+                                        border: 'none',
+                                        borderRadius: '10px',
+                                        width: '35px',
+                                        height: '35px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        cursor: 'pointer',
+                                        boxShadow: isListening ? '0 0 15px rgba(231, 76, 60, 0.5)' : 'none'
+                                      }}
+                                    >
+                                      <Mic size={18} className={isListening ? "animate-pulse" : ""} />
+                                    </button>
+                                  </div>
                                   <div style={{ display: 'flex', gap: '8px' }}>
                                     <button
                                       onClick={() => handlePasapalabraAnswer(pasapalabra.inputValue)}
