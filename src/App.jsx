@@ -1567,18 +1567,30 @@ function App() {
 
       const available = students.filter(s => !aulaTeams.some(team => team.studentIds.includes(s.id)));
 
+      const cols = 6; // Asumimos 6 columnas para el picker en TV
+
       if (e.key === 'ArrowRight' && pickerArea === 'students') {
-        if (available.length > 0) setPickerFocusIdx(prev => (prev + 1) % available.length);
+        if ((pickerFocusIdx + 1) % cols !== 0 && pickerFocusIdx + 1 < available.length) {
+          setPickerFocusIdx(prev => prev + 1);
+        }
       } else if (e.key === 'ArrowLeft' && pickerArea === 'students') {
-        if (available.length > 0) setPickerFocusIdx(prev => (prev - 1 + available.length) % available.length);
-      } else if (e.key === 'ArrowUp') {
-        if (pickerArea === 'students') setPickerArea('input');
-        else if (pickerArea === 'add-btn') setPickerArea('students');
-        else if (pickerArea === 'start-btn') setPickerArea('add-btn');
+        if (pickerFocusIdx % cols !== 0) {
+          setPickerFocusIdx(prev => prev - 1);
+        }
       } else if (e.key === 'ArrowDown') {
         if (pickerArea === 'input') setPickerArea('students');
-        else if (pickerArea === 'students') setPickerArea('add-btn');
+        else if (pickerArea === 'students') {
+          if (pickerFocusIdx + cols < available.length) setPickerFocusIdx(prev => prev + cols);
+          else setPickerArea('add-btn');
+        }
         else if (pickerArea === 'add-btn') setPickerArea('start-btn');
+      } else if (e.key === 'ArrowUp') {
+        if (pickerArea === 'students') {
+          if (pickerFocusIdx - cols >= 0) setPickerFocusIdx(prev => prev - cols);
+          else setPickerArea('input');
+        }
+        else if (pickerArea === 'add-btn') setPickerArea('students');
+        else if (pickerArea === 'start-btn') setPickerArea('add-btn');
       } else if (e.key === 'Enter' || e.key === 'OK') {
         if (pickerArea === 'students') {
           const student = available[pickerFocusIdx];
@@ -2069,46 +2081,55 @@ function App() {
       if (total === 0) return;
 
       // Desplazamiento horizontal (incluyendo cañones)
-      if (e.key === 'ArrowRight') {
-        if (mainFocusIdx === -2) setMainFocusIdx(3); // Del cañón izquierdo al puesto 4
+      if (e.key === 'ArrowDown') {
+        if (mainFocusIdx >= 0 && mainFocusIdx <= 4) setMainFocusIdx(-1); // Del podio al botón Sala
+        else if (mainFocusIdx === -1) setMainFocusIdx(5); // Del botón Sala al primero del ranking
+        else if (mainFocusIdx === -2 || mainFocusIdx === -3) setMainFocusIdx(-1);
+        else if (mainFocusIdx >= 5) {
+          const nextIdx = mainFocusIdx + 4;
+          if (nextIdx < total) setMainFocusIdx(nextIdx);
+        }
+      } else if (e.key === 'ArrowUp') {
+        if (mainFocusIdx >= 5 && mainFocusIdx <= 8) setMainFocusIdx(-1); // Del ranking al botón Sala
+        else if (mainFocusIdx === -1) setMainFocusIdx(0); // Del botón Sala al líder
+        else if (mainFocusIdx >= 5) setMainFocusIdx(prev => prev - 4);
+        else if (mainFocusIdx >= 0 && mainFocusIdx <= 4) { /* Tope superior */ }
+      } else if (e.key === 'ArrowRight') {
+        if (mainFocusIdx === -2) setMainFocusIdx(3);
         else if (mainFocusIdx === 3) setMainFocusIdx(1);
         else if (mainFocusIdx === 1) setMainFocusIdx(0);
         else if (mainFocusIdx === 0) setMainFocusIdx(2);
         else if (mainFocusIdx === 2) setMainFocusIdx(4);
-        else if (mainFocusIdx === 4) setMainFocusIdx(-3); // Del puesto 5 al cañón derecho
-        else if (mainFocusIdx >= 0) {
+        else if (mainFocusIdx === 4) setMainFocusIdx(-3);
+        else if (mainFocusIdx >= 5) {
           if (mainFocusPart === 'student') setMainFocusPart('minus');
           else if (mainFocusPart === 'minus') setMainFocusPart('plus');
           else {
-            setMainFocusIdx(prev => (prev + 1) % total);
-            setMainFocusPart('student');
+            const col = (mainFocusIdx - 5) % 4;
+            if (col < 3 && mainFocusIdx + 1 < total) {
+              setMainFocusIdx(prev => prev + 1);
+              setMainFocusPart('student');
+            }
           }
         }
       } else if (e.key === 'ArrowLeft') {
-        if (mainFocusIdx === -3) setMainFocusIdx(4); // Del cañón derecho al puesto 5
+        if (mainFocusIdx === -3) setMainFocusIdx(4);
         else if (mainFocusIdx === 4) setMainFocusIdx(2);
         else if (mainFocusIdx === 2) setMainFocusIdx(0);
         else if (mainFocusIdx === 0) setMainFocusIdx(1);
         else if (mainFocusIdx === 1) setMainFocusIdx(3);
-        else if (mainFocusIdx === 3) setMainFocusIdx(-2); // Del puesto 4 al cañón izquierdo
-        else if (mainFocusIdx >= 0) {
+        else if (mainFocusIdx === 3) setMainFocusIdx(-2);
+        else if (mainFocusIdx >= 5) {
           if (mainFocusPart === 'plus') setMainFocusPart('minus');
           else if (mainFocusPart === 'minus') setMainFocusPart('student');
           else {
-            setMainFocusIdx(prev => (prev - 1 + total) % total);
-            setMainFocusPart('plus');
+            const col = (mainFocusIdx - 5) % 4;
+            if (col > 0) {
+              setMainFocusIdx(prev => prev - 1);
+              setMainFocusPart('plus');
+            }
           }
         }
-      } else if (e.key === 'ArrowDown') {
-        if (mainFocusIdx >= 0 && mainFocusIdx <= 4) setMainFocusIdx(-1); // Del podio al botón Sala
-        else if (mainFocusIdx === -1) setMainFocusIdx(Math.min(5, total - 1)); // Del botón Sala al ranking
-        else if (mainFocusIdx === -2 || mainFocusIdx === -3) setMainFocusIdx(-1); // De cañones al botón Sala
-        else if (mainFocusIdx >= 5) setMainFocusIdx(prev => Math.min(prev + 4, total - 1));
-      } else if (e.key === 'ArrowUp') {
-        if (mainFocusIdx >= 5 && mainFocusIdx <= 8) setMainFocusIdx(-1); // Del ranking al botón Sala
-        else if (mainFocusIdx === -1) setMainFocusIdx(0); // Del botón Sala al líder
-        else if (mainFocusIdx >= 0 && mainFocusIdx <= 4) { /* Tope superior */ }
-        else if (mainFocusIdx >= 9) setMainFocusIdx(prev => prev - 4);
       } else if (e.key === 'Enter' || e.key === 'OK') {
         if (loginEnterGuardRef.current) return;
 
@@ -2129,7 +2150,7 @@ function App() {
 
     window.addEventListener('keydown', handleMainNavigation);
     return () => window.removeEventListener('keydown', handleMainNavigation);
-  }, [isAuthenticated, showAulaModal, selectedStudent, showAddModal, showQuizModal, view, sortedStudents, mainFocusIdx, mainFocusPart]);
+  }, [isAuthenticated, showAulaModal, selectedStudent, showAddModal, showQuizModal, view, sortedStudents, mainFocusIdx, mainFocusPart, history, selectedDate]);
 
   const getDailyStudentScore = (studentId) => {
     const dayData = history[selectedDate] || {};
