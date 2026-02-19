@@ -1126,10 +1126,18 @@ function App() {
   };
 
   const handlePasapalabraAnswer = (answer) => {
-    if (pasapalabra.status !== 'playing' || pasapalabra.isPaused) return;
+    if (pasapalabra.status !== 'playing') return;
+
+    // Si ya está pausado (viendo un error), pulsar de nuevo sirve para pasar a la siguiente sin esperar los 3s
+    if (pasapalabra.isPaused) {
+      nextAfterError();
+      return;
+    }
 
     const currentItem = pasapalabra.rosco[pasapalabra.currentIdx];
-    const isCorrect = answer.toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "") ===
+    if (!currentItem || !currentItem.answer) return;
+
+    const isCorrect = (answer || "").toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "") ===
       currentItem.answer.toUpperCase().trim().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
     // Sonido fuera del setter
@@ -4148,26 +4156,29 @@ function App() {
                                       <Mic size={18} className={isListening ? "animate-pulse" : ""} />
                                     </button>
                                   </div>
-                                  <div style={{ display: 'flex', gap: '5px', marginTop: '8px', justifyContent: 'center' }}>
+                                  <div style={{ display: 'flex', gap: '8px', marginTop: '10px', justifyContent: 'center' }}>
                                     <button
-                                      onClick={() => handlePasapalabraAnswer(pasapalabra.inputValue)}
+                                      onClick={() => {
+                                        if (pasapalabra.inputValue.trim() === '') skipPasapalabra();
+                                        else handlePasapalabraAnswer(pasapalabra.inputValue);
+                                      }}
                                       style={{
                                         flex: 1,
-                                        padding: '8px 2px',
+                                        padding: '12px 5px',
                                         background: '#2ecc71',
                                         color: 'white',
-                                        borderRadius: '10px',
+                                        borderRadius: '12px',
                                         border: 'none',
                                         fontWeight: 900,
                                         cursor: 'pointer',
-                                        fontSize: '0.75rem',
+                                        fontSize: '0.85rem',
                                         boxShadow: '0 4px 10px rgba(46, 204, 113, 0.2)',
                                         transition: 'all 0.2s',
                                         whiteSpace: 'nowrap',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        gap: '3px'
+                                        gap: '5px'
                                       }}
                                     >
                                       ✅ COMPROBAR
@@ -4176,21 +4187,21 @@ function App() {
                                       onClick={skipPasapalabra}
                                       style={{
                                         flex: 1,
-                                        padding: '8px 2px',
+                                        padding: '12px 5px',
                                         background: '#e67e22',
                                         color: 'white',
-                                        borderRadius: '10px',
+                                        borderRadius: '12px',
                                         border: 'none',
                                         fontWeight: 900,
                                         cursor: 'pointer',
-                                        fontSize: '0.75rem',
+                                        fontSize: '0.85rem',
                                         boxShadow: '0 4px 10px rgba(230, 126, 34, 0.2)',
                                         transition: 'all 0.2s',
                                         whiteSpace: 'nowrap',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        gap: '3px'
+                                        gap: '5px'
                                       }}
                                     >
                                       ⏩ PASAPALABRA
