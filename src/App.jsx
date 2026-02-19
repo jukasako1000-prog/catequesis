@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Trophy, Star, Minus, Plus, Cloud, Church, Sun, Heart, UserPlus, HelpCircle, X, ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, Download, Upload, Medal, Calendar, History, TrendingUp, Gamepad2, Sparkles, BookOpen, Search, ArrowLeft, Edit, ZoomIn, ZoomOut, Monitor, Mic } from 'lucide-react';
+import { Trophy, Star, Minus, Plus, Cloud, Church, Sun, Heart, UserPlus, HelpCircle, X, ChevronLeft, ChevronRight, ChevronDown, CheckCircle2, Download, Upload, Medal, Calendar, History, TrendingUp, Gamepad2, Sparkles, BookOpen, Search, ArrowLeft, Edit, ZoomIn, ZoomOut, Monitor, Mic, Maximize } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { motion, AnimatePresence, Reorder } from 'framer-motion';
 
@@ -374,6 +374,18 @@ function App() {
   useEffect(() => {
     localStorage.setItem('catequesis_zoom', appZoom);
   }, [appZoom]);
+
+  const toggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.log(`Error al activar pantalla completa: ${err.message}`);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+  };
 
   const handleLogin = (e) => {
     e?.preventDefault();
@@ -3198,6 +3210,14 @@ function App() {
             title="Resetear Pantalla (100%)"
           >
             <Monitor size={20} />
+          </button>
+          <button
+            className="action-btn"
+            style={{ background: '#4a90e2', width: '45px', height: '45px' }}
+            onClick={toggleFullscreen}
+            title="Pantalla Completa"
+          >
+            <Maximize size={20} />
           </button>
         </div>
       </div>
