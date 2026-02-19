@@ -2533,34 +2533,41 @@ function App() {
       {
         view === 'learning' && (
           <div className="learning-view animate-fade-in" style={{ padding: '2rem 0' }}>
-            <div className="learning-header" style={{ position: 'relative', textAlign: 'center', marginBottom: '3rem' }}>
-              <button
-                className="learning-focusable"
-                onClick={() => setView('general')}
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: aulaFocusIdx === 0 ? '#1e1b4b' : 'rgba(255,255,255,0.2)',
-                  border: aulaFocusIdx === 0 ? '4px solid white' : 'none',
-                  color: 'white',
-                  padding: '10px 20px',
-                  borderRadius: '15px',
-                  cursor: 'pointer',
-                  fontWeight: 800,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  backdropFilter: 'blur(5px)',
-                  boxShadow: aulaFocusIdx === 0 ? '0 0 30px rgba(30,27,75,0.8)' : 'none',
-                  transition: 'all 0.2s'
-                }}
-              >
-                <ArrowLeft size={20} /> Volver
-              </button>
-              <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>Sala de Estudio 🎮</h2>
-              <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.2rem', fontWeight: 600 }}>Elige un tema y prepárate para el reto especial del día.</p>
+            <div className="learning-header" style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '20px',
+              marginBottom: '3rem',
+              position: 'relative'
+            }}>
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+                <button
+                  className="learning-focusable"
+                  onClick={() => setView('general')}
+                  style={{
+                    background: aulaFocusIdx === 0 ? '#1e1b4b' : 'rgba(255,255,255,0.2)',
+                    border: aulaFocusIdx === 0 ? '4px solid white' : 'none',
+                    color: 'white',
+                    padding: '10px 20px',
+                    borderRadius: '15px',
+                    cursor: 'pointer',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    backdropFilter: 'blur(5px)',
+                    boxShadow: aulaFocusIdx === 0 ? '0 0 30px rgba(30,27,75,0.8)' : 'none',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <ArrowLeft size={20} /> Volver
+                </button>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>Sala de Estudio 🎮</h2>
+                <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.2rem', fontWeight: 600 }}>Elige un tema y prepárate para el reto especial del día.</p>
+              </div>
             </div>
 
             <div className="themes-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '25px' }}>
