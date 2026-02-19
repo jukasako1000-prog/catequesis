@@ -4150,8 +4150,10 @@ function App() {
                                         fontWeight: 800,
                                         textAlign: 'center',
                                         background: isListening ? '#fff5f5' : 'white',
-                                        transition: 'all 0.3s'
+                                        transition: 'all 0.3s',
+                                        caretColor: 'transparent'
                                       }}
+                                      inputMode="none"
                                     />
                                     <button
                                       onClick={startPasapalabraVoice}
