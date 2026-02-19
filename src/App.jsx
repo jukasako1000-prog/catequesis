@@ -410,7 +410,7 @@ function App() {
   const [pasapalabra, setPasapalabra] = useState({
     rosco: [], // [{ letter: 'A', question: '...', answer: '...', status: 'pending' }]
     currentIdx: 0,
-    timeLeft: 480,
+    timeLeft: 600,
     status: 'playing', // 'playing', 'finished'
     teams: [],
     currentTeamIdx: 0,
@@ -877,7 +877,7 @@ function App() {
     setPasapalabra({
       rosco: roscoData,
       currentIdx: 0,
-      timeLeft: 480,
+      timeLeft: 600,
       status: 'playing',
       teams: teams.map(t => ({ ...t, hits: 0, errors: 0 })),
       currentTeamIdx: initialTeamIdx,
@@ -2631,6 +2631,7 @@ function App() {
       {
         view === 'learning' && (
           <div className="learning-view animate-fade-in" style={{ padding: '2rem 0' }}>
+<<<<<<< HEAD
             <div className="learning-header" style={{ position: 'relative', textAlign: 'center', marginBottom: '3rem' }}>
               <button
                 className="learning-focusable"
@@ -2661,6 +2662,43 @@ function App() {
               </button>
               <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>Sala de Estudio 🎮</h2>
               <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.2rem', fontWeight: 600 }}>Elige un tema y prepárate para el reto especial del día.</p>
+=======
+            <div className="learning-header" style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '20px',
+              marginBottom: '3rem',
+              position: 'relative'
+            }}>
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
+                <button
+                  className="learning-focusable"
+                  onClick={() => setView('general')}
+                  style={{
+                    background: aulaFocusIdx === 0 ? '#1e1b4b' : 'rgba(255,255,255,0.2)',
+                    border: aulaFocusIdx === 0 ? '4px solid white' : 'none',
+                    color: 'white',
+                    padding: '10px 20px',
+                    borderRadius: '15px',
+                    cursor: 'pointer',
+                    fontWeight: 800,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    backdropFilter: 'blur(5px)',
+                    boxShadow: aulaFocusIdx === 0 ? '0 0 30px rgba(30,27,75,0.8)' : 'none',
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  <ArrowLeft size={20} /> Volver
+                </button>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>Sala de Estudio 🎮</h2>
+                <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.2rem', fontWeight: 600 }}>Elige un tema y prepárate para el reto especial del día.</p>
+              </div>
+>>>>>>> FEATURE_CAMBIOS
             </div>
 
             <div className="themes-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '25px' }}>
@@ -4064,11 +4102,11 @@ function App() {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '280px',
+                        width: '260px',
                         textAlign: 'center',
                         background: 'rgba(255,255,255,0.98)',
-                        padding: '20px',
-                        borderRadius: '40px',
+                        padding: '15px',
+                        borderRadius: '30px',
                         boxShadow: '0 20px 50px rgba(0,0,0,0.1)',
                         border: '1px solid #eee',
                         zIndex: 1
@@ -4109,11 +4147,11 @@ function App() {
                                       }}
                                       style={{
                                         width: '100%',
-                                        padding: '12px 45px 12px 12px',
-                                        borderRadius: '15px',
+                                        padding: '10px 40px 10px 10px',
+                                        borderRadius: '12px',
                                         border: isListening ? '3px solid #e74c3c' : '2px solid #4a90e2',
                                         outline: 'none',
-                                        fontSize: '1.2rem',
+                                        fontSize: '1rem',
                                         fontWeight: 800,
                                         textAlign: 'center',
                                         background: isListening ? '#fff5f5' : 'white',
@@ -4143,6 +4181,7 @@ function App() {
                                       <Mic size={18} className={isListening ? "animate-pulse" : ""} />
                                     </button>
                                   </div>
+<<<<<<< HEAD
                                   <button
                                     onClick={skipPasapalabra}
                                     style={{
@@ -4164,6 +4203,56 @@ function App() {
                                   >
                                     ⏩ PASAPALABRA
                                   </button>
+=======
+                                  <div style={{ display: 'flex', gap: '5px', marginTop: '8px', justifyContent: 'center' }}>
+                                    <button
+                                      onClick={() => handlePasapalabraAnswer(pasapalabra.inputValue)}
+                                      style={{
+                                        flex: 1,
+                                        padding: '8px 2px',
+                                        background: '#2ecc71',
+                                        color: 'white',
+                                        borderRadius: '10px',
+                                        border: 'none',
+                                        fontWeight: 900,
+                                        cursor: 'pointer',
+                                        fontSize: '0.75rem',
+                                        boxShadow: '0 4px 10px rgba(46, 204, 113, 0.2)',
+                                        transition: 'all 0.2s',
+                                        whiteSpace: 'nowrap',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '3px'
+                                      }}
+                                    >
+                                      ✅ COMPROBAR
+                                    </button>
+                                    <button
+                                      onClick={skipPasapalabra}
+                                      style={{
+                                        flex: 1,
+                                        padding: '8px 2px',
+                                        background: '#e67e22',
+                                        color: 'white',
+                                        borderRadius: '10px',
+                                        border: 'none',
+                                        fontWeight: 900,
+                                        cursor: 'pointer',
+                                        fontSize: '0.75rem',
+                                        boxShadow: '0 4px 10px rgba(230, 126, 34, 0.2)',
+                                        transition: 'all 0.2s',
+                                        whiteSpace: 'nowrap',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '3px'
+                                      }}
+                                    >
+                                      ⏩ PASAPALABRA
+                                    </button>
+                                  </div>
+>>>>>>> FEATURE_CAMBIOS
 
                                 </div>
                               </>
