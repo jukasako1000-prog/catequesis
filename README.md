@@ -129,6 +129,15 @@ CATEQUESIS APP/
 - **Lucide React** (iconos)
 - **LocalStorage** (persistencia de datos)
 
+### 📱 Optimizaciones para Tablets y Proyectores
+La aplicación está diseñada para su uso en aulas con hardware específico:
+- **Modo Pantalla Completa**: Botón dedicado para ocultar la interfaz del navegador.
+- **Control de Zoom**: Ajuste dinámico de escala (50%-150%) para proyectores de baja resolución.
+- **Compatibilidad con Teclados (tipo Rii)**:
+    - `inputMode="none"` para evitar que aparezca el teclado virtual en pantalla.
+    - `caret-color: transparent` para ocultar el cursor y evitar distracciones visuales.
+- **Diseño Táctil**: Botones de juego con áreas de pulsación ampliadas para un manejo cómodo.
+
 ## 📝 Cómo Añadir un Nuevo Tema
 
 ### Paso 1: Preparar el Contenido

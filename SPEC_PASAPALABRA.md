@@ -29,9 +29,18 @@ El objeto `pasapalabra` en `App.jsx` debe mantener esta estructura:
   isPaused: false,
   inputValue: '',
   showAnswer: null, // Si es != null, se muestra el modal de corrección
-  pointsAwarded: false // Crítico para el useEffect de premios
+  pointsAwarded: false, // Crítico para el useEffect de premios
+  isPerfectStreak: true // Bonus si se completa sin fallos ni pasapalabras
 }
 ```
+
+## 📱 Optimización para Tabletas y Proyectores
+Para garantizar una experiencia fluida con teclados externos (tipo Rii) y en pantallas táctiles:
+1.  **Sin Teclado Virtual**: El campo de entrada usa `inputMode="none"` para evitar que el sistema despliegue el teclado táctil, dejando espacio libre para el juego.
+2.  **Cursor Invisible**: Se aplica `caret-color: transparent` para ocultar el cursor parpadeante, mejorando la inmersión y evitando barras de herramientas de texto automáticas.
+3.  **Botones Táctiles**: Los botones de `COMPROBAR` y `PASAPALABRA` tienen un padding ampliado (**12px**) y esquinas redondeadas (**12px**) para facilitar la pulsación con el dedo.
+4.  **Modo Cine (Fullscreen)**: Se incluye un botón con el icono `Maximize` que activa el modo pantalla completa nativo del navegador para ocultar barras de direcciones y menús.
+5.  **Control de Zoom**: Se incluye un control lateral de zoom (50% a 150%) para adaptar la escala del juego a diferentes proyectores o tamaños de aula.
 
 ## 🎨 Interfaz y Layout (UI)
 *   **Tamaño del Rosco**: El contenedor del Rosco debe ser de **700px x 700px**.
@@ -45,8 +54,13 @@ El objeto `pasapalabra` en `App.jsx` debe mantener esta estructura:
 
 ## 🔄 Flujo de Turnos
 1.  **Acierto**: Suena `success`, se marca en verde y el turno SIGUE en el mismo equipo. El índice avanza a la siguiente letra pendiente.
-2.  **Error**: Suena `error`, se marca en rojo, se muestra la palabra correcta (`showAnswer`) y el juego se pausa. Al pulsar "Continuar", el turno PASA al siguiente equipo.
+2.  **Error**: Suena `error`, se marca en rojo, se muestra la palabra correcta (`showAnswer`) y el juego se pausa.
+    *   **Bypass de Espera**: Durante la pausa de error, pulsar de nuevo `COMPROBAR` (o Enter) saltará inmediatamente a la siguiente pregunta sin esperar el temporizador de 3 segundos.
 3.  **Pasapalabra**: Se salta la letra (sigue pendiente) y el turno PASA al siguiente equipo.
+
+## 🛠️ Robustez Técnica
+*   **Normalización**: Las respuestas se comparan eliminando tildes (`normalize("NFD")`), espacios y convirtiendo a mayúsculas.
+*   **Security Checks**: El handler de respuestas tiene protecciones contra objetos nulos para evitar cierres inesperados si los datos del Rosco están incompletos.
 
 ---
 *Documento de referencia para la evolución del Proyecto Catequesis 2026* ⛪✨
