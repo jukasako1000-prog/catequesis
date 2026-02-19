@@ -3835,11 +3835,11 @@ function App() {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '310px',
+                        width: '260px',
                         textAlign: 'center',
                         background: 'rgba(255,255,255,0.98)',
-                        padding: '20px',
-                        borderRadius: '40px',
+                        padding: '15px',
+                        borderRadius: '30px',
                         boxShadow: '0 20px 50px rgba(0,0,0,0.1)',
                         border: '1px solid #eee',
                         zIndex: 1
@@ -3878,11 +3878,11 @@ function App() {
                                       }}
                                       style={{
                                         width: '100%',
-                                        padding: '12px 45px 12px 12px',
-                                        borderRadius: '15px',
+                                        padding: '10px 40px 10px 10px',
+                                        borderRadius: '12px',
                                         border: isListening ? '3px solid #e74c3c' : '2px solid #4a90e2',
                                         outline: 'none',
-                                        fontSize: '1.2rem',
+                                        fontSize: '1rem',
                                         fontWeight: 800,
                                         textAlign: 'center',
                                         background: isListening ? '#fff5f5' : 'white',
@@ -3912,26 +3912,26 @@ function App() {
                                       <Mic size={18} className={isListening ? "animate-pulse" : ""} />
                                     </button>
                                   </div>
-                                  <div style={{ display: 'flex', gap: '8px', marginTop: '10px', justifyContent: 'center' }}>
+                                  <div style={{ display: 'flex', gap: '5px', marginTop: '8px', justifyContent: 'center' }}>
                                     <button
                                       onClick={() => handlePasapalabraAnswer(pasapalabra.inputValue)}
                                       style={{
                                         flex: 1,
-                                        padding: '10px 5px',
+                                        padding: '8px 2px',
                                         background: '#2ecc71',
                                         color: 'white',
-                                        borderRadius: '12px',
+                                        borderRadius: '10px',
                                         border: 'none',
                                         fontWeight: 900,
                                         cursor: 'pointer',
-                                        fontSize: '0.85rem',
-                                        boxShadow: '0 4px 12px rgba(46, 204, 113, 0.2)',
+                                        fontSize: '0.75rem',
+                                        boxShadow: '0 4px 10px rgba(46, 204, 113, 0.2)',
                                         transition: 'all 0.2s',
                                         whiteSpace: 'nowrap',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        gap: '4px'
+                                        gap: '3px'
                                       }}
                                     >
                                       ✅ COMPROBAR
@@ -3940,21 +3940,21 @@ function App() {
                                       onClick={skipPasapalabra}
                                       style={{
                                         flex: 1,
-                                        padding: '10px 5px',
+                                        padding: '8px 2px',
                                         background: '#e67e22',
                                         color: 'white',
-                                        borderRadius: '12px',
+                                        borderRadius: '10px',
                                         border: 'none',
                                         fontWeight: 900,
                                         cursor: 'pointer',
-                                        fontSize: '0.85rem',
-                                        boxShadow: '0 4px 12px rgba(230, 126, 34, 0.2)',
+                                        fontSize: '0.75rem',
+                                        boxShadow: '0 4px 10px rgba(230, 126, 34, 0.2)',
                                         transition: 'all 0.2s',
                                         whiteSpace: 'nowrap',
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
-                                        gap: '4px'
+                                        gap: '3px'
                                       }}
                                     >
                                       ⏩ PASAPALABRA
