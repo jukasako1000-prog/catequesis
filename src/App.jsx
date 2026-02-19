@@ -410,7 +410,7 @@ function App() {
   const [pasapalabra, setPasapalabra] = useState({
     rosco: [], // [{ letter: 'A', question: '...', answer: '...', status: 'pending' }]
     currentIdx: 0,
-    timeLeft: 480,
+    timeLeft: 600,
     status: 'playing', // 'playing', 'finished'
     teams: [],
     currentTeamIdx: 0,
@@ -872,7 +872,7 @@ function App() {
     setPasapalabra({
       rosco: roscoData,
       currentIdx: 0,
-      timeLeft: 480,
+      timeLeft: 600,
       status: 'playing',
       teams: teams.map(t => ({ ...t, hits: 0, errors: 0 })),
       currentTeamIdx: initialTeamIdx,
@@ -3910,6 +3910,44 @@ function App() {
                                       }}
                                     >
                                       <Mic size={18} className={isListening ? "animate-pulse" : ""} />
+                                    </button>
+                                  </div>
+                                  <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                                    <button
+                                      onClick={() => handlePasapalabraAnswer(pasapalabra.inputValue)}
+                                      style={{
+                                        flex: 1,
+                                        padding: '15px',
+                                        background: '#2ecc71',
+                                        color: 'white',
+                                        borderRadius: '15px',
+                                        border: 'none',
+                                        fontWeight: 950,
+                                        cursor: 'pointer',
+                                        fontSize: '1.1rem',
+                                        boxShadow: '0 4px 15px rgba(46, 204, 113, 0.3)',
+                                        transition: 'all 0.2s'
+                                      }}
+                                    >
+                                      ✅ COMPROBAR
+                                    </button>
+                                    <button
+                                      onClick={skipPasapalabra}
+                                      style={{
+                                        flex: 1,
+                                        padding: '15px',
+                                        background: '#e67e22',
+                                        color: 'white',
+                                        borderRadius: '15px',
+                                        border: 'none',
+                                        fontWeight: 950,
+                                        cursor: 'pointer',
+                                        fontSize: '1.1rem',
+                                        boxShadow: '0 4px 15px rgba(230, 126, 34, 0.3)',
+                                        transition: 'all 0.2s'
+                                      }}
+                                    >
+                                      ⏩ PASAPALABRA
                                     </button>
                                   </div>
 
