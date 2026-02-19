@@ -2631,38 +2631,6 @@ function App() {
       {
         view === 'learning' && (
           <div className="learning-view animate-fade-in" style={{ padding: '2rem 0' }}>
-<<<<<<< HEAD
-            <div className="learning-header" style={{ position: 'relative', textAlign: 'center', marginBottom: '3rem' }}>
-              <button
-                className="learning-focusable"
-                onClick={() => setView('general')}
-                style={{
-                  position: 'absolute',
-                  left: 0,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: aulaFocusIdx === 0 ? '#feff9c' : 'rgba(255,255,255,0.2)',
-                  border: aulaFocusIdx === 0 ? '15px solid #f1c40f' : '1px solid transparent',
-                  color: aulaFocusIdx === 0 ? '#1e1b4b' : 'white',
-                  padding: '10px 20px',
-                  borderRadius: '15px',
-                  cursor: 'pointer',
-                  fontWeight: 800,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  outline: 'none',
-                  backdropFilter: 'blur(5px)',
-                  boxShadow: aulaFocusIdx === 0 ? '0 0 50px #f1c40f' : 'none',
-                  transform: aulaFocusIdx === 0 ? 'scale(1.1)' : 'scale(1)',
-                  transition: 'all 0.15s'
-                }}
-              >
-                <ArrowLeft size={20} /> Volver
-              </button>
-              <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>Sala de Estudio 🎮</h2>
-              <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.2rem', fontWeight: 600 }}>Elige un tema y prepárate para el reto especial del día.</p>
-=======
             <div className="learning-header" style={{
               display: 'flex',
               flexDirection: 'column',
@@ -2698,7 +2666,6 @@ function App() {
                 <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: 'white', marginBottom: '0.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>Sala de Estudio 🎮</h2>
                 <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '1.2rem', fontWeight: 600 }}>Elige un tema y prepárate para el reto especial del día.</p>
               </div>
->>>>>>> FEATURE_CAMBIOS
             </div>
 
             <div className="themes-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '25px' }}>
@@ -4181,29 +4148,6 @@ function App() {
                                       <Mic size={18} className={isListening ? "animate-pulse" : ""} />
                                     </button>
                                   </div>
-<<<<<<< HEAD
-                                  <button
-                                    onClick={skipPasapalabra}
-                                    style={{
-                                      width: '100%',
-                                      marginTop: '5px',
-                                      padding: '12px',
-                                      background: 'linear-gradient(135deg, #4a90e2, #357abd)',
-                                      color: 'white',
-                                      border: 'none',
-                                      borderRadius: '15px',
-                                      fontWeight: 900,
-                                      fontSize: '1rem',
-                                      cursor: 'pointer',
-                                      textTransform: 'uppercase',
-                                      letterSpacing: '2px',
-                                      boxShadow: '0 4px 15px rgba(74, 144, 226, 0.3)',
-                                      transition: 'all 0.2s'
-                                    }}
-                                  >
-                                    ⏩ PASAPALABRA
-                                  </button>
-=======
                                   <div style={{ display: 'flex', gap: '5px', marginTop: '8px', justifyContent: 'center' }}>
                                     <button
                                       onClick={() => handlePasapalabraAnswer(pasapalabra.inputValue)}
@@ -4252,7 +4196,6 @@ function App() {
                                       ⏩ PASAPALABRA
                                     </button>
                                   </div>
->>>>>>> FEATURE_CAMBIOS
 
                                 </div>
                               </>
