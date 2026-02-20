@@ -3319,31 +3319,6 @@ function App() {
         }}>
           <button
             className="action-btn"
-            style={{ background: 'rgba(255,255,255,0.2)', width: '45px', height: '45px' }}
-            onClick={() => setAppZoom(prev => Math.min(prev + 0.05, 1.5))}
-            title="Aumentar Zoom"
-          >
-            <ZoomIn size={20} />
-          </button>
-          <div style={{ color: 'white', fontSize: '0.7rem', fontWeight: 900 }}>{Math.round(appZoom * 100)}%</div>
-          <button
-            className="action-btn"
-            style={{ background: 'rgba(255,255,255,0.2)', width: '45px', height: '45px' }}
-            onClick={() => setAppZoom(prev => Math.max(prev - 0.05, 0.5))}
-            title="Reducir Zoom"
-          >
-            <ZoomOut size={20} />
-          </button>
-          <button
-            className="action-btn"
-            style={{ background: appZoom === 1.0 ? 'rgba(255,255,255,0.1)' : '#e74c3c', width: '45px', height: '45px' }}
-            onClick={() => setAppZoom(1.0)}
-            title="Resetear Pantalla (100%)"
-          >
-            <Monitor size={20} />
-          </button>
-          <button
-            className="action-btn"
             style={{ background: '#4a90e2', width: '45px', height: '45px' }}
             onClick={toggleFullscreen}
             title="Pantalla Completa"
