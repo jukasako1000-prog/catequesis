@@ -483,6 +483,13 @@ function App() {
     onComplete: null,
     title: '🎲 SORTEO DE EQUIPOS 🎲'
   });
+  const [raffleSelectedIds, setRaffleSelectedIds] = useState([]);
+
+  const toggleRaffleSelection = (id) => {
+    setRaffleSelectedIds(prev =>
+      prev.includes(id) ? prev.filter(sid => sid !== id) : [...prev, id]
+    );
+  };
 
   const [pickerFocusIdx, setPickerFocusIdx] = useState(0);
   const [pickerArea, setPickerArea] = useState('students'); // 'input', 'students', 'add-btn', 'start-btn'
@@ -3083,12 +3090,17 @@ function App() {
 
             <button
               onClick={() => {
-                if (students.length < 1) return;
-                const items = students.map(s => ({ name: s.name }));
+                const selectedOnes = students.filter(s => raffleSelectedIds.includes(s.id));
+                const listToUse = selectedOnes.length > 0 ? selectedOnes : students;
+
+                if (listToUse.length < 1) return;
+
+                const items = listToUse.map(s => ({ name: s.name }));
                 runCoolRaffle(items, (winnerIdx) => {
-                  const winner = students[winnerIdx];
+                  const winner = listToUse[winnerIdx];
                   console.log("Ganador:", winner.name);
-                }, '🎲 SORTEO DE TURNO 🎲');
+                  setRaffleSelectedIds([]); // Limpiar selección tras sorteo
+                }, selectedOnes.length > 0 ? '🎲 SORTEO SELECCIONADO 🎲' : '🎲 SORTEO DE TURNO 🎲');
               }}
               style={{
                 padding: '12px 25px',
@@ -3134,19 +3146,50 @@ function App() {
                         layout
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="student-card"
+                        className={`student-card ${raffleSelectedIds.includes(student.id) ? 'selected-for-raffle' : ''}`}
+                        onClick={() => toggleRaffleSelection(student.id)}
                         style={{
-                          border: isCardFocused ? '6px solid #1e1b4b' : '1px solid rgba(0,0,0,0.05)',
-                          transform: isCardFocused ? 'scale(1.05)' : 'scale(1)',
-                          boxShadow: isCardFocused ? '0 0 45px rgba(30, 27, 75, 0.9)' : '0 5px 15px rgba(0,0,0,0.05)',
-                          transition: 'all 0.2s'
+                          border: raffleSelectedIds.includes(student.id)
+                            ? '6px solid #f1c40f'
+                            : (isCardFocused ? '6px solid #1e1b4b' : '1px solid rgba(0,0,0,0.05)'),
+                          transform: raffleSelectedIds.includes(student.id) || isCardFocused ? 'scale(1.05)' : 'scale(1)',
+                          boxShadow: raffleSelectedIds.includes(student.id)
+                            ? '0 0 30px rgba(241, 196, 15, 0.4)'
+                            : (isCardFocused ? '0 0 45px rgba(30, 27, 75, 0.9)' : '0 5px 15px rgba(0,0,0,0.05)'),
+                          transition: 'all 0.2s',
+                          cursor: 'pointer',
+                          position: 'relative'
                         }}
                       >
+                        {raffleSelectedIds.includes(student.id) && (
+                          <div style={{
+                            position: 'absolute',
+                            top: '-10px',
+                            right: '-10px',
+                            background: '#f1c40f',
+                            color: '#1e1b4b',
+                            borderRadius: '50%',
+                            width: '30px',
+                            height: '30px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontSize: '1.2rem',
+                            fontWeight: 900,
+                            boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+                            zIndex: 100
+                          }}>
+                            🎲
+                          </div>
+                        )}
                         <div className="rank-number">#{index + 1}</div>
 
                         <div
                           className="small-avatar"
-                          onClick={() => handleStudentClick(student)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStudentClick(student);
+                          }}
                           style={{
                             cursor: 'pointer',
                             border: isCardFocused ? '2px solid #f1c40f' : 'none'
@@ -3178,7 +3221,10 @@ function App() {
                                   boxShadow: isMinusFocused ? '0 0 30px rgba(30, 27, 75, 1)' : 'none',
                                   zIndex: isMinusFocused ? 10 : 1
                                 }}
-                                onClick={() => updatePoints(student.id, -5)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  updatePoints(student.id, -5);
+                                }}
                                 title="Quitar Puntos (-5)"
                               >
                                 <Minus size={16} />
@@ -3194,7 +3240,10 @@ function App() {
                                   boxShadow: isPlusFocused ? '0 0 30px rgba(30, 27, 75, 1)' : 'none',
                                   zIndex: isPlusFocused ? 10 : 1
                                 }}
-                                onClick={() => updatePoints(student.id, 5)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  updatePoints(student.id, 5);
+                                }}
                                 title="Añadir Puntos (+5)"
                               >
                                 <Plus size={16} />
