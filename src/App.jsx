@@ -1599,23 +1599,7 @@ function App() {
     return () => clearInterval(timer);
   }, [showAulaModal, aulaStep, pasapalabra.status, pasapalabra.timeLeft, pasapalabra.isPaused]);
 
-  useEffect(() => {
-    if (showAulaModal && aulaStep === 'pasapalabra' && pasapalabra.status === 'finished' && !pasapalabra.pointsAwarded) {
-      const pointsPerHit = 2;
-      let summary = "🎉 ¡Resultados del Rosco!\n";
-      pasapalabra.teams.forEach(team => {
-        const pointsTotal = team.hits * pointsPerHit;
-        if (pointsTotal > 0) {
-          team.studentIds.forEach(id => updatePoints(id, pointsTotal));
-          summary += `✨ ${team.name}: ${team.hits} aciertos = ${pointsTotal} estrellas cada uno.\n`;
-        } else {
-          summary += `ℹ️ ${team.name}: Sin aciertos.\n`;
-        }
-      });
-      setPasapalabra(prev => ({ ...prev, pointsAwarded: true }));
-      setTimeout(() => alert(summary), 500);
-    }
-  }, [pasapalabra.status, pasapalabra.pointsAwarded, aulaStep, showAulaModal]);
+
 
   // Recompensas El Intruso
   useEffect(() => {
