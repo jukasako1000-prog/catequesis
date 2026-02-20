@@ -1117,10 +1117,15 @@ function App() {
         const normalizedTranscript = transcript.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
         // 1. Comprobar si quiere poner el nombre del equipo (Ej: "Equipo Los Leones" o "Nombre Los Halcones")
-        if (normalizedTranscript.startsWith("EQUIPO") || normalizedTranscript.startsWith("NOMBRE")) {
-          const namePart = transcript.replace(/^(EQUIPO|NOMBRE)(\s|:)+/i, "").trim();
+        if (normalizedTranscript.startsWith("EQUIPO") || normalizedTranscript.startsWith("NOMBRE") || normalizedTranscript.startsWith("TURNO")) {
+          const namePart = transcript.replace(/^(EQUIPO|NOMBRE|TURNO)(\s|:)+/i, "").trim();
           if (namePart) {
-            setCurrentTeamName(namePart);
+            // Si hay gente seleccionada, agilizar añadiendo el equipo directamente
+            if (phraseGame.selectedTeamIds.length > 0) {
+              addAulaTeam(namePart, phraseGame.selectedTeamIds);
+            } else {
+              setCurrentTeamName(namePart);
+            }
             playSound('success');
             return;
           }
@@ -1514,6 +1519,20 @@ function App() {
           : [...prev.selectedTeamIds, id]
       };
     });
+  };
+
+  const addAulaTeam = (name, studentIds) => {
+    if (!name || studentIds.length === 0) return;
+    setAulaTeams(prev => [...prev, {
+      name: name.toUpperCase(),
+      studentIds: [...studentIds],
+      hits: 0,
+      errors: 0
+    }]);
+    setCurrentTeamName('');
+    setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] }));
+    setPickerFocusIdx(0); // Reiniciar el foco al principio de la nueva lista
+    setPickerArea('students');
   };
 
   const penalizeTeam = () => {
@@ -3659,7 +3678,7 @@ function App() {
                         <input
                           ref={teamNameInputRef}
                           type="text"
-                          placeholder="Nombre del Equipo (ej: Los Leones)"
+                          placeholder={isListening ? "🎤 Diga el nombre del equipo..." : "Nombre del Equipo (ej: Los Leones)"}
                           value={currentTeamName}
                           onChange={(e) => setCurrentTeamName(e.target.value)}
                           style={{
@@ -3739,12 +3758,13 @@ function App() {
                           transition: 'all 0.2s',
                           boxShadow: pickerArea === 'add-btn' ? '0 0 20px rgba(46, 204, 113, 0.5)' : 'none'
                         }}
-                        disabled={!currentTeamName || phraseGame.selectedTeamIds.length === 0}
+                        disabled={phraseGame.selectedTeamIds.length === 0}
                         onClick={() => {
-                          setAulaTeams([...aulaTeams, { name: currentTeamName, studentIds: [...phraseGame.selectedTeamIds] }]);
-                          setCurrentTeamName('');
-                          setPhraseGame(prev => ({ ...prev, selectedTeamIds: [] }));
-                          setPickerArea('students');
+                          if (currentTeamName.trim()) {
+                            addAulaTeam(currentTeamName, phraseGame.selectedTeamIds);
+                          } else {
+                            startTeamSelectionVoice();
+                          }
                         }}
                       >
                         ➕ Añadir Equipo
