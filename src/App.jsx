@@ -409,7 +409,7 @@ function App() {
   const [phraseGame, setPhraseGame] = useState({
     original: '',
     revealed: [],
-    timeLeft: 120,
+    timeLeft: 180,
     status: 'playing', // 'playing', 'won', 'lost'
     usedLetters: [],
     isPaused: false,
@@ -1481,7 +1481,7 @@ function App() {
       ...prev,
       original: phrase,
       revealed: revealedIndices,
-      timeLeft: 120, // 2 minutos fijo
+      timeLeft: 180, // 3 minutos
       usedLetters: [],
       isPaused: false,
       teams: teams,
