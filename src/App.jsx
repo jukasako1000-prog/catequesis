@@ -1645,10 +1645,8 @@ function App() {
       // Esperar 1 segundo para que se vea el orden final antes del cartel
       setTimeout(() => {
         historiaGame.teams.forEach((team, teamIdx) => {
-          // Asumiendo que cada equipo tiene un desafío y se recompensa por completarlo
-          // O si se quiere recompensar a todos los equipos que participaron
-          team.studentIds.forEach(id => updatePoints(id, pointsWin));
-          summary += `✨ ${team.name}: ${pointsWin} estrellas cada uno por completar su historia.\n`;
+          // Ya se han repartido durante el juego en handleHistoriaReorder
+          summary += `✨ ${team.name}: +5 estrellas por completar su historia.\n`;
         });
         alert(summary);
         setHistoriaGame(prev => ({ ...prev, pointsAwarded: true }));
@@ -4826,7 +4824,7 @@ function App() {
                                 </div>
                               </div>
                             ) : (
-                              <div style={{ color: '#27ae60', fontWeight: 900 }}>+20 Estrellas para el equipo ✨</div>
+                              <div style={{ color: '#27ae60', fontWeight: 900 }}>+10 Estrellas para el equipo ✨</div>
                             )}
                           </div>
                         ) : (
