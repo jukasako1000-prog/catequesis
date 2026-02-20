@@ -4758,81 +4758,6 @@ function App() {
                     )}
                   </div>
                 )}
-                {/* --- COOL RAFFLE OVERLAY --- */}
-                {raffleState.active && (
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: '#1a1a1ae6',
-                    zIndex: 2000,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '30px',
-                    willChange: 'opacity, transform'
-                  }}>
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      style={{ textAlign: 'center' }}
-                    >
-                      <div style={{ fontSize: '1.5rem', color: '#f1c40f', fontWeight: 900, marginBottom: '20px', letterSpacing: '2px' }}>
-                        {raffleState.title}
-                      </div>
-
-                      <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginBottom: '40px' }}>
-                        {raffleState.teams.map((team, idx) => {
-                          const isHighlighted = raffleState.highlightedIdx === idx;
-                          const isWinner = raffleState.winnerIdx === idx;
-                          return (
-                            <motion.div
-                              key={idx}
-                              animate={{
-                                scale: isHighlighted ? 1.2 : 1,
-                                border: isHighlighted ? '4px solid #f1c40f' : '2px solid rgba(255,255,255,0.2)',
-                                boxShadow: isHighlighted ? '0 0 30px rgba(241, 196, 15, 0.6)' : 'none'
-                              }}
-                              style={{
-                                background: isWinner ? '#2ecc71' : 'rgba(255,255,255,0.1)',
-                                padding: '20px 30px',
-                                borderRadius: '25px',
-                                color: 'white',
-                                minWidth: '180px'
-                              }}
-                            >
-                              <div style={{ fontSize: '1.2rem', fontWeight: 900, marginBottom: '10px' }}>{team.name}</div>
-                              {isWinner && (
-                                <motion.div
-                                  initial={{ y: 20, opacity: 0 }}
-                                  animate={{ y: 0, opacity: 1 }}
-                                  style={{ color: '#fff', fontWeight: 900, fontSize: '0.9rem' }}
-                                >
-                                  🏆 ¡EMPIEZA!
-                                </motion.div>
-                              )}
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-
-                      {raffleState.winnerIdx === null ? (
-                        <div style={{ color: 'white', fontWeight: 700, opacity: 0.7 }}>Sorteando...</div>
-                      ) : (
-                        <motion.div
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          style={{ fontSize: '2.5rem', fontWeight: 950, color: '#f1c40f', textShadow: '0 0 20px rgba(0,0,0,0.5)' }}
-                        >
-                          ¡{raffleState.teams[raffleState.winnerIdx].name}! 🚀
-                        </motion.div>
-                      )}
-                    </motion.div>
-                  </div>
-                )}
               </div>
             </motion.div>
           </div>
@@ -4842,6 +4767,116 @@ function App() {
       <footer style={{ textAlign: 'center', padding: '4rem 0', color: '#7f8c8d' }}>
         <p>✨ "Dejad a los niños venir a mí" ✨</p>
       </footer>
+
+      {/* --- GLOBAL COOL RAFFLE OVERLAY --- */}
+      <AnimatePresence>
+        {raffleState.active && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: 'rgba(26, 26, 26, 0.95)',
+              zIndex: 99999,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px'
+            }}>
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              style={{ textAlign: 'center', width: '100%', maxWidth: '1200px' }}
+            >
+              <div style={{ fontSize: '2rem', color: '#f1c40f', fontWeight: 900, marginBottom: '30px', letterSpacing: '4px', textShadow: '0 0 20px rgba(241, 196, 15, 0.3)' }}>
+                {raffleState.title}
+              </div>
+
+              <div style={{
+                display: 'flex',
+                gap: '15px',
+                justifyContent: 'center',
+                flexWrap: 'wrap',
+                marginBottom: '50px',
+                maxHeight: '60vh',
+                overflowY: 'auto',
+                padding: '20px'
+              }}>
+                {raffleState.teams.map((team, idx) => {
+                  const isHighlighted = raffleState.highlightedIdx === idx;
+                  const isWinner = raffleState.winnerIdx === idx;
+                  return (
+                    <motion.div
+                      key={idx}
+                      animate={{
+                        scale: isHighlighted ? 1.1 : 1,
+                        border: isHighlighted ? '4px solid #f1c40f' : '2px solid rgba(255,255,255,0.1)',
+                        boxShadow: isHighlighted ? '0 0 30px rgba(241, 196, 15, 0.4)' : 'none',
+                        y: isHighlighted ? -5 : 0
+                      }}
+                      style={{
+                        background: isWinner ? 'linear-gradient(135deg, #2ecc71, #27ae60)' : 'rgba(255,255,255,0.05)',
+                        padding: '15px 25px',
+                        borderRadius: '20px',
+                        color: 'white',
+                        minWidth: '150px',
+                        backdropFilter: 'blur(5px)',
+                        transition: 'background 0.3s'
+                      }}
+                    >
+                      <div style={{ fontSize: '1.1rem', fontWeight: 900 }}>{team.name}</div>
+                      {isWinner && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          style={{ color: '#fff', fontWeight: 900, fontSize: '0.8rem', marginTop: '5px' }}
+                        >
+                          🏆 ¡SESIÓN ELEGIDA!
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  );
+                })}
+              </div>
+
+              {raffleState.winnerIdx === null ? (
+                <div style={{
+                  color: 'white',
+                  fontWeight: 900,
+                  fontSize: '1.5rem',
+                  letterSpacing: '2px',
+                  animation: 'pulse 1s infinite'
+                }}>
+                  🎲 SORTEANDO... 🎲
+                </div>
+              ) : (
+                <motion.div
+                  initial={{ scale: 0, rotate: -10 }}
+                  animate={{ scale: 1.2, rotate: 0 }}
+                  style={{
+                    fontSize: '3.5rem',
+                    fontWeight: 950,
+                    color: '#f1c40f',
+                    textShadow: '0 0 30px rgba(0,0,0,0.8)',
+                    background: 'rgba(0,0,0,0.3)',
+                    padding: '20px 40px',
+                    borderRadius: '30px',
+                    display: 'inline-block'
+                  }}
+                >
+                  ¡{raffleState.teams[raffleState.winnerIdx].name}! 🚀
+                </motion.div>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* --- APOTHEOSIC CELEBRATION ELEMENTS --- */}
       <AnimatePresence>
