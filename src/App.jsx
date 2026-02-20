@@ -966,7 +966,12 @@ function App() {
       const transcript = event.results[0][0].transcript;
       // Quitamos el punto final si el navegador lo añade
       const cleanTranscript = transcript.replace(/\.$/, '').toUpperCase();
-      setPasapalabra(prev => ({ ...prev, inputValue: cleanTranscript }));
+      setPasapalabra(prev => ({
+        ...prev,
+        inputValue: cleanTranscript,
+        showAnswer: null, // Limpiar el error anterior si entra voz nueva
+        isPaused: false   // Despausar si entra voz nueva
+      }));
     };
 
     recognition.start();
@@ -1140,8 +1145,10 @@ function App() {
   const handlePasapalabraAnswer = (answer) => {
     if (pasapalabra.status !== 'playing') return;
 
-    // Si ya está pausado (viendo un error), pulsar de nuevo sirve para pasar a la siguiente sin esperar los 3s
-    if (pasapalabra.isPaused) {
+    const hasAnswer = (answer || "").trim() !== "";
+
+    // Si ya está pausado (viendo un error) Y NO hay texto nuevo, pasar a la siguiente
+    if (pasapalabra.isPaused && !hasAnswer) {
       nextAfterError();
       return;
     }
@@ -1240,6 +1247,19 @@ function App() {
 
       return { ...prev, currentIdx: nextIdx, currentTeamIdx: nextTeamIdx, inputValue: '', isPerfectStreak: false };
     });
+  };
+
+  const finalizePasapalabra = () => {
+    if (window.confirm("¿Quieres finalizar el Rosco y repartir los puntos ahora?")) {
+      setPasapalabra(prev => ({
+        ...prev,
+        status: 'finished',
+        timeLeft: 0,
+        isPaused: false,
+        showAnswer: null
+      }));
+      playSound('fanfare');
+    }
   };
 
   const startIntrusoGame = (temaName, teams = [], initialTeamIdx = 0) => {
@@ -4181,7 +4201,12 @@ function App() {
                                   </div>
                                   <div style={{ display: 'flex', gap: '40px', marginTop: '10px', justifyContent: 'center' }}>
                                     <button
-                                      onClick={() => {
+                                      onClick={(e) => {
+                                        // Evitar múltiples clics seguidos
+                                        if (e.target.disabled) return;
+                                        e.target.disabled = true;
+                                        setTimeout(() => e.target.disabled = false, 500);
+
                                         if (pasapalabra.inputValue.trim() !== '') {
                                           handlePasapalabraAnswer(pasapalabra.inputValue);
                                         }
@@ -4232,6 +4257,22 @@ function App() {
                                     </button>
                                   </div>
 
+                                  <button
+                                    onClick={finalizePasapalabra}
+                                    style={{
+                                      marginTop: '15px',
+                                      background: 'none',
+                                      border: 'none',
+                                      color: '#e74c3c',
+                                      fontSize: '0.7rem',
+                                      fontWeight: 800,
+                                      cursor: 'pointer',
+                                      textDecoration: 'underline',
+                                      opacity: 0.6
+                                    }}
+                                  >
+                                    🛑 FINALIZAR ROSCO
+                                  </button>
                                 </div>
                               </>
                             )}
