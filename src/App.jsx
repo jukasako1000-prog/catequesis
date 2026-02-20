@@ -4143,15 +4143,33 @@ function App() {
                     </button>
                     {/* Header: Timer y Turnos */}
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                        <div style={{ background: pasapalabra.timeLeft <= 30 ? '#e74c3c' : '#2c3e50', color: 'white', padding: '12px 25px', borderRadius: '30px', fontSize: '1.8rem', fontWeight: 900, boxShadow: '0 5px 15px rgba(0,0,0,0.1)' }}>
-                          ⏱️ {Math.floor(pasapalabra.timeLeft / 60)}:{(pasapalabra.timeLeft % 60).toString().padStart(2, '0')}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-start' }}>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                          <div style={{ background: pasapalabra.timeLeft <= 30 ? '#e74c3c' : '#2c3e50', color: 'white', padding: '12px 25px', borderRadius: '30px', fontSize: '1.8rem', fontWeight: 900, boxShadow: '0 5px 15px rgba(0,0,0,0.1)' }}>
+                            ⏱️ {Math.floor(pasapalabra.timeLeft / 60)}:{(pasapalabra.timeLeft % 60).toString().padStart(2, '0')}
+                          </div>
+                          <button
+                            onClick={() => setPasapalabra(prev => ({ ...prev, isPaused: !prev.isPaused }))}
+                            style={{ background: pasapalabra.isPaused ? '#2ecc71' : '#f39c12', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '20px', fontWeight: 900, cursor: 'pointer', fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}
+                          >
+                            {pasapalabra.isPaused ? '▶️ REANUDAR' : '⏸️ PAUSAR'}
+                          </button>
                         </div>
                         <button
-                          onClick={() => setPasapalabra(prev => ({ ...prev, isPaused: !prev.isPaused }))}
-                          style={{ background: pasapalabra.isPaused ? '#2ecc71' : '#f39c12', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '20px', fontWeight: 900, cursor: 'pointer', fontSize: '1.1rem', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}
+                          onClick={finalizePasapalabra}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            color: '#e74c3c',
+                            fontSize: '0.7rem',
+                            fontWeight: 800,
+                            cursor: 'pointer',
+                            textDecoration: 'underline',
+                            opacity: 0.5,
+                            marginLeft: '15px'
+                          }}
                         >
-                          {pasapalabra.isPaused ? '▶️ REANUDAR' : '⏸️ PAUSAR'}
+                          🛑 FINALIZAR ROSCO
                         </button>
                       </div>
                       {pasapalabra.teams.length > 0 && (
@@ -4386,23 +4404,6 @@ function App() {
                                       ⏩ PASAPALABRA
                                     </button>
                                   </div>
-
-                                  <button
-                                    onClick={finalizePasapalabra}
-                                    style={{
-                                      marginTop: '15px',
-                                      background: 'none',
-                                      border: 'none',
-                                      color: '#e74c3c',
-                                      fontSize: '0.7rem',
-                                      fontWeight: 800,
-                                      cursor: 'pointer',
-                                      textDecoration: 'underline',
-                                      opacity: 0.6
-                                    }}
-                                  >
-                                    🛑 FINALIZAR ROSCO
-                                  </button>
                                 </div>
                               </>
                             )}
