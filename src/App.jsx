@@ -1944,11 +1944,11 @@ function App() {
     duringAudio.play().catch(e => console.log("Audio during blocked", e));
     raffleAudioRef.current = duringAudio;
 
-    let i = 0;
     const interval = setInterval(() => {
-      setRaffleState(prev => ({ ...prev, highlightedIdx: i % teams.length }));
-      i++;
-    }, 150);
+      // Usar un índice aleatorio para el resaltado para que se vea más caótico y rápido
+      const randomHighlight = Math.floor(Math.random() * teams.length);
+      setRaffleState(prev => ({ ...prev, highlightedIdx: randomHighlight }));
+    }, 60);
 
     setTimeout(() => {
       clearInterval(interval);
