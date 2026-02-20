@@ -4134,10 +4134,11 @@ function App() {
                                       onChange={(e) => setPasapalabra(prev => ({ ...prev, inputValue: e.target.value }))}
                                       onKeyDown={(e) => {
                                         if (e.key === 'Enter' || e.key === 'OK') {
-                                          if (pasapalabra.inputValue.trim() === '') skipPasapalabra();
-                                          else handlePasapalabraAnswer(pasapalabra.inputValue);
+                                          if (pasapalabra.inputValue.trim() !== '') {
+                                            handlePasapalabraAnswer(pasapalabra.inputValue);
+                                          }
                                         } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                                          if (pasapalabra.inputValue.trim() === '') skipPasapalabra();
+                                          skipPasapalabra();
                                         }
                                       }}
                                       style={{
@@ -4178,11 +4179,12 @@ function App() {
                                       <Mic size={18} className={isListening ? "animate-pulse" : ""} />
                                     </button>
                                   </div>
-                                  <div style={{ display: 'flex', gap: '8px', marginTop: '10px', justifyContent: 'center' }}>
+                                  <div style={{ display: 'flex', gap: '40px', marginTop: '10px', justifyContent: 'center' }}>
                                     <button
                                       onClick={() => {
-                                        if (pasapalabra.inputValue.trim() === '') skipPasapalabra();
-                                        else handlePasapalabraAnswer(pasapalabra.inputValue);
+                                        if (pasapalabra.inputValue.trim() !== '') {
+                                          handlePasapalabraAnswer(pasapalabra.inputValue);
+                                        }
                                       }}
                                       style={{
                                         flex: 1,
