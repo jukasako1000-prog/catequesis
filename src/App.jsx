@@ -480,7 +480,8 @@ function App() {
     teams: [],
     winnerIdx: null,
     highlightedIdx: null,
-    onComplete: null
+    onComplete: null,
+    title: '🎲 SORTEO DE EQUIPOS 🎲'
   });
 
   const [pickerFocusIdx, setPickerFocusIdx] = useState(0);
@@ -1932,9 +1933,9 @@ function App() {
 
 
 
-  const runCoolRaffle = (teams, onComplete) => {
+  const runCoolRaffle = (teams, onComplete, title = '🎲 SORTEO DE EQUIPOS 🎲') => {
     if (teams.length < 2) return;
-    setRaffleState({ active: true, teams, winnerIdx: null, highlightedIdx: 0, onComplete });
+    setRaffleState({ active: true, teams, winnerIdx: null, highlightedIdx: 0, onComplete, title });
 
     // Iniciar música de sorteo
     const duringAudio = new Audio('/DURANTESORTEO.mp3');
@@ -3078,6 +3079,37 @@ function App() {
               onMouseLeave={(e) => e.currentTarget.style.transform = 'translateY(0)'}
             >
               <Gamepad2 size={20} /> Sala de Estudio
+            </button>
+
+            <button
+              onClick={() => {
+                if (students.length < 1) return;
+                const items = students.map(s => ({ name: s.name }));
+                runCoolRaffle(items, (winnerIdx) => {
+                  const winner = students[winnerIdx];
+                  console.log("Ganador:", winner.name);
+                }, '🎲 SORTEO DE TURNO 🎲');
+              }}
+              style={{
+                padding: '12px 25px',
+                borderRadius: '15px',
+                border: mainFocusIdx === -4 ? '6px solid #1e1b4b' : 'none',
+                background: 'linear-gradient(135deg, #f39c12, #e67e22)',
+                color: 'white',
+                fontWeight: 800,
+                fontSize: '1rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                boxShadow: mainFocusIdx === -4 ? '0 0 30px rgba(30, 27, 75, 1)' : '0 4px 15px rgba(243, 156, 18, 0.3)',
+                transform: mainFocusIdx === -4 ? 'scale(1.15)' : 'scale(1)',
+                transition: 'all 0.2s',
+                zIndex: 10
+              }}
+              title="Elegir un alumno al azar"
+            >
+              <Trophy size={20} /> Sortear Turno
             </button>
           </div>
 
@@ -4749,7 +4781,7 @@ function App() {
                       style={{ textAlign: 'center' }}
                     >
                       <div style={{ fontSize: '1.5rem', color: '#f1c40f', fontWeight: 900, marginBottom: '20px', letterSpacing: '2px' }}>
-                        🎲 SORTEO DE EQUIPOS 🎲
+                        {raffleState.title}
                       </div>
 
                       <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginBottom: '40px' }}>
