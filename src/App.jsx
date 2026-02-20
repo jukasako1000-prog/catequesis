@@ -491,6 +491,14 @@ function App() {
     );
   };
 
+  const toggleSelectAllForRaffle = () => {
+    if (raffleSelectedIds.length === students.length) {
+      setRaffleSelectedIds([]);
+    } else {
+      setRaffleSelectedIds(students.map(s => s.id));
+    }
+  };
+
   const [pickerFocusIdx, setPickerFocusIdx] = useState(0);
   const [pickerArea, setPickerArea] = useState('students'); // 'input', 'students', 'add-btn', 'start-btn'
   const teamNameInputRef = useRef(null);
@@ -3122,6 +3130,27 @@ function App() {
               title="Elegir un alumno al azar"
             >
               <Trophy size={20} /> Sortear Turno
+            </button>
+
+            <button
+              onClick={toggleSelectAllForRaffle}
+              style={{
+                padding: '12px 20px',
+                borderRadius: '15px',
+                background: 'rgba(255,255,255,0.2)',
+                color: 'white',
+                border: '2px solid rgba(255,255,255,0.3)',
+                fontWeight: 700,
+                fontSize: '0.9rem',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.2s'
+              }}
+            >
+              {raffleSelectedIds.length === students.length ? <CheckCircle2 size={18} /> : <Sparkles size={18} />}
+              {raffleSelectedIds.length === students.length ? 'Limpiar Todo' : 'Seleccionar Todos'}
             </button>
           </div>
 
