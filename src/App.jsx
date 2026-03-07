@@ -1653,12 +1653,14 @@ function App() {
             // Sonido de cambio de turno/aviso
             playSound('error');
 
-            // Voz si es posible
+            // Voz si es posible (retrasada 1.5s para no solaparse con el sonido)
             if ('speechSynthesis' in window && hasMultipleTeams) {
               const nextTeam = prev.teams[nextTeamIdx];
               const msg = new SpeechSynthesisUtterance("Turno para el equipo " + nextTeam.name);
               msg.lang = 'es-ES';
-              window.speechSynthesis.speak(msg);
+              setTimeout(() => {
+                window.speechSynthesis.speak(msg);
+              }, 1500);
             }
 
             // Saltamos a la siguiente palabra pendiente
