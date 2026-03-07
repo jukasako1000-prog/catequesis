@@ -4939,8 +4939,9 @@ function App() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              justifyContent: 'center',
-              padding: '20px'
+              justifyContent: 'flex-start',
+              padding: '5vh 20px',
+              overflowY: 'auto'
             }}>
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
