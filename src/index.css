@@ -800,18 +800,12 @@ header p {
   z-index: 10000;
   display: flex;
   justify-content: center;
-  align-items: center;
-  /* Centrado base */
-  padding: 2rem 1rem;
+  align-items: flex-start; /* Alineamos al inicio para controlar el margen superior */
+  padding: 5vh 1rem; /* Margen relativo a la altura de la pantalla */
   overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
-/* Permitir que el contenido respire y se centre si es pequeño, pero se pueda scrollear si es grande */
-.overlay::before,
-.overlay::after {
-  content: '';
-  margin: auto;
-}
 
 .modal {
   background: white;
@@ -821,7 +815,7 @@ header p {
   padding: 2.5rem;
   position: relative;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  margin: auto;
+  margin: 0 auto; /* Eliminado margin auto vertical para evitar desplazamientos extraños */
   will-change: transform, opacity;
 }
 
