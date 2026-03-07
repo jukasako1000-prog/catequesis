@@ -969,6 +969,13 @@ function App() {
       turnTimeLeft: 20
     });
     setAulaStep('pasapalabra');
+    // Scroll automático arriba para centrar el juego
+    setTimeout(() => {
+      if (aulaOverlayRef.current) {
+        aulaOverlayRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 100);
   };
 
   // Efecto para premiar al final del Pasapalabra
@@ -1656,7 +1663,7 @@ function App() {
             // Voz si es posible
             if ('speechSynthesis' in window && hasMultipleTeams) {
               const nextTeam = prev.teams[nextTeamIdx];
-              const msg = new SpeechSynthesisUtterance("Tiempo agotado. Turno para el equipo " + nextTeam.name);
+              const msg = new SpeechSynthesisUtterance("Turno para el equipo " + nextTeam.name);
               msg.lang = 'es-ES';
               window.speechSynthesis.speak(msg);
             }
