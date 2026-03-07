@@ -383,13 +383,13 @@ const INITIAL_STUDENTS = [
   { id: 104, name: 'MA.CASES', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGELCASES.jpg' },
   { id: 105, name: 'Miguel Angel', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGEL .jpg' },
   { id: 106, name: 'Enzo', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/enzo.jpg' },
-  { id: 108, name: 'J.FRANCISCO', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=JF&backgroundColor=4a90e2&fontSize=45' },
+  { id: 108, name: 'J.FRANCISCO', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/escudomadrid.png' },
   { id: 109, name: 'Cristina', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/CRISTINA.jpg' },
   { id: 111, name: 'Celia', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/CELIA.jpg' },
   { id: 112, name: 'Valentina', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/VALENTINA.jpg' },
   { id: 113, name: 'Lucía', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/LUCIA.png' },
   { id: 114, name: 'Elena', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/ELENA.jpg' },
-  { id: 115, name: 'Emma', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Emma&top=longHair&mouth=smile' },
+  { id: 115, name: 'Emma', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=EM&backgroundColor=4a90e2&fontSize=45' },
 ];
 
 function App() {
@@ -399,8 +399,13 @@ function App() {
   });
 
   useEffect(() => {
-    // Asegurar el nombre correcto de MA.CASES por código
-    setStudents(prev => prev.map(s => (s.id === 104 && s.name !== 'MA.CASES') ? { ...s, name: 'MA.CASES' } : s));
+    // Asegurar el nombre correcto de MA.CASES y avatares específicos por código
+    setStudents(prev => prev.map(s => {
+      if (s.id === 104 && s.name !== 'MA.CASES') return { ...s, name: 'MA.CASES' };
+      if (s.id === 115 && !s.avatar.includes('initials')) return { ...s, avatar: 'https://api.dicebear.com/7.x/initials/svg?seed=EM&backgroundColor=4a90e2&fontSize=45' };
+      if (s.id === 108 && !s.avatar.includes('escudomadrid')) return { ...s, avatar: 'AVATARES/escudomadrid.png' };
+      return s;
+    }));
   }, []);
 
   const [view, setView] = useState('general'); // 'general' or 'daily'
