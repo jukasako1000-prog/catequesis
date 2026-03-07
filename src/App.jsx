@@ -319,6 +319,59 @@ const AULA_TEMAS = {
         items: ["María está orando en Nazaret", "Aparece el Ángel Gabriel", "El Ángel le da el mensaje", "María dice: 'Hágase en mí'"]
       }
     ]
+  },
+  "Cuaresma y Semana Santa": {
+    icon: "⛪",
+    questions: [
+      { id: 80, question: "¿Qué día empieza la Cuaresma?", options: ["Lunes de Pascua", "Miércoles de Ceniza", "Viernes Santo", "Sábado de Gloria"], correct: 1 },
+      { id: 81, question: "¿Cuántos días dura el tiempo de Cuaresma aproximadamente?", options: ["30 días", "12 días", "40 días", "50 días"], correct: 2 },
+      { id: 82, question: "¿Qué celebramos el Domingo de Ramos?", options: ["La entrada de Jesús en Jerusalén", "La Resurrección de Jesús", "La muerte en la Cruz", "La Primera Comunión"], correct: 0 },
+      { id: 83, question: "¿Qué sacramento instituyó Jesús el Jueves Santo?", options: ["El Bautismo", "El Matrimonio", "La Eucaristía", "La Confirmación"], correct: 2 },
+      { id: 84, question: "¿Cuál es el color litúrgico de la Cuaresma?", options: ["Blanco", "Morado", "Rojo", "Verde"], correct: 1 },
+      { id: 85, question: "¿Qué día recordamos la muerte de Jesús en la Cruz?", options: ["Jueves Santo", "Sábado Santo", "Viernes Santo", "Miércoles de Ceniza"], correct: 2 },
+      { id: 86, question: "¿Qué gran noticia celebramos el Domingo de Resurrección?", options: ["Que Jesús ha nacido", "Que Jesús ha resucitado", "Que Jesús se ha ido de viaje", "Que Jesús está durmiendo"], correct: 1 }
+    ],
+    phrases: ["CONVIÉRTETE Y CREE EN EL EVANGELIO", "DÍA DEL AMOR FRATERNO", "CRISTO HA RESUCITADO VERDADERAMENTE", "EL SEÑOR ES MI PASTOR NADA ME FALTA"],
+    rosco: [
+      { letter: "A", question: "No comer por sacrificio, pilar de la Cuaresma.", answer: "AYUNO" },
+      { letter: "B", question: "La que recibimos con los ramos el domingo.", answer: "BENDICIÓN" },
+      { letter: "C", question: "Se impone en la frente el primer día de Cuaresma.", answer: "CENIZA" },
+      { letter: "D", question: "Lugar donde Jesús ayunó 40 días.", answer: "DESIERTO" },
+      { letter: "E", label: "Contiene la E", question: "Corona que pusieron a Jesús de ...", answer: "ESPINAS" },
+      { letter: "F", label: "Contiene la F", question: "Lo que sentimos porque Jesús ha resucitado.", answer: "FELICIDAD" },
+      { letter: "G", question: "Huerto donde Jesús oró antes de ser entregado.", answer: "GETSEMANÍ" },
+      { letter: "H", question: "Jesús es el ... de Dios que quita el pecado del mundo.", answer: "HIJO" },
+      { letter: "I", question: "Humo con olor que se usa en las procesiones.", answer: "INCIENSO" },
+      { letter: "J", question: "Ciudad donde entró Jesús montado en un burrito.", answer: "JERUSALÉN" },
+      { letter: "L", question: "Acción de lavar los pies por amor.", answer: "LAVATORIO" },
+      { letter: "M", question: "Color de la Cuaresma.", answer: "MORADO" },
+      { letter: "N", question: "Persona que sale en las procesiones con túnica.", answer: "NAZARENO" },
+      { letter: "O", question: "Hablar con Dios, pilar fundamental de este tiempo.", answer: "ORACIÓN" },
+      { letter: "P", question: "Victoria de Jesús sobre la muerte.", answer: "PASCUA" },
+      { letter: "Q", label: "Contiene la Q", question: "Jesús nos ... tanto que dio su vida.", answer: "QUIERE" },
+      { letter: "R", question: "Lo que llevamos para bendecir el Domingo de Ramos.", answer: "RAMO" },
+      { letter: "S", question: "Santo que ayudó a Jesús a llevar la cruz.", answer: "SIMÓN" },
+      { letter: "T", question: "Tres días de pasión, muerte y vida: ... Pascual.", answer: "TRIDUO" },
+      { letter: "U", question: "La ... Cena de Jesús con sus amigos.", answer: "ÚLTIMA" },
+      { letter: "V", question: "Sexto día de la semana, cuando Jesús muere.", answer: "VIERNES" },
+      { letter: "X", label: "Contiene la X", question: "Cuando Jesús muere en la Cruz: ... del Señor.", answer: "EXPIRACIÓN" },
+      { letter: "Y", label: "Contiene la Y", question: "Ofrecer nuestro tiempo para ... a los demás.", answer: "AYUDAR" },
+      { letter: "Z", label: "Contiene la Z", question: "Donde guardamos a Jesús para siempre.", answer: "CORAZÓN" }
+    ],
+    intrusos: [
+      { options: ["Ceniza", "Ayuno", "Morado", "Papá Noel"], correct: 3, explanation: "¡Papá Noel es de Navidad! No tiene nada que ver con la Cuaresma." },
+      { options: ["Palmas", "Olivos", "Ramos", "Paraguas"], correct: 3, explanation: "En el Domingo de Ramos usamos ramos de olivo, no paraguas." },
+      { options: ["Pan", "Vino", "Lavatorio", "Tarta"], correct: 3, explanation: "En la Última Cena compartieron pan y vino, no una tarta de cumpleaños." },
+      { options: ["Cruz", "Pasión", "Muerte", "Piscina"], correct: 3, explanation: "Viernes Santo es un día de oración, no de ir a la piscina." },
+      { options: ["Vida", "Luz", "Alegría", "Tristeza"], correct: 3, explanation: "La Pascua es alegría por la vida, no tristeza." },
+      { options: ["Cenáculo", "Huerto", "Calvario", "Cine"], correct: 3, explanation: "Los Santos Lugares son para orar, no para ver películas." }
+    ],
+    historias: [
+      {
+        title: "El Triduo Pascual",
+        items: ["Jueves (Cena y Lavatorio)", "Viernes (Muerte en la Cruz)", "Sábado (Silencio y Espera)", "Domingo (¡Ha Resucitado!)"]
+      }
+    ]
   }
 };
 
