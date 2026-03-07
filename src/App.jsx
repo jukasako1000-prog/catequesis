@@ -475,14 +475,12 @@ function App() {
   const [pasapalabra, setPasapalabra] = useState({
     rosco: [], // [{ letter: 'A', question: '...', answer: '...', status: 'pending' }]
     currentIdx: 0,
-    timeLeft: 600,
-    status: 'playing', // 'playing', 'finished'
-    teams: [],
     currentTeamIdx: 0,
     isPaused: false,
     inputValue: '',
     showAnswer: null,
-    pointsAwarded: false
+    pointsAwarded: false,
+    turnTimeLeft: 20
   });
 
   // El Intruso State
@@ -958,15 +956,11 @@ function App() {
     setPasapalabra({
       rosco: roscoData,
       currentIdx: 0,
-      timeLeft: 600,
-      status: 'playing',
-      teams: teams.map(t => ({ ...t, hits: 0, errors: 0 })),
-      currentTeamIdx: initialTeamIdx,
-      isPaused: false,
       inputValue: '',
       showAnswer: null,
       pointsAwarded: false,
-      isPerfectStreak: true // Comienza en true, se pierde al fallar o pasar palabra
+      isPerfectStreak: true, // Comienza en true, se pierde al fallar o pasar palabra
+      turnTimeLeft: 20
     });
     setAulaStep('pasapalabra');
   };
@@ -1282,7 +1276,8 @@ function App() {
         inputValue: '',
         showAnswer: isCorrect ? null : currentItem.answer,
         isPaused: !isCorrect, // Siempre pausamos al fallar para mostrar la respuesta
-        isPerfectStreak: isCorrect ? prev.isPerfectStreak : false
+        isPerfectStreak: isCorrect ? prev.isPerfectStreak : false,
+        turnTimeLeft: 20 // Reiniciar tiempo tras respuesta
       };
     });
   };
@@ -1300,7 +1295,7 @@ function App() {
         nextIdx = (nextIdx + 1) % prev.rosco.length;
         count++;
       }
-      return { ...prev, currentIdx: nextIdx, showAnswer: null, isPaused: false };
+      return { ...prev, currentIdx: nextIdx, showAnswer: null, isPaused: false, turnTimeLeft: 20 };
     });
   };
 
@@ -1319,7 +1314,7 @@ function App() {
         nextTeamIdx = (prev.currentTeamIdx + 1) % prev.teams.length;
       }
 
-      return { ...prev, currentIdx: nextIdx, currentTeamIdx: nextTeamIdx, inputValue: '', isPerfectStreak: false };
+      return { ...prev, currentIdx: nextIdx, currentTeamIdx: nextTeamIdx, inputValue: '', isPerfectStreak: false, turnTimeLeft: 20 };
     });
   };
 
@@ -1328,7 +1323,7 @@ function App() {
       setPasapalabra(prev => ({
         ...prev,
         status: 'finished',
-        timeLeft: 0,
+        turnTimeLeft: 0,
         isPaused: false,
         showAnswer: null
       }));
@@ -1631,26 +1626,58 @@ function App() {
         });
       }, 1000);
     }
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    };
   }, [showAulaModal, aulaStep, phraseGame.status, phraseGame.timeLeft, phraseGame.isPaused]);
 
-  // Timer para Pasapalabra
+  // Timer para Pasapalabra (20 segundos por turno)
   useEffect(() => {
     let timer;
-    if (showAulaModal && aulaStep === 'pasapalabra' && pasapalabra.status === 'playing' && !pasapalabra.isPaused && pasapalabra.timeLeft > 0) {
+    if (showAulaModal && aulaStep === 'pasapalabra' && pasapalabra.status === 'playing' && !pasapalabra.isPaused && pasapalabra.turnTimeLeft > 0) {
       timer = setInterval(() => {
         setPasapalabra(prev => {
           if (prev.isPaused) return prev;
-          if (prev.timeLeft <= 1) {
-            clearInterval(timer);
-            return { ...prev, timeLeft: 0, status: 'finished' };
+          if (prev.turnTimeLeft <= 1) {
+            // Se agota el tiempo: pasar turno automáticamente
+            const hasMultipleTeams = prev.teams.length > 1;
+            const nextTeamIdx = hasMultipleTeams ? (prev.currentTeamIdx + 1) % prev.teams.length : prev.currentTeamIdx;
+
+            // Sonido de cambio de turno/aviso
+            playSound('error');
+
+            // Voz si es posible
+            if ('speechSynthesis' in window && hasMultipleTeams) {
+              const nextTeam = prev.teams[nextTeamIdx];
+              const msg = new SpeechSynthesisUtterance("Tiempo agotado. Turno para el equipo " + nextTeam.name);
+              msg.lang = 'es-ES';
+              window.speechSynthesis.speak(msg);
+            }
+
+            // Saltamos a la siguiente palabra pendiente
+            let nextIdx = (prev.currentIdx + 1) % prev.rosco.length;
+            let count = 0;
+            while (prev.rosco[nextIdx].status !== 'pending' && count < prev.rosco.length) {
+              nextIdx = (nextIdx + 1) % prev.rosco.length;
+              count++;
+            }
+
+            return {
+              ...prev,
+              turnTimeLeft: 20,
+              currentTeamIdx: nextTeamIdx,
+              currentIdx: nextIdx,
+              isPerfectStreak: false,
+              inputValue: ''
+            };
           }
-          return { ...prev, timeLeft: prev.timeLeft - 1 };
+          return { ...prev, turnTimeLeft: prev.turnTimeLeft - 1 };
         });
       }, 1000);
     }
     return () => clearInterval(timer);
-  }, [showAulaModal, aulaStep, pasapalabra.status, pasapalabra.timeLeft, pasapalabra.isPaused]);
+  }, [showAulaModal, aulaStep, pasapalabra.status, pasapalabra.turnTimeLeft, pasapalabra.isPaused]);
 
 
 
@@ -4155,8 +4182,8 @@ function App() {
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-start' }}>
                         <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                          <div style={{ background: pasapalabra.timeLeft <= 30 ? '#e74c3c' : '#2c3e50', color: 'white', padding: '12px 25px', borderRadius: '30px', fontSize: '1.8rem', fontWeight: 900, boxShadow: '0 5px 15px rgba(0,0,0,0.1)' }}>
-                            ⏱️ {Math.floor(pasapalabra.timeLeft / 60)}:{(pasapalabra.timeLeft % 60).toString().padStart(2, '0')}
+                          <div style={{ background: pasapalabra.turnTimeLeft <= 5 ? '#e74c3c' : '#2c3e50', color: 'white', padding: '12px 25px', borderRadius: '30px', fontSize: '1.8rem', fontWeight: 900, boxShadow: '0 5px 15px rgba(0,0,0,0.1)', minWidth: '100px', textAlign: 'center' }}>
+                            ⏱️ {pasapalabra.turnTimeLeft}s
                           </div>
                           <button
                             onClick={() => setPasapalabra(prev => ({ ...prev, isPaused: !prev.isPaused }))}
