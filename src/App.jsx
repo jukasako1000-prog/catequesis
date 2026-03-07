@@ -475,6 +475,8 @@ function App() {
   const [pasapalabra, setPasapalabra] = useState({
     rosco: [], // [{ letter: 'A', question: '...', answer: '...', status: 'pending' }]
     currentIdx: 0,
+    status: 'playing', // 'playing', 'finished'
+    teams: [],
     currentTeamIdx: 0,
     isPaused: false,
     inputValue: '',
@@ -956,6 +958,10 @@ function App() {
     setPasapalabra({
       rosco: roscoData,
       currentIdx: 0,
+      status: 'playing',
+      teams: teams.map(t => ({ ...t, hits: 0, errors: 0 })),
+      currentTeamIdx: initialTeamIdx,
+      isPaused: false,
       inputValue: '',
       showAnswer: null,
       pointsAwarded: false,
