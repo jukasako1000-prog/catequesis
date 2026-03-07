@@ -349,7 +349,7 @@ const AULA_TEMAS = {
       { letter: "O", question: "Hablar con Dios, pilar fundamental de este tiempo.", answer: "ORACIÓN" },
       { letter: "P", question: "Victoria de Jesús sobre la muerte.", answer: "PASCUA" },
       { letter: "Q", label: "Contiene la Q", question: "Jesús nos ... tanto que dio su vida.", answer: "QUIERE" },
-      { letter: "R", question: "Lo que llevamos para bendecir el Domingo de Ramos.", answer: "RAMO" },
+      { letter: "R", question: "Lo que celebramos el domingo: el paso de la muerte a la vida.", answer: "RESURRECCIÓN" },
       { letter: "S", question: "Santo que ayudó a Jesús a llevar la cruz.", answer: "SIMÓN" },
       { letter: "T", question: "Tres días de pasión, muerte y vida: ... Pascual.", answer: "TRIDUO" },
       { letter: "U", question: "La ... Cena de Jesús con sus amigos.", answer: "ÚLTIMA" },
