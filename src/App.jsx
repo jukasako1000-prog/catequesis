@@ -969,13 +969,6 @@ function App() {
       turnTimeLeft: 20
     });
     setAulaStep('pasapalabra');
-    // Scroll automático arriba para centrar el juego
-    setTimeout(() => {
-      if (aulaOverlayRef.current) {
-        aulaOverlayRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 100);
   };
 
   // Efecto para premiar al final del Pasapalabra
@@ -1691,6 +1684,18 @@ function App() {
     }
     return () => clearInterval(timer);
   }, [showAulaModal, aulaStep, pasapalabra.status, pasapalabra.turnTimeLeft, pasapalabra.isPaused]);
+
+  // Resetear scroll al cambiar de fase en el aula
+  useEffect(() => {
+    if (showAulaModal) {
+      setTimeout(() => {
+        if (aulaOverlayRef.current) {
+          aulaOverlayRef.current.scrollTo({ top: 0, behavior: 'auto' });
+        }
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }, 50);
+    }
+  }, [aulaStep, showAulaModal]);
 
 
 
