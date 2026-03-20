@@ -544,7 +544,7 @@ function App() {
     inputValue: '',
     showAnswer: null,
     pointsAwarded: false,
-    turnTimeLeft: 20
+    turnTimeLeft: 30
   });
 
   // El Intruso State
@@ -1028,7 +1028,7 @@ function App() {
       showAnswer: null,
       pointsAwarded: false,
       isPerfectStreak: true, // Comienza en true, se pierde al fallar o pasar palabra
-      turnTimeLeft: 20
+      turnTimeLeft: 30
     });
     setAulaStep('pasapalabra');
   };
@@ -1345,7 +1345,7 @@ function App() {
         showAnswer: isCorrect ? null : currentItem.answer,
         isPaused: !isCorrect, // Siempre pausamos al fallar para mostrar la respuesta
         isPerfectStreak: isCorrect ? prev.isPerfectStreak : false,
-        turnTimeLeft: 20 // Reiniciar tiempo tras respuesta
+        turnTimeLeft: 30 // Reiniciar tiempo tras respuesta
       };
     });
   };
@@ -1363,7 +1363,7 @@ function App() {
         nextIdx = (nextIdx + 1) % prev.rosco.length;
         count++;
       }
-      return { ...prev, currentIdx: nextIdx, showAnswer: null, isPaused: false, turnTimeLeft: 20 };
+      return { ...prev, currentIdx: nextIdx, showAnswer: null, isPaused: false, turnTimeLeft: 30 };
     });
   };
 
@@ -1382,7 +1382,7 @@ function App() {
         nextTeamIdx = (prev.currentTeamIdx + 1) % prev.teams.length;
       }
 
-      return { ...prev, currentIdx: nextIdx, currentTeamIdx: nextTeamIdx, inputValue: '', isPerfectStreak: false, turnTimeLeft: 20 };
+      return { ...prev, currentIdx: nextIdx, currentTeamIdx: nextTeamIdx, inputValue: '', isPerfectStreak: false, turnTimeLeft: 30 };
     });
   };
 
@@ -1732,7 +1732,7 @@ function App() {
 
             return {
               ...prev,
-              turnTimeLeft: 20,
+              turnTimeLeft: 30,
               currentTeamIdx: nextTeamIdx,
               currentIdx: nextIdx,
               isPerfectStreak: false,
