@@ -372,6 +372,63 @@ const AULA_TEMAS = {
         items: ["Jueves (Cena y Lavatorio)", "Viernes (Muerte en la Cruz)", "Sábado (Silencio y Espera)", "Domingo (¡Ha Resucitado!)"]
       }
     ]
+  },
+  "Pasión, Muerte y Resurrección": {
+    icon: "✝️",
+    questions: [
+      { id: 90, question: "¿Quién entregó a Jesús a los sumos sacerdotes por 30 monedas?", options: ["Pedro", "Juan", "Judas Iscariote", "Mateo"], correct: 2 },
+      { id: 91, question: "¿Qué gobernador romano condenó a Jesús a morir en la cruz?", options: ["Herodes", "Caifás", "Poncio Pilato", "Augusto"], correct: 2 },
+      { id: 92, question: "¿Cómo se llama el monte donde fue crucificado Jesús?", options: ["Sinaí", "Calvario (Gólgota)", "Tabor", "Carmelo"], correct: 1 },
+      { id: 93, question: "¿Quién ayudó a Jesús a llevar la cruz en el camino?", options: ["Simón de Cirene", "Un soldado", "Pedro", "Zaqueo"], correct: 0 },
+      { id: 94, question: "¿Qué significa el letrero 'INRI' de la cruz?", options: ["Inocente", "Jesús Nazareno Rey de los Judíos", "Iglesia de Dios", "No culpable"], correct: 1 },
+      { id: 95, question: "¿Qué gran milagro ocurrió al tercer día de su muerte?", options: ["Curó a un ciego", "Multiplicó panes", "Resucitó de entre los muertos", "Caminó sobre el agua"], correct: 2 },
+      { id: 96, question: "¿A quién se apareció Jesús resucitado en primer lugar según el evangelio?", options: ["A Pilato", "A los fariseos", "A María Magdalena", "Al emperador"], correct: 2 }
+    ],
+    phrases: ["PADRE EN TUS MANOS ENCOMIENDO MI ESPÍRITU", "YO SOY LA RESURRECCIÓN Y LA VIDA", "ÉL HA RESUCITADO NO ESTÁ AQUÍ"],
+    rosco: [
+      { letter: "A", question: "José de ..., hombre bueno que pidió a Pilato el cuerpo de Jesús.", answer: "ARIMATEA" },
+      { letter: "B", question: "Preso que fue liberado por Pilato en lugar de Jesús.", answer: "BARRABÁS" },
+      { letter: "C", question: "El madero donde Jesús murió por amor a nosotros.", answer: "CRUZ" },
+      { letter: "D", question: "Jesús es verdaderamente el Hijo de ...", answer: "DIOS" },
+      { letter: "E", question: "Material de la corona que los soldados pusieron a Jesús en la cabeza.", answer: "ESPINAS" },
+      { letter: "F", question: "Grupo religioso en tiempos de Jesús que se oponía a él.", answer: "FARISEOS" },
+      { letter: "G", question: "Nombre hebreo del lugar de la crucifixión, que significa de la calavera.", answer: "GÓLGOTA" },
+      { letter: "H", question: "Rey de Galilea al que Pilato envió a Jesús durante el juicio.", answer: "HERODES" },
+      { letter: "I", question: "Letrero que pusieron en la cruz: Jesús Nazareno Rey de los Judíos.", answer: "INRI" },
+      { letter: "J", question: "Apóstol que entregó a su Maestro con un beso.", answer: "JUDAS" },
+      { letter: "L", question: "Arma que un soldado clavó en el costado de Jesús.", answer: "LANZA" },
+      { letter: "M", question: "La madre valiente que estuvo al pie de la cruz.", answer: "MARÍA" },
+      { letter: "N", question: "Hombre que visitó a Jesús de noche y llevó perfume para su entierro.", answer: "NICODEMO" },
+      { letter: "O", question: "Lo que hizo Jesús en el huerto de Getsemaní mientras los apóstoles dormían.", answer: "ORACIÓN" },
+      { letter: "P", question: "Gobernador romano que se lavó las manos en el juicio a Jesús.", answer: "PILATO" },
+      { letter: "Q", label: "Contiene la Q", question: "Lo que Jesús siente por nosotros, y por lo cual dio su vida.", answer: "QUERER" },
+      { letter: "R", question: "El mayor triunfo de Jesús: Vencer a la muerte al tercer día.", answer: "RESURRECCIÓN" },
+      { letter: "S", question: "Lugar cavado en la roca donde depositaron el cuerpo de Jesús.", answer: "SEPULCRO" },
+      { letter: "T", question: "La oscuridad que cubrió la tierra al morir el Señor.", answer: "TINIEBLAS" },
+      { letter: "U", question: "Perfumes y aceites que las mujeres llevaron de mañana al sepulcro.", answer: "UNGÜENTOS" },
+      { letter: "V", question: "Día de la Semana Santa en el que recordamos su muerte: ... Santo", answer: "VIERNES" },
+      { letter: "X", label: "Contiene la X", question: "El castigo doloroso que Jesús sufrió en la cruz.", answer: "CRUCIFIXIÓN" },
+      { letter: "Y", label: "Contiene la Y", question: "Lo que hizo Simón de Cirene al ver a Jesús cansado con la cruz.", answer: "AYUDAR" },
+      { letter: "Z", label: "Contiene la Z", question: "Amigo querido de Jesús al que resucitó días antes de su propia pasión.", answer: "LÁZARO" }
+    ],
+    intrusos: [
+      { options: ["Pilato", "Caifás", "Herodes", "Faraón"], correct: 3, explanation: "El Faraón es de la época de Moisés en Egipto, no del juicio de Jesús." },
+      { options: ["Cruz", "Corona", "Clavos", "Pistola"], correct: 3, explanation: "En la época de Jesús no existían las armas de fuego." },
+      { options: ["Magdalena", "Salomé", "Juana", "Caperucita"], correct: 3, explanation: "Caperucita Roja es un cuento infantil, no acompañó a Jesús." },
+      { options: ["Pedro", "Santiago", "Juan", "Batman"], correct: 3, explanation: "Batman es un superhéroe de los cómics y las películas." },
+      { options: ["Vendas", "Sudario", "Ángel", "Televisión"], correct: 3, explanation: "Las santas mujeres encontraron el sepulcro vacío y vendas, ¡no una pantalla!" },
+      { options: ["Oscuridad", "Temblor", "Velo roto", "Alienígenas"], correct: 3, explanation: "Los evangelios relatan fenómenos asombrosos, pero nunca una invasión alienígena." }
+    ],
+    historias: [
+      {
+        title: "El Vía Crucis",
+        items: ["Es condenado a muerte", "Carga con la dura cruz", "Simón le ayuda en el camino", "Muere y es sepultado"]
+      },
+      {
+        title: "La Mañana de Pascua",
+        items: ["Las mujeres van al alba", "Ven la piedra movida", "El ángel les da la noticia", "Ven a Jesús resucitado"]
+      }
+    ]
   }
 };
 
