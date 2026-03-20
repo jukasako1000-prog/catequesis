@@ -401,7 +401,7 @@ const AULA_TEMAS = {
       { letter: "N", question: "Hombre que visitó a Jesús de noche y llevó perfume para su entierro.", answer: "NICODEMO" },
       { letter: "O", question: "Lo que hizo Jesús en el huerto de Getsemaní mientras los apóstoles dormían.", answer: "ORACIÓN" },
       { letter: "P", question: "Gobernador romano que se lavó las manos en el juicio a Jesús.", answer: "PILATO" },
-      { letter: "Q", label: "Contiene la Q", question: "Lo que Jesús siente por nosotros, y por lo cual dio su vida.", answer: "QUERER" },
+      { letter: "Q", question: "Romper, violar o saltarse una norma. Las autoridades religiosas buscaban condenar a Jesús acusándolo de ... la Ley de Moisés.", answer: "QUEBRANTAR" },
       { letter: "R", question: "El mayor triunfo de Jesús: Vencer a la muerte al tercer día.", answer: "RESURRECCIÓN" },
       { letter: "S", question: "Lugar cavado en la roca donde depositaron el cuerpo de Jesús.", answer: "SEPULCRO" },
       { letter: "T", question: "La oscuridad que cubrió la tierra al morir el Señor.", answer: "TINIEBLAS" },
