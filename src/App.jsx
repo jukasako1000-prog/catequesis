@@ -429,6 +429,59 @@ const AULA_TEMAS = {
         items: ["Las mujeres van al alba", "Ven la piedra movida", "El ángel les da la noticia", "Ven a Jesús resucitado"]
       }
     ]
+  },
+  "Jesús ha Resucitado": {
+    icon: "🌅",
+    questions: [
+      { id: 110, question: "¿Qué día de la semana resucitó el Señor?", options: ["Sábado", "Lunes", "Domingo", "Jueves"], correct: 2 },
+      { id: 111, question: "¿A quién se apareció Jesús primero cerca del sepulcro?", options: ["A Pedro", "A Juan", "A María Magdalena", "A los soldados"], correct: 2 },
+      { id: 112, question: "¿Qué apóstol dijo que no creería hasta que no tocara las llagas de Jesús?", options: ["Andrés", "Tomás", "Mateo", "Santiago"], correct: 1 },
+      { id: 113, question: "¿En qué camino se apareció Jesús a dos discípulos que iban tristes?", options: ["Camino de Roma", "Camino de Damasco", "Camino de Emaús", "Camino de Jericó"], correct: 2 },
+      { id: 114, question: "¿Qué significa la palabra 'Aleluya'?", options: ["Gracias Dios", "Alabad al Señor", "Perdónanos", "Paz a todos"], correct: 1 },
+      { id: 115, question: "¿Qué regalo de paz les dio Jesús a sus amigos al aparecerse?", options: ["Oro", "Un banquete", "Su propia Paz", "Ropa nueva"], correct: 2 },
+      { id: 116, question: "¿Cuántos días pasó Jesús con sus discípulos antes de subir al cielo?", options: ["3 días", "40 días", "7 días", "12 días"], correct: 1 }
+    ],
+    phrases: ["CRISTO HA RESUCITADO VERDADERAMENTE", "ESTE ES EL DÍA EN QUE ACTUÓ EL SEÑOR", "LA PAZ SEA CON VOSOTROS"],
+    rosco: [
+      { letter: "A", question: "Cuando Jesús subió al cielo 40 días después de resucitar.", answer: "ASCENSIÓN" },
+      { letter: "B", question: "La resurrección es la mejor ... noticia del mundo.", answer: "BUENA" },
+      { letter: "C", question: "Vela grande que se enciende en la Vigilia Pascual y representa a Jesús.", answer: "CIRIO" },
+      { letter: "D", question: "El día de la semana en el que Jesús venció a la muerte.", answer: "DOMINGO" },
+      { letter: "E", question: "Pueblo hacia donde caminaban dos discípulos muy tristes.", answer: "EMAÚS" },
+      { letter: "F", question: "Creer que Jesús vive aunque no lo veamos con los ojos.", answer: "FE" },
+      { letter: "G", question: "Lugar donde Jesús dijo a sus discípulos que se encontrarían con Él.", answer: "GALILEA" },
+      { letter: "H", question: "En plural: Jesús enseñó las ... de sus manos a los apóstoles.", answer: "HERIDAS" },
+      { letter: "I", question: "La familia de los que creen que Jesús ha resucitado.", answer: "IGLESIA" },
+      { letter: "J", question: "El Hijo de Dios que vive para siempre.", answer: "JESÚS" },
+      { letter: "L", question: "En plural: Las marcas de los clavos que Tomás quiso tocar.", answer: "LLAGAS" },
+      { letter: "M", question: "Apellido de María, la primera mujer en ver a Jesús resucitado.", answer: "MAGDALENA" },
+      { letter: "N", question: "Jesús nos regala una ... vida llena de alegría.", answer: "NUEVA" },
+      { letter: "O", question: "Hablar con Jesús, que está vivo y nos escucha.", answer: "ORACIÓN" },
+      { letter: "P", question: "La fiesta más importante de los cristianos porque Jesús vive.", answer: "PASCUA" },
+      { letter: "Q", label: "Contiene la Q", question: "Lo que Jesús nos pide que hagamos con todo el mundo.", answer: "QUERER" },
+      { letter: "R", question: "El paso de la muerte a la vida de Jesús.", answer: "RESURRECCIÓN" },
+      { letter: "S", question: "Lugar donde pusieron a Jesús y que estaba vacío el domingo.", answer: "SEPULCRO" },
+      { letter: "T", question: "El apóstol que dudó hasta que vio a Jesús.", answer: "TOMÁS" },
+      { letter: "U", label: "Contiene la U", question: "Grito de alegría que significa 'Alabad al Señor'.", answer: "ALELUYA" },
+      { letter: "V", question: "Jesús resucitó para darnos la ... eterna.", answer: "VIDA" },
+      { letter: "X", label: "Contiene la X", question: "Lo que sentimos al saber que Jesús está con nosotros.", answer: "EXPERIENCIA" },
+      { letter: "Y", label: "Contiene la Y", question: "Lo que Jesús hace con nosotros cuando le pedimos ayuda.", answer: "AYUDAR" },
+      { letter: "Z", label: "Contiene la Z", question: "Primer regalo de Jesús al aparecerse: 'La ... sea con vosotros'.", answer: "PAZ" }
+    ],
+    intrusos: [
+      { options: ["Sepulcro vacío", "Llagas de Jesús", "Ángel del Señor", "Carbón de Reyes"], correct: 3, explanation: "El carbón de Reyes es de Navidad, no de la Pascua." },
+      { options: ["Pascua", "Aleluya", "Domingo de Resurrección", "Cuaresma"], correct: 3, explanation: "La Cuaresma es el tiempo de preparación antes de la Resurrección." },
+      { options: ["Tomás", "Juan", "Pedro", "Goliat"], correct: 3, explanation: "Goliat es un gigante vencido por David siglos antes de Jesús." },
+      { options: ["Emaús", "Jerusalén", "Galilea", "Nueva York"], correct: 3, explanation: "Nueva York no es un lugar que aparezca en los evangelios." },
+      { options: ["Vida", "Luz", "Alegría", "Miedo"], correct: 3, explanation: "Jesús resucitado nos quita el miedo y nos da paz." },
+      { options: ["Cirio Pascual", "Agua bendita", "Flores frescas", "Saco de carbón"], correct: 3, explanation: "El carbón no es un símbolo de la alegría de la Pascua." }
+    ],
+    historias: [
+      {
+        title: "La Mañana de Pascua",
+        items: ["Las mujeres van al alba", "Ven la piedra movida", "El ángel les da la noticia", "Ven a Jesús resucitado"]
+      }
+    ]
   }
 };
 
