@@ -506,19 +506,19 @@ const AULA_TEMAS = {
       { letter: "I", question: "La comunidad de todos los bautizados, que nació en Pentecostés.", answer: "IGLESIA" },
       { letter: "J", question: "Quien prometió enviar al Espíritu Santo a sus amigos.", answer: "JESÚS" },
       { letter: "L", question: "El don de Pentecostés permitió a los apóstoles hablar en diferentes...", answer: "LENGUAS" },
-      { letter: "M", question: "La Madre de Jesús, que rezaba junto a los apóstoles en Pentecostés.", answer: "MARÍA" },
+      { letter: "M", question: "Lo que perdieron los apóstoles al recibir el Espíritu Santo, saliendo a predicar con valentía.", answer: "MIEDO" },
       { letter: "N", label: "Contiene la N", question: "Día que celebramos la venida del Espíritu Santo (50 días después de Pascua).", answer: "PENTECOSTÉS" },
       { letter: "O", label: "Contiene la O", question: "Don del Espíritu Santo para ser valientes: F...", answer: "FORTALEZA" },
       { letter: "P", question: "Ave que representa al Espíritu Santo en el Bautismo de Jesús.", answer: "PALOMA" },
-      { letter: "Q", label: "Contiene la Q", question: "Lugar donde estaban reunidos y escondidos los apóstoles: El Cená...", answer: "CENÁCULO" },
+      { letter: "Q", label: "Contiene la Q", question: "Comunidad de cristianos guiada por el Espíritu Santo (como la nuestra de San Bartolomé).", answer: "PARROQUIA" },
       { letter: "R", question: "Lo que el Espíritu Santo nos ayuda a hacer para hablar con Dios.", answer: "REZAR" },
       { letter: "S", question: "Uno de los siete dones del Espíritu Santo para conocer la voluntad de Dios.", answer: "SABIDURÍA" },
       { letter: "T", question: "La Santísima ..., misterio de un solo Dios en tres personas.", answer: "TRINIDAD" },
       { letter: "U", label: "Contiene la U", question: "Lo que formamos todos los cristianos guiados por el Espíritu: Una...", answer: "UNIDAD" },
       { letter: "V", question: "Ruido como de un ... impetuoso que llenó la casa en Pentecostés.", answer: "VIENTO" },
       { letter: "X", label: "Contiene la X", question: "El Espíritu Santo nos ayuda a llevar la cruz con...", answer: "ÉXITO" },
-      { letter: "Y", label: "Contiene la Y", question: "El Espíritu Santo nos ... a comprender el Evangelio.", answer: "AYUDA" },
-      { letter: "Z", label: "Contiene la Z", question: "Lo que sentimos en el corazón cuando tenemos al Espíritu Santo.", answer: "PAZ" }
+      { letter: "Y", label: "Contiene la Y", question: "El Espíritu Santo es nuestro guía y gran ... en los momentos difíciles.", answer: "APOYO" },
+      { letter: "Z", label: "Contiene la Z", question: "Lugar donde el Espíritu Santo derrama el amor de Dios: Nuestro...", answer: "CORAZÓN" }
     ],
     intrusos: [
       { options: ["Paloma", "Fuego", "Viento", "Gato"], correct: 3, explanation: "El gato no es un símbolo del Espíritu Santo en la Biblia." },
