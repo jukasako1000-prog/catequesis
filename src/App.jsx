@@ -539,7 +539,7 @@ const AULA_TEMAS = {
 // Nueva lista oficial de alumnos (Filtrada a los proporcionados)
 const INITIAL_STUDENTS = [
   { id: 101, name: 'Adrian', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/ADRIAN.jpg' },
-  { id: 102, name: 'Alejandra', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/ALEJANDRA.jpg' },
+  { id: 102, name: 'Alejandra', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/alejandra2.jpg' },
   { id: 103, name: 'Marina', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MARINA.jpg' },
   { id: 104, name: 'MA.CASES', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGELCASES.jpg' },
   { id: 105, name: 'Miguel Angel', totalScore: 0, dailyScore: 0, behaviorMedals: 0, readingMerits: 0, attendance: 0, avatar: 'AVATARES/MIGUELANGEL .jpg' },
@@ -563,6 +563,7 @@ function App() {
     // Asegurar el nombre correcto de MA.CASES y avatares específicos por código
     setStudents(prev => prev.map(s => {
       if (s.id === 104 && s.name !== 'MA.CASES') return { ...s, name: 'MA.CASES' };
+      if (s.id === 102 && !s.avatar.includes('alejandra2')) return { ...s, avatar: 'AVATARES/alejandra2.jpg' };
       if (s.id === 115 && !s.avatar.includes('emma2')) return { ...s, avatar: 'AVATARES/emma2.jpg' };
       if (s.id === 108 && !s.avatar.includes('josefrancisco2')) return { ...s, avatar: 'AVATARES/josefrancisco2.jfif' };
       if (s.id === 106 && !s.avatar.includes('enzo2')) return { ...s, avatar: 'AVATARES/enzo2.jpg' };
