@@ -482,6 +482,57 @@ const AULA_TEMAS = {
         items: ["Las mujeres van al alba", "Ven la piedra movida", "El ángel les da la noticia", "Ven a Jesús resucitado"]
       }
     ]
+  },
+  "Espíritu Santo y Pentecostés": {
+    icon: "🔥",
+    questions: [
+      { id: 120, question: "¿Quién es el Espíritu Santo?", options: ["Un profeta", "Un ángel", "La Tercera Persona de la Trinidad", "Un apóstol"], correct: 2 },
+      { id: 121, question: "¿En qué forma descendió el Espíritu Santo sobre los apóstoles en Pentecostés?", options: ["Como lluvia", "Como paloma", "Como lenguas de fuego", "Como viento suave"], correct: 2 },
+      { id: 122, question: "¿Cuántos días después de la Resurrección se celebra Pentecostés?", options: ["3 días", "40 días", "50 días", "10 días"], correct: 2 },
+      { id: 123, question: "¿Con quién estaban reunidos los apóstoles el día de Pentecostés?", options: ["Con Moisés", "Con la Virgen María", "Con Juan el Bautista", "Con los fariseos"], correct: 1 },
+      { id: 124, question: "¿Qué don recibieron los apóstoles para poder predicar a todos los pueblos?", options: ["Poder volar", "Hablar en diferentes lenguas", "Fuerza sobrehumana", "Invisibilidad"], correct: 1 },
+      { id: 125, question: "¿Cuántos son los dones del Espíritu Santo?", options: ["3", "5", "7", "10"], correct: 2 }
+    ],
+    phrases: ["VEN ESPÍRITU SANTO", "RECIBID EL ESPÍRITU SANTO", "EL ESPÍRITU SANTO OS LO ENSEÑARÁ TODO"],
+    rosco: [
+      { letter: "A", question: "Los doce amigos de Jesús que recibieron el Espíritu Santo.", answer: "APÓSTOLES" },
+      { letter: "B", question: "Sacramento en el que recibimos por primera vez el Espíritu Santo.", answer: "BAUTISMO" },
+      { letter: "C", question: "Sacramento que nos llena del Espíritu Santo y nos hace testigos de Jesús.", answer: "CONFIRMACIÓN" },
+      { letter: "D", question: "Regalos especiales que nos da el Espíritu Santo (Sabiduría, Entendimiento...).", answer: "DONES" },
+      { letter: "E", question: "La Tercera Persona de la Santísima Trinidad: ... Santo.", answer: "ESPÍRITU" },
+      { letter: "F", question: "Forma en la que el Espíritu Santo se posó sobre las cabezas de los apóstoles: Lenguas de ...", answer: "FUEGO" },
+      { letter: "G", question: "Lo que Dios nos da a través del Espíritu Santo para ser santos.", answer: "GRACIA" },
+      { letter: "H", label: "Contiene la H", question: "El Espíritu Santo nos ayuda a ser ... e hijos de Dios.", answer: "HERMANOS" },
+      { letter: "I", question: "La comunidad de todos los bautizados, que nació en Pentecostés.", answer: "IGLESIA" },
+      { letter: "J", question: "Quien prometió enviar al Espíritu Santo a sus amigos.", answer: "JESÚS" },
+      { letter: "L", question: "El don de Pentecostés permitió a los apóstoles hablar en diferentes...", answer: "LENGUAS" },
+      { letter: "M", question: "La Madre de Jesús, que rezaba junto a los apóstoles en Pentecostés.", answer: "MARÍA" },
+      { letter: "N", label: "Contiene la N", question: "Día que celebramos la venida del Espíritu Santo (50 días después de Pascua).", answer: "PENTECOSTÉS" },
+      { letter: "O", label: "Contiene la O", question: "Don del Espíritu Santo para ser valientes: F...", answer: "FORTALEZA" },
+      { letter: "P", question: "Ave que representa al Espíritu Santo en el Bautismo de Jesús.", answer: "PALOMA" },
+      { letter: "Q", label: "Contiene la Q", question: "Lugar donde estaban reunidos y escondidos los apóstoles: El Cená...", answer: "CENÁCULO" },
+      { letter: "R", question: "Lo que el Espíritu Santo nos ayuda a hacer para hablar con Dios.", answer: "REZAR" },
+      { letter: "S", question: "Uno de los siete dones del Espíritu Santo para conocer la voluntad de Dios.", answer: "SABIDURÍA" },
+      { letter: "T", question: "La Santísima ..., misterio de un solo Dios en tres personas.", answer: "TRINIDAD" },
+      { letter: "U", label: "Contiene la U", question: "Lo que formamos todos los cristianos guiados por el Espíritu: Una...", answer: "UNIDAD" },
+      { letter: "V", question: "Ruido como de un ... impetuoso que llenó la casa en Pentecostés.", answer: "VIENTO" },
+      { letter: "X", label: "Contiene la X", question: "El Espíritu Santo nos ayuda a llevar la cruz con...", answer: "ÉXITO" },
+      { letter: "Y", label: "Contiene la Y", question: "El Espíritu Santo nos ... a comprender el Evangelio.", answer: "AYUDA" },
+      { letter: "Z", label: "Contiene la Z", question: "Lo que sentimos en el corazón cuando tenemos al Espíritu Santo.", answer: "PAZ" }
+    ],
+    intrusos: [
+      { options: ["Paloma", "Fuego", "Viento", "Gato"], correct: 3, explanation: "El gato no es un símbolo del Espíritu Santo en la Biblia." },
+      { options: ["Sabiduría", "Fortaleza", "Piedad", "Envidia"], correct: 3, explanation: "La envidia es un pecado, no un don del Espíritu Santo." },
+      { options: ["María", "Pedro", "Juan", "Pilato"], correct: 3, explanation: "Pilato no estaba en el Cenáculo recibiendo el Espíritu Santo." },
+      { options: ["Bautismo", "Confirmación", "Pentecostés", "Halloween"], correct: 3, explanation: "Halloween no tiene relación con los sacramentos ni con el Espíritu Santo." },
+      { options: ["Consejo", "Ciencia", "Entendimiento", "Magia"], correct: 3, explanation: "La magia no es un don del Espíritu Santo." }
+    ],
+    historias: [
+      {
+        title: "El día de Pentecostés",
+        items: ["Estaban reunidos en el Cenáculo", "Vino un ruido como de viento", "Se posaron lenguas de fuego", "Salieron a predicar sin miedo"]
+      }
+    ]
   }
 };
 
