@@ -286,6 +286,12 @@ Buscar las funciones:
 2. **Los Mandamientos** 📜
 3. **La Creación** 🌎
 4. **Sacramentos** 🕊️
+5. **La Biblia** 📖
+6. **María, nuestra Madre** 🌹
+7. **Cuaresma y Semana Santa** ⛪
+8. **Pasión, Muerte y Resurrección** ✝️
+9. **Jesús ha Resucitado** 🌅
+10. **Espíritu Santo y Pentecostés** 🔥
 
 ## 🎯 Roadmap / Próximas Mejoras
 
@@ -316,15 +322,20 @@ Buscar las funciones:
 
 ---
 
-**Última actualización**: Febrero 2026 (Sesión de Refinamiento UI)
-**Versión**: 2.1
+**Última actualización**: Mayo 2026 (Expansión de Temas y Avatares)
+**Versión**: 2.2
 **Desarrollado para**: Catequesis de Confirmación - Parroquia San Bartolomé
 
 ---
 
 ## 🛠️ Log de Cambios Recientes (Última Sesión)
 
-### 🔝 Cabecera y Podio
+### 📚 Contenido y Alumnos (Mayo 2026)
+- **Nuevo Tema**: Añadido "Espíritu Santo y Pentecostés" a la Sala de Estudio con todos sus minijuegos (Quiz, Frase, Rosco, Intrusos, Historia).
+- **Ajustes en Rosco**: Correcciones pedagógicas en definiciones clave para la catequesis.
+- **Actualización de Avatares**: Nuevas fotos asignadas automáticamente a Emma, J.Francisco, Enzo y Alejandra.
+
+### 🔝 Cabecera y Podio (Febrero 2026)
 - **Ajuste de Altura**: Se ha bajado todo el bloque del podio y los cañones de confeti (**5rem**) para evitar que la corona del ganador solape con el lema superior.
 - **Navegación Simplificada**: Eliminación definitiva de las pestañas superiores. Ahora todo se gestiona desde el panel de control del ranking.
 
@@ -350,7 +361,7 @@ Buscar las funciones:
 - **Formato Panorámico**: El ancho máximo de la aplicación se ha ampliado a **1400px** para aprovechar mejor las pantallas 16:9.
 - **Optimización Vertical**: Reajuste de alturas en el podio y cabeceras para que todo el contenido principal sea visible sin necesidad de mucho scroll en pantallas grandes.
 
-**Última actualización de diseño**: 13 de Febrero de 2026.
+**Última actualización general**: Mayo de 2026.
 
 ### 🎮 Soporte Total para Mandos y Navegación (Nueva Era)
 - **Navegación Universal**: Implementación de soporte completo para mandos Bluetooth y teclado en toda la app. Ahora es posible gestionar toda la clase sin tocar el ratón.
